@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PasswordGenerator
 {
-    class PasswordGenerator
+    public class PasswordGenerator
     {
         private static string DefaultAlphabet { get; } = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private static string NonAlphanumerics { get; } = "~`'!@#$%^&*()_-+={}[]|\\:\";<,>.?/";
