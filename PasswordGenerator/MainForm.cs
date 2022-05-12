@@ -13,9 +13,11 @@ namespace PasswordGenerator
 {
     public partial class MainForm : Form
     {
+        private PasswordGenerator genarator;
         public MainForm()
         {
             isDraggingHorisontal = isDraggingVertical = false;
+            genarator = new PasswordGenerator(); //Пока так, потому что не загружаем с базы
             InitializeComponent();
         }
 
