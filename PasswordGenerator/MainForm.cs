@@ -21,59 +21,6 @@ namespace PasswordGenerator
             InitializeComponent();
         }
 
-        public void SetCurrentForm(IconButton nextButton, Form nextForm)
-        {
-            if (currentButton == nextButton)
-            {
-                return;
-            }
-            if (currentButton != null)
-            {
-                currentButton.BackColor = buttonPanel.BackColor;
-            }
-            string hexColorString = nextForm.Tag as string;
-            currentForm?.Close();
-            workPanel.Controls.Clear();
-            currentForm?.Dispose();
-            if (hexColorString != null)
-            {
-                Color fromHexColor = ColorTranslator.FromHtml(hexColorString);
-                nextButton.BackColor = topLabelPanel.BackColor = fromHexColor;
-                logoPanel.BackColor = ChangeColorBrightness(nextButton.BackColor, -0.3);
-            }
-            currentButton = nextButton;
-            currentForm = nextForm;
-            nextForm.Dock = DockStyle.Fill;
-            nextForm.TopLevel = false;
-            workPanel.Controls.Add(nextForm);
-            topLabel.Text = nextForm.Text;
-            nextForm.BringToFront();
-            nextForm.Show();
-        }
-
-        public Color ChangeColorBrightness(Color color, double correctionFactor)
-        {
-            double red = color.R;
-            double green = color.G;
-            double blue = color.B;
-            //If correction factor is less than 0, darken color.
-            if (correctionFactor < 0)
-            {
-                correctionFactor = 1 + correctionFactor;
-                red *= correctionFactor;
-                green *= correctionFactor;
-                blue *= correctionFactor;
-            }
-            //If correction factor is greater than zero, lighten color.
-            else
-            {
-                red = (255 - red) * correctionFactor + red;
-                green = (255 - green) * correctionFactor + green;
-                blue = (255 - blue) * correctionFactor + blue;
-            }
-            return Color.FromArgb(color.A, (byte)red, (byte)green, (byte)blue);
-        }
-
         #region Moving
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
@@ -159,15 +106,87 @@ namespace PasswordGenerator
         #endregion
 
         #region Min-Max-Close Buttons
-        private void closeBtn_Click(object sender, EventArgs e)
+        private void OnCloseClick(object sender, EventArgs e)
             => Close();
 
-        private void maximizeBtn_Click(object sender, EventArgs e)
+        private void OnMaxClick(object sender, EventArgs e)
             => WindowState = (WindowState == FormWindowState.Maximized) ? FormWindowState.Normal : FormWindowState.Maximized;
 
-        private void minimizeBtn_Click(object sender, EventArgs e)
+        private void OnMinClick(object sender, EventArgs e)
             => WindowState = FormWindowState.Minimized;
+
+        private void OnCloseMouseEnter(object sender, EventArgs e)
+            => closeBtn.BackColor = Color.Red;
+
+        private void OnCloseMouseLeave(object sender, EventArgs e)
+            => closeBtn.BackColor = Color.Transparent;
+
+        private void OnMaxMouseEnter(object sender, EventArgs e)
+            => maximizeBtn.BackColor = Color.Yellow;
+
+        private void OnMaxMouseLeave(object sender, EventArgs e)
+            => maximizeBtn.BackColor = Color.Transparent;
+
+        private void OnMixMouseEnter(object sender, EventArgs e)
+            => minimizeBtn.BackColor = Color.Green;
+
+        private void OnMinMouseLeave(object sender, EventArgs e)
+            => minimizeBtn.BackColor = Color.Transparent;
         #endregion
+
+        #region Buttons
+        public void SetCurrentForm(IconButton nextButton, Form nextForm)
+        {
+            if (currentButton == nextButton)
+            {
+                return;
+            }
+            if (currentButton != null)
+            {
+                currentButton.BackColor = buttonPanel.BackColor;
+            }
+            string hexColorString = nextForm.Tag as string;
+            currentForm?.Close();
+            workPanel.Controls.Clear();
+            currentForm?.Dispose();
+            if (hexColorString != null)
+            {
+                Color fromHexColor = ColorTranslator.FromHtml(hexColorString);
+                nextButton.BackColor = topLabelPanel.BackColor = fromHexColor;
+                logoPanel.BackColor = ChangeColorBrightness(nextButton.BackColor, -0.3);
+            }
+            currentButton = nextButton;
+            currentForm = nextForm;
+            nextForm.Dock = DockStyle.Fill;
+            nextForm.TopLevel = false;
+            workPanel.Controls.Add(nextForm);
+            topLabel.Text = nextForm.Text;
+            nextForm.BringToFront();
+            nextForm.Show();
+        }
+
+        public Color ChangeColorBrightness(Color color, double correctionFactor)
+        {
+            double red = color.R;
+            double green = color.G;
+            double blue = color.B;
+            //If correction factor is less than 0, darken color.
+            if (correctionFactor < 0)
+            {
+                correctionFactor = 1 + correctionFactor;
+                red *= correctionFactor;
+                green *= correctionFactor;
+                blue *= correctionFactor;
+            }
+            //If correction factor is greater than zero, lighten color.
+            else
+            {
+                red = (255 - red) * correctionFactor + red;
+                green = (255 - green) * correctionFactor + green;
+                blue = (255 - blue) * correctionFactor + blue;
+            }
+            return Color.FromArgb(color.A, (byte)red, (byte)green, (byte)blue);
+        }
 
         private void OnGenerateBtnClick(object sender, EventArgs e)
         {
@@ -178,23 +197,6 @@ namespace PasswordGenerator
         {
             SetCurrentForm(picPasswordsBtn, new SavedSettingForm(this, Generator));
         }
-
-        private void closeBtn_MouseEnter(object sender, EventArgs e)
-            => closeBtn.BackColor = Color.Red;
-
-        private void closeBtn_MouseLeave(object sender, EventArgs e)
-            => closeBtn.BackColor = Color.Transparent;
-
-        private void maximizeBtn_MouseEnter(object sender, EventArgs e)
-            => maximizeBtn.BackColor = Color.Yellow;
-
-        private void maximizeBtn_MouseLeave(object sender, EventArgs e)
-            => maximizeBtn.BackColor = Color.Transparent;
-
-        private void minimizeBtn_MouseEnter(object sender, EventArgs e)
-            => minimizeBtn.BackColor = Color.Green;
-
-        private void minimizeBtn_MouseLeave(object sender, EventArgs e)
-            => minimizeBtn.BackColor = Color.Transparent;
+        #endregion
     }
 }

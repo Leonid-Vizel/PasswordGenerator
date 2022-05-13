@@ -45,7 +45,7 @@ namespace PasswordGenerator
             this.copyBtn = new FontAwesome.Sharp.IconButton();
             this.btnPanel = new System.Windows.Forms.Panel();
             this.saveCurrentBtn = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.copyLabel = new System.Windows.Forms.Label();
             this.copyLabelShowTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.lengthUpDown)).BeginInit();
             this.btnPanel.SuspendLayout();
@@ -60,10 +60,20 @@ namespace PasswordGenerator
             0,
             0,
             0});
+            this.lengthUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.lengthUpDown.Name = "lengthUpDown";
             this.lengthUpDown.Size = new System.Drawing.Size(180, 29);
             this.lengthUpDown.TabIndex = 0;
-            this.lengthUpDown.ValueChanged += new System.EventHandler(this.lengthUpDown_ValueChanged);
+            this.lengthUpDown.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.lengthUpDown.ValueChanged += new System.EventHandler(this.OnLengthUpDownChanged);
             // 
             // lengthLabel
             // 
@@ -85,7 +95,7 @@ namespace PasswordGenerator
             this.numberCheckBox.TabIndex = 14;
             this.numberCheckBox.Text = "Включить числа";
             this.numberCheckBox.UseVisualStyleBackColor = true;
-            this.numberCheckBox.CheckedChanged += new System.EventHandler(this.numberCheckBox_CheckedChanged);
+            this.numberCheckBox.CheckedChanged += new System.EventHandler(this.OnNumberCheckBoxChanged);
             // 
             // alphanumCheckBox
             // 
@@ -97,7 +107,7 @@ namespace PasswordGenerator
             this.alphanumCheckBox.TabIndex = 13;
             this.alphanumCheckBox.Text = "Включить не буквенно-цифровые символы";
             this.alphanumCheckBox.UseVisualStyleBackColor = true;
-            this.alphanumCheckBox.CheckedChanged += new System.EventHandler(this.alphanumCheckBox_CheckedChanged);
+            this.alphanumCheckBox.CheckedChanged += new System.EventHandler(this.OnAlphanumCheckBoxChanged);
             // 
             // ambiguousCheckBox
             // 
@@ -109,7 +119,7 @@ namespace PasswordGenerator
             this.ambiguousCheckBox.TabIndex = 12;
             this.ambiguousCheckBox.Text = "Исключить неоднозначные символы";
             this.ambiguousCheckBox.UseVisualStyleBackColor = true;
-            this.ambiguousCheckBox.CheckedChanged += new System.EventHandler(this.ambiguousCheckBox_CheckedChanged);
+            this.ambiguousCheckBox.CheckedChanged += new System.EventHandler(this.OnAmbiguousCheckBoxChanged);
             // 
             // similarCheckBox
             // 
@@ -121,7 +131,7 @@ namespace PasswordGenerator
             this.similarCheckBox.TabIndex = 11;
             this.similarCheckBox.Text = "Исключить подобные символы (i, l, 1, L, o, 0, O)\r\n";
             this.similarCheckBox.UseVisualStyleBackColor = true;
-            this.similarCheckBox.CheckedChanged += new System.EventHandler(this.similarCheckBox_CheckedChanged);
+            this.similarCheckBox.CheckedChanged += new System.EventHandler(this.OnSimilarCheckBoxChanged);
             // 
             // lowerCheckBox
             // 
@@ -133,7 +143,7 @@ namespace PasswordGenerator
             this.lowerCheckBox.TabIndex = 10;
             this.lowerCheckBox.Text = "Включить строчные буквы";
             this.lowerCheckBox.UseVisualStyleBackColor = true;
-            this.lowerCheckBox.CheckedChanged += new System.EventHandler(this.lowerCheckBox_CheckedChanged);
+            this.lowerCheckBox.CheckedChanged += new System.EventHandler(this.OnLowerCheckBoxChanged);
             // 
             // upperCheckBox
             // 
@@ -145,7 +155,7 @@ namespace PasswordGenerator
             this.upperCheckBox.TabIndex = 9;
             this.upperCheckBox.Text = "Включить прописные буквы";
             this.upperCheckBox.UseVisualStyleBackColor = true;
-            this.upperCheckBox.CheckedChanged += new System.EventHandler(this.upperCheckBox_CheckedChanged);
+            this.upperCheckBox.CheckedChanged += new System.EventHandler(this.OnUpperCheckBoxChanged);
             // 
             // generateBtn
             // 
@@ -196,7 +206,7 @@ namespace PasswordGenerator
             this.openPasswordBtn.Size = new System.Drawing.Size(28, 24);
             this.openPasswordBtn.TabIndex = 21;
             this.openPasswordBtn.UseVisualStyleBackColor = true;
-            this.openPasswordBtn.Click += new System.EventHandler(this.openPasswordBtn_Click);
+            this.openPasswordBtn.Click += new System.EventHandler(this.OnEyeClick);
             // 
             // copyBtn
             // 
@@ -211,7 +221,7 @@ namespace PasswordGenerator
             this.copyBtn.Size = new System.Drawing.Size(28, 29);
             this.copyBtn.TabIndex = 22;
             this.copyBtn.UseVisualStyleBackColor = true;
-            this.copyBtn.Click += new System.EventHandler(this.copyBtn_Click);
+            this.copyBtn.Click += new System.EventHandler(this.OnCopyClick);
             // 
             // btnPanel
             // 
@@ -236,15 +246,16 @@ namespace PasswordGenerator
             this.saveCurrentBtn.Text = "Сохранить параметры";
             this.saveCurrentBtn.UseVisualStyleBackColor = false;
             // 
-            // label1
+            // copyLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.ForeColor = System.Drawing.Color.Green;
-            this.label1.Location = new System.Drawing.Point(21, 335);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(112, 21);
-            this.label1.TabIndex = 24;
-            this.label1.Text = "Скопировано!";
+            this.copyLabel.AutoSize = true;
+            this.copyLabel.ForeColor = System.Drawing.Color.Green;
+            this.copyLabel.Location = new System.Drawing.Point(21, 335);
+            this.copyLabel.Name = "copyLabel";
+            this.copyLabel.Size = new System.Drawing.Size(112, 21);
+            this.copyLabel.TabIndex = 24;
+            this.copyLabel.Text = "Скопировано!";
+            this.copyLabel.Visible = false;
             // 
             // copyLabelShowTimer
             // 
@@ -256,7 +267,7 @@ namespace PasswordGenerator
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(822, 390);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.copyLabel);
             this.Controls.Add(this.btnPanel);
             this.Controls.Add(this.copyBtn);
             this.Controls.Add(this.openPasswordBtn);
@@ -302,7 +313,7 @@ namespace PasswordGenerator
         private FontAwesome.Sharp.IconButton copyBtn;
         private System.Windows.Forms.Panel btnPanel;
         private System.Windows.Forms.Button saveCurrentBtn;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label copyLabel;
         private System.Windows.Forms.Timer copyLabelShowTimer;
     }
 }
