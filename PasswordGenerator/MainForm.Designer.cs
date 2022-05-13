@@ -35,7 +35,7 @@ namespace PasswordGenerator
             this.picPasswordsBtn = new FontAwesome.Sharp.IconButton();
             this.generateBtn = new FontAwesome.Sharp.IconButton();
             this.logoPanel = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
+            this.logoLabel = new System.Windows.Forms.Label();
             this.logoBox = new System.Windows.Forms.PictureBox();
             this.workPanel = new System.Windows.Forms.Panel();
             this.topLabel = new System.Windows.Forms.Label();
@@ -128,7 +128,7 @@ namespace PasswordGenerator
             // logoPanel
             // 
             this.logoPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(58)))));
-            this.logoPanel.Controls.Add(this.label2);
+            this.logoPanel.Controls.Add(this.logoLabel);
             this.logoPanel.Controls.Add(this.logoBox);
             this.logoPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.logoPanel.Location = new System.Drawing.Point(0, 0);
@@ -136,19 +136,19 @@ namespace PasswordGenerator
             this.logoPanel.Size = new System.Drawing.Size(189, 69);
             this.logoPanel.TabIndex = 0;
             // 
-            // label2
+            // logoLabel
             // 
-            this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Font = new System.Drawing.Font("ConcursoItalian BTN Wide", 23.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(69, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(120, 69);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "PROGA";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveMouseDown);
+            this.logoLabel.BackColor = System.Drawing.Color.Transparent;
+            this.logoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logoLabel.Font = new System.Drawing.Font("Copperplate Gothic Light", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.logoLabel.ForeColor = System.Drawing.Color.White;
+            this.logoLabel.Location = new System.Drawing.Point(69, 0);
+            this.logoLabel.Name = "logoLabel";
+            this.logoLabel.Size = new System.Drawing.Size(120, 69);
+            this.logoLabel.TabIndex = 4;
+            this.logoLabel.Text = "PROGA";
+            this.logoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.logoLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveMouseDown);
             // 
             // logoBox
             // 
@@ -170,10 +170,6 @@ namespace PasswordGenerator
             this.workPanel.Name = "workPanel";
             this.workPanel.Size = new System.Drawing.Size(833, 552);
             this.workPanel.TabIndex = 3;
-            this.workPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnPanelMouseDown);
-            this.workPanel.MouseLeave += new System.EventHandler(this.OnPanelMouseLeave);
-            this.workPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnPanelMouseMove);
-            this.workPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnPanelMouseUp);
             // 
             // topLabel
             // 
@@ -206,9 +202,9 @@ namespace PasswordGenerator
             this.closeBtn.Size = new System.Drawing.Size(30, 30);
             this.closeBtn.TabIndex = 7;
             this.closeBtn.UseVisualStyleBackColor = false;
-            this.closeBtn.Click += new System.EventHandler(this.closeBtn_Click);
-            this.closeBtn.MouseEnter += new System.EventHandler(this.closeBtn_MouseEnter);
-            this.closeBtn.MouseLeave += new System.EventHandler(this.closeBtn_MouseLeave);
+            this.closeBtn.Click += new System.EventHandler(this.OnCloseClick);
+            this.closeBtn.MouseEnter += new System.EventHandler(this.OnCloseMouseEnter);
+            this.closeBtn.MouseLeave += new System.EventHandler(this.OnCloseMouseLeave);
             // 
             // maximizeBtn
             // 
@@ -226,9 +222,9 @@ namespace PasswordGenerator
             this.maximizeBtn.Size = new System.Drawing.Size(30, 30);
             this.maximizeBtn.TabIndex = 8;
             this.maximizeBtn.UseVisualStyleBackColor = false;
-            this.maximizeBtn.Click += new System.EventHandler(this.maximizeBtn_Click);
-            this.maximizeBtn.MouseEnter += new System.EventHandler(this.maximizeBtn_MouseEnter);
-            this.maximizeBtn.MouseLeave += new System.EventHandler(this.maximizeBtn_MouseLeave);
+            this.maximizeBtn.Click += new System.EventHandler(this.OnMaxClick);
+            this.maximizeBtn.MouseEnter += new System.EventHandler(this.OnMaxMouseEnter);
+            this.maximizeBtn.MouseLeave += new System.EventHandler(this.OnMaxMouseLeave);
             // 
             // minimizeBtn
             // 
@@ -246,9 +242,9 @@ namespace PasswordGenerator
             this.minimizeBtn.Size = new System.Drawing.Size(30, 30);
             this.minimizeBtn.TabIndex = 9;
             this.minimizeBtn.UseVisualStyleBackColor = false;
-            this.minimizeBtn.Click += new System.EventHandler(this.minimizeBtn_Click);
-            this.minimizeBtn.MouseEnter += new System.EventHandler(this.minimizeBtn_MouseEnter);
-            this.minimizeBtn.MouseLeave += new System.EventHandler(this.minimizeBtn_MouseLeave);
+            this.minimizeBtn.Click += new System.EventHandler(this.OnMinClick);
+            this.minimizeBtn.MouseEnter += new System.EventHandler(this.OnMixMouseEnter);
+            this.minimizeBtn.MouseLeave += new System.EventHandler(this.OnMinMouseLeave);
             // 
             // topLabelPanel
             // 
@@ -295,7 +291,7 @@ namespace PasswordGenerator
         private FontAwesome.Sharp.IconButton closeBtn;
         private FontAwesome.Sharp.IconButton maximizeBtn;
         private FontAwesome.Sharp.IconButton minimizeBtn;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label logoLabel;
         private FontAwesome.Sharp.IconButton savesBtn;
         private System.Windows.Forms.Panel topLabelPanel;
         private FontAwesome.Sharp.IconButton picPasswordsBtn;

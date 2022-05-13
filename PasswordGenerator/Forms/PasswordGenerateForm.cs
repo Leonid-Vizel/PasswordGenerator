@@ -16,7 +16,19 @@ namespace PasswordGenerator
             this.generator = generator;
         }
 
-        private void openPasswordBtn_Click(object sender, EventArgs e)
+        private void OnFormLoad(object sender, EventArgs e)
+        {
+            lengthUpDown.Value = generator.PasswordLength;
+            upperCheckBox.Checked = generator.UseUpperCase;
+            lowerCheckBox.Checked = generator.UseLowerCase;
+            numberCheckBox.Checked = generator.UseNumbers;
+            alphanumCheckBox.Checked = generator.UseNonAlphanumeric;
+            similarCheckBox.Checked = generator.ExcludeSimilar;
+            ambiguousCheckBox.Checked = generator.ExcludeAmbiguous;
+        }
+
+        #region Copy and Eye Buttons
+        private void OnEyeClick(object sender, EventArgs e)
         {
             if (openPasswordBtn.IconChar == FontAwesome.Sharp.IconChar.EyeSlash)
             {
@@ -30,24 +42,29 @@ namespace PasswordGenerator
             }
         }
 
-        private void copyBtn_Click(object sender, EventArgs e)
+        private void OnCopyClick(object sender, EventArgs e)
         {
-            copyBtn.IconChar = FontAwesome.Sharp.IconChar.Check;
-            copyBtn.IconColor = Color.Green;
-            Clipboard.SetText(passwordBox.Text);
-            label1.Visible = true;
-            copyLabelShowTimer.Start();
+            if (passwordBox.Text.Length > 0)
+            {
+                copyBtn.IconChar = FontAwesome.Sharp.IconChar.Check;
+                copyBtn.IconColor = Color.Green;
+                Clipboard.SetText(passwordBox.Text);
+                copyLabel.Visible = true;
+                copyLabelShowTimer.Start();
+            }
         }
 
         private void OnCopyTimerElapsed(object sender, EventArgs e)
         {
             copyBtn.IconChar = FontAwesome.Sharp.IconChar.Copy;
             copyBtn.IconColor = Color.Black;
-            label1.Visible = false;
+            copyLabel.Visible = false;
             copyLabelShowTimer.Stop();
         }
+        #endregion
 
-        private void upperCheckBox_CheckedChanged(object sender, EventArgs e)
+        #region CehckBoxes
+        private void OnUpperCheckBoxChanged(object sender, EventArgs e)
         {
             if (!(upperCheckBox.Checked || lowerCheckBox.Checked || alphanumCheckBox.Checked || numberCheckBox.Checked))
             {
@@ -58,7 +75,7 @@ namespace PasswordGenerator
             generator.UseUpperCase = upperCheckBox.Checked;
         }
 
-        private void lowerCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void OnLowerCheckBoxChanged(object sender, EventArgs e)
         {
             if (!(upperCheckBox.Checked || lowerCheckBox.Checked || alphanumCheckBox.Checked || numberCheckBox.Checked))
             {
@@ -69,7 +86,7 @@ namespace PasswordGenerator
             generator.UseLowerCase = lowerCheckBox.Checked;
         }
 
-        private void alphanumCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void OnAlphanumCheckBoxChanged(object sender, EventArgs e)
         {
             if (!(upperCheckBox.Checked || lowerCheckBox.Checked || alphanumCheckBox.Checked || numberCheckBox.Checked))
             {
@@ -80,7 +97,7 @@ namespace PasswordGenerator
             generator.UseNonAlphanumeric = alphanumCheckBox.Checked;
         }
 
-        private void numberCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void OnNumberCheckBoxChanged(object sender, EventArgs e)
         {
             if (!(upperCheckBox.Checked || lowerCheckBox.Checked || alphanumCheckBox.Checked || numberCheckBox.Checked))
             {
@@ -91,28 +108,18 @@ namespace PasswordGenerator
             generator.UseNumbers = numberCheckBox.Checked;
         }
 
-        private void similarCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void OnSimilarCheckBoxChanged(object sender, EventArgs e)
             => generator.ExcludeSimilar = similarCheckBox.Checked;
 
-        private void ambiguousCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void OnAmbiguousCheckBoxChanged(object sender, EventArgs e)
             => generator.ExcludeAmbiguous = ambiguousCheckBox.Checked;
+        #endregion
 
         private void OnGenerateClick(object sender, EventArgs e)
             => passwordBox.Text = generator.Generate();
 
-        private void lengthUpDown_ValueChanged(object sender, EventArgs e)
+        private void OnLengthUpDownChanged(object sender, EventArgs e)
             => generator.PasswordLength = (int)lengthUpDown.Value;
-
-        private void OnFormLoad(object sender, EventArgs e)
-        {
-            lengthUpDown.Value = generator.PasswordLength;
-            upperCheckBox.Checked = generator.UseUpperCase;
-            lowerCheckBox.Checked = generator.UseLowerCase;
-            numberCheckBox.Checked = generator.UseNumbers;
-            alphanumCheckBox.Checked = generator.UseNonAlphanumeric;
-            similarCheckBox.Checked = generator.ExcludeSimilar;
-            ambiguousCheckBox.Checked = generator.ExcludeAmbiguous;
-        }
 
         private void OnOpenSavedClick(object sender, EventArgs e)
             => parent.OnPicPasswordsClick(null,null);
