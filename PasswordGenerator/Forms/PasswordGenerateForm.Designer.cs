@@ -61,17 +61,17 @@ namespace PasswordGenerator
             0,
             0});
             this.lengthUpDown.Name = "lengthUpDown";
-            this.lengthUpDown.Size = new System.Drawing.Size(180, 29);
+            this.lengthUpDown.Size = new System.Drawing.Size(180, 34);
             this.lengthUpDown.TabIndex = 0;
             this.lengthUpDown.ValueChanged += new System.EventHandler(this.lengthUpDown_ValueChanged);
             // 
             // lengthLabel
             // 
             this.lengthLabel.AutoSize = true;
-            this.lengthLabel.Location = new System.Drawing.Point(15, 20);
+            this.lengthLabel.Location = new System.Drawing.Point(-2, 17);
             this.lengthLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lengthLabel.Name = "lengthLabel";
-            this.lengthLabel.Size = new System.Drawing.Size(58, 21);
+            this.lengthLabel.Size = new System.Drawing.Size(75, 28);
             this.lengthLabel.TabIndex = 1;
             this.lengthLabel.Text = "Длина:";
             // 
@@ -81,7 +81,7 @@ namespace PasswordGenerator
             this.numberCheckBox.Location = new System.Drawing.Point(19, 153);
             this.numberCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.numberCheckBox.Name = "numberCheckBox";
-            this.numberCheckBox.Size = new System.Drawing.Size(145, 25);
+            this.numberCheckBox.Size = new System.Drawing.Size(181, 32);
             this.numberCheckBox.TabIndex = 14;
             this.numberCheckBox.Text = "Включить числа";
             this.numberCheckBox.UseVisualStyleBackColor = true;
@@ -93,7 +93,7 @@ namespace PasswordGenerator
             this.alphanumCheckBox.Location = new System.Drawing.Point(19, 120);
             this.alphanumCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.alphanumCheckBox.Name = "alphanumCheckBox";
-            this.alphanumCheckBox.Size = new System.Drawing.Size(341, 25);
+            this.alphanumCheckBox.Size = new System.Drawing.Size(437, 32);
             this.alphanumCheckBox.TabIndex = 13;
             this.alphanumCheckBox.Text = "Включить не буквенно-цифровые символы";
             this.alphanumCheckBox.UseVisualStyleBackColor = true;
@@ -105,7 +105,7 @@ namespace PasswordGenerator
             this.ambiguousCheckBox.Location = new System.Drawing.Point(19, 219);
             this.ambiguousCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.ambiguousCheckBox.Name = "ambiguousCheckBox";
-            this.ambiguousCheckBox.Size = new System.Drawing.Size(295, 25);
+            this.ambiguousCheckBox.Size = new System.Drawing.Size(376, 32);
             this.ambiguousCheckBox.TabIndex = 12;
             this.ambiguousCheckBox.Text = "Исключить неоднозначные символы";
             this.ambiguousCheckBox.UseVisualStyleBackColor = true;
@@ -117,7 +117,7 @@ namespace PasswordGenerator
             this.similarCheckBox.Location = new System.Drawing.Point(19, 186);
             this.similarCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.similarCheckBox.Name = "similarCheckBox";
-            this.similarCheckBox.Size = new System.Drawing.Size(365, 25);
+            this.similarCheckBox.Size = new System.Drawing.Size(463, 32);
             this.similarCheckBox.TabIndex = 11;
             this.similarCheckBox.Text = "Исключить подобные символы (i, l, 1, L, o, 0, O)\r\n";
             this.similarCheckBox.UseVisualStyleBackColor = true;
@@ -129,7 +129,7 @@ namespace PasswordGenerator
             this.lowerCheckBox.Location = new System.Drawing.Point(19, 87);
             this.lowerCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.lowerCheckBox.Name = "lowerCheckBox";
-            this.lowerCheckBox.Size = new System.Drawing.Size(221, 25);
+            this.lowerCheckBox.Size = new System.Drawing.Size(278, 32);
             this.lowerCheckBox.TabIndex = 10;
             this.lowerCheckBox.Text = "Включить строчные буквы";
             this.lowerCheckBox.UseVisualStyleBackColor = true;
@@ -141,7 +141,7 @@ namespace PasswordGenerator
             this.upperCheckBox.Location = new System.Drawing.Point(19, 54);
             this.upperCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.upperCheckBox.Name = "upperCheckBox";
-            this.upperCheckBox.Size = new System.Drawing.Size(232, 25);
+            this.upperCheckBox.Size = new System.Drawing.Size(295, 32);
             this.upperCheckBox.TabIndex = 9;
             this.upperCheckBox.Text = "Включить прописные буквы";
             this.upperCheckBox.UseVisualStyleBackColor = true;
@@ -179,7 +179,7 @@ namespace PasswordGenerator
             this.passwordBox.Location = new System.Drawing.Point(19, 303);
             this.passwordBox.MaxLength = 1000;
             this.passwordBox.Name = "passwordBox";
-            this.passwordBox.Size = new System.Drawing.Size(554, 29);
+            this.passwordBox.Size = new System.Drawing.Size(554, 34);
             this.passwordBox.TabIndex = 20;
             this.passwordBox.UseSystemPasswordChar = true;
             // 
@@ -242,7 +242,7 @@ namespace PasswordGenerator
             this.label1.ForeColor = System.Drawing.Color.Green;
             this.label1.Location = new System.Drawing.Point(21, 335);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(112, 21);
+            this.label1.Size = new System.Drawing.Size(145, 28);
             this.label1.TabIndex = 24;
             this.label1.Text = "Скопировано!";
             // 
@@ -253,7 +253,7 @@ namespace PasswordGenerator
             // 
             // PasswordGenerateForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 28F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(822, 390);
             this.Controls.Add(this.label1);
