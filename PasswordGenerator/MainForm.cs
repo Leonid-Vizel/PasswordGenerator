@@ -139,5 +139,25 @@ namespace PasswordGenerator
             SetCurrentForm(picPasswordsBtn, new SavedSettingForm(this, Generator));
         }
         #endregion
+
+        private void closeCurrentBtn_Click(object sender, EventArgs e)
+        {
+            if (currentButton == null)
+            {
+                return;
+            }
+            if (currentForm != null)
+            {
+                currentForm.Close();
+                workPanel.Controls.Clear();
+                resizeTool.UnlinkEvents(currentForm);
+                currentForm.Dispose();
+                currentForm = null;
+            }
+            topLabelPanel.BackColor = buttonPanel.BackColor;
+            logoPanel.BackColor = ChangeColorBrightness(buttonPanel.BackColor, -0.3);
+            currentButton.BackColor = buttonPanel.BackColor;
+            currentButton = null;
+        }
     }
 }

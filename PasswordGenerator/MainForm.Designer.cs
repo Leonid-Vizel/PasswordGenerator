@@ -43,6 +43,8 @@ namespace PasswordGenerator
             this.maximizeBtn = new FontAwesome.Sharp.IconButton();
             this.minimizeBtn = new FontAwesome.Sharp.IconButton();
             this.topLabelPanel = new System.Windows.Forms.Panel();
+            this.closeCurrentBtn = new FontAwesome.Sharp.IconButton();
+            this.reloadCurrentBtn = new FontAwesome.Sharp.IconButton();
             this.buttonPanel.SuspendLayout();
             this.logoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoBox)).BeginInit();
@@ -165,6 +167,8 @@ namespace PasswordGenerator
             // 
             // workPanel
             // 
+            this.workPanel.BackgroundImage = global::PasswordGenerator.Properties.Resources.keyLogo;
+            this.workPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.workPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.workPanel.Location = new System.Drawing.Point(189, 69);
             this.workPanel.Name = "workPanel";
@@ -249,6 +253,8 @@ namespace PasswordGenerator
             // topLabelPanel
             // 
             this.topLabelPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(76)))));
+            this.topLabelPanel.Controls.Add(this.reloadCurrentBtn);
+            this.topLabelPanel.Controls.Add(this.closeCurrentBtn);
             this.topLabelPanel.Controls.Add(this.minimizeBtn);
             this.topLabelPanel.Controls.Add(this.closeBtn);
             this.topLabelPanel.Controls.Add(this.maximizeBtn);
@@ -258,6 +264,37 @@ namespace PasswordGenerator
             this.topLabelPanel.Name = "topLabelPanel";
             this.topLabelPanel.Size = new System.Drawing.Size(833, 69);
             this.topLabelPanel.TabIndex = 0;
+            // 
+            // closeCurrentBtn
+            // 
+            this.closeCurrentBtn.FlatAppearance.BorderSize = 0;
+            this.closeCurrentBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.closeCurrentBtn.IconChar = FontAwesome.Sharp.IconChar.Plus;
+            this.closeCurrentBtn.IconColor = System.Drawing.Color.White;
+            this.closeCurrentBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.closeCurrentBtn.IconSize = 40;
+            this.closeCurrentBtn.Location = new System.Drawing.Point(6, 12);
+            this.closeCurrentBtn.Name = "closeCurrentBtn";
+            this.closeCurrentBtn.Rotation = 45D;
+            this.closeCurrentBtn.Size = new System.Drawing.Size(37, 37);
+            this.closeCurrentBtn.TabIndex = 10;
+            this.closeCurrentBtn.UseVisualStyleBackColor = true;
+            this.closeCurrentBtn.Click += new System.EventHandler(this.closeCurrentBtn_Click);
+            // 
+            // reloadCurrentBtn
+            // 
+            this.reloadCurrentBtn.FlatAppearance.BorderSize = 0;
+            this.reloadCurrentBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.reloadCurrentBtn.IconChar = FontAwesome.Sharp.IconChar.Redo;
+            this.reloadCurrentBtn.IconColor = System.Drawing.Color.White;
+            this.reloadCurrentBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.reloadCurrentBtn.IconSize = 40;
+            this.reloadCurrentBtn.Location = new System.Drawing.Point(49, 12);
+            this.reloadCurrentBtn.Name = "reloadCurrentBtn";
+            this.reloadCurrentBtn.Rotation = 45D;
+            this.reloadCurrentBtn.Size = new System.Drawing.Size(37, 37);
+            this.reloadCurrentBtn.TabIndex = 11;
+            this.reloadCurrentBtn.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -295,6 +332,8 @@ namespace PasswordGenerator
         private FontAwesome.Sharp.IconButton savesBtn;
         private System.Windows.Forms.Panel topLabelPanel;
         private FontAwesome.Sharp.IconButton picPasswordsBtn;
+        private FontAwesome.Sharp.IconButton closeCurrentBtn;
+        private FontAwesome.Sharp.IconButton reloadCurrentBtn;
     }
 }
 
