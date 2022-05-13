@@ -170,10 +170,6 @@ namespace PasswordGenerator
             this.workPanel.Name = "workPanel";
             this.workPanel.Size = new System.Drawing.Size(833, 552);
             this.workPanel.TabIndex = 3;
-            this.workPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnPanelMouseDown);
-            this.workPanel.MouseLeave += new System.EventHandler(this.OnPanelMouseLeave);
-            this.workPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnPanelMouseMove);
-            this.workPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnPanelMouseUp);
             // 
             // topLabel
             // 

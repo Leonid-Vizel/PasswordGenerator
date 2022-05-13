@@ -9,16 +9,17 @@ namespace PasswordGenerator
 {
     public partial class MainForm : Form
     {
+        private ResizeTool resizeTool;
         public PasswordGenerator Generator { get; set; }
         private IconButton currentButton;
         private Form currentForm;
         public MainForm()
         {
-            isDraggingHorisontal = isDraggingVertical = false;
             Generator = new PasswordGenerator(); //Пока так, потому что не загружаем с базы
             Generator.UseUpperCase = true;
             Generator.PasswordLength = 10;
             InitializeComponent();
+            resizeTool = new ResizeTool(this,workPanel);
         }
 
         #region Moving
@@ -37,71 +38,6 @@ namespace PasswordGenerator
                 ReleaseCapture();
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
-        }
-        #endregion
-
-        #region Resizing
-        private bool isDraggingHorisontal;
-        private bool isDraggingVertical;
-
-        private void OnPanelMouseMove(object sender, MouseEventArgs e)
-        {
-            Panel senderPanel = sender as Panel;
-            if (senderPanel == null)
-            {
-                return;
-            }
-            bool sizeXready = e.X >= senderPanel.Width - 4;
-            bool sizeYready = e.Y >= senderPanel.Height - 4;
-            if (sizeYready)
-            {
-                Cursor = Cursors.SizeNS;
-            }
-            else if (sizeXready)
-            {
-                Cursor = Cursors.SizeWE;
-            }
-            else
-            {
-                Cursor = Cursors.Default;
-            }
-
-            if (isDraggingHorisontal)
-            {
-                Size = new Size(senderPanel.Location.X + senderPanel.Size.Width + (e.X - senderPanel.Size.Width), Height);
-            }
-            else if (isDraggingVertical)
-            {
-                Size = new Size(Width, senderPanel.Location.Y + senderPanel.Size.Height + (e.Y - senderPanel.Size.Height));
-            }
-        }
-
-        private void OnPanelMouseUp(object sender, MouseEventArgs e)
-        {
-            isDraggingHorisontal = isDraggingVertical = false;
-        }
-
-        private void OnPanelMouseDown(object sender, MouseEventArgs e)
-        {
-            Panel senderPanel = sender as Panel;
-            if (senderPanel == null)
-            {
-                return;
-            }
-            if (e.X >= senderPanel.Width - 4)
-            {
-                isDraggingHorisontal = true;
-            }
-            else if (e.Y >= senderPanel.Height - 4)
-            {
-                isDraggingVertical = true;
-            }
-        }
-
-        private void OnPanelMouseLeave(object sender, EventArgs e)
-        {
-            Cursor = Cursors.Default;
-            isDraggingHorisontal = isDraggingVertical = false;
         }
         #endregion
 
@@ -146,9 +82,13 @@ namespace PasswordGenerator
                 currentButton.BackColor = buttonPanel.BackColor;
             }
             string hexColorString = nextForm.Tag as string;
-            currentForm?.Close();
-            workPanel.Controls.Clear();
-            currentForm?.Dispose();
+            if (currentForm != null)
+            {
+                currentForm.Close();
+                workPanel.Controls.Clear();
+                resizeTool.UnlinkEvents(currentForm);
+                currentForm.Dispose();
+            }
             if (hexColorString != null)
             {
                 Color fromHexColor = ColorTranslator.FromHtml(hexColorString);
@@ -161,6 +101,7 @@ namespace PasswordGenerator
             nextForm.TopLevel = false;
             workPanel.Controls.Add(nextForm);
             topLabel.Text = nextForm.Text;
+            resizeTool.LinkEvents(nextForm);
             nextForm.BringToFront();
             nextForm.Show();
         }
