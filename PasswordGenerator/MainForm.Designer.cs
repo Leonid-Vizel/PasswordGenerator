@@ -37,14 +37,14 @@ namespace PasswordGenerator
             this.logoPanel = new System.Windows.Forms.Panel();
             this.logoLabel = new System.Windows.Forms.Label();
             this.logoBox = new System.Windows.Forms.PictureBox();
-            this.workPanel = new System.Windows.Forms.Panel();
             this.topLabel = new System.Windows.Forms.Label();
+            this.topLabelPanel = new System.Windows.Forms.Panel();
+            this.reloadCurrentBtn = new FontAwesome.Sharp.IconButton();
+            this.closeCurrentBtn = new FontAwesome.Sharp.IconButton();
+            this.minimizeBtn = new FontAwesome.Sharp.IconButton();
             this.closeBtn = new FontAwesome.Sharp.IconButton();
             this.maximizeBtn = new FontAwesome.Sharp.IconButton();
-            this.minimizeBtn = new FontAwesome.Sharp.IconButton();
-            this.topLabelPanel = new System.Windows.Forms.Panel();
-            this.closeCurrentBtn = new FontAwesome.Sharp.IconButton();
-            this.reloadCurrentBtn = new FontAwesome.Sharp.IconButton();
+            this.workPanel = new System.Windows.Forms.Panel();
             this.buttonPanel.SuspendLayout();
             this.logoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoBox)).BeginInit();
@@ -142,7 +142,7 @@ namespace PasswordGenerator
             // 
             this.logoLabel.BackColor = System.Drawing.Color.Transparent;
             this.logoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logoLabel.Font = new System.Drawing.Font("Copperplate Gothic Light", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.logoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F);
             this.logoLabel.ForeColor = System.Drawing.Color.White;
             this.logoLabel.Location = new System.Drawing.Point(69, 0);
             this.logoLabel.Name = "logoLabel";
@@ -165,16 +165,6 @@ namespace PasswordGenerator
             this.logoBox.TabStop = false;
             this.logoBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveMouseDown);
             // 
-            // workPanel
-            // 
-            this.workPanel.BackgroundImage = global::PasswordGenerator.Properties.Resources.keyLogo;
-            this.workPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.workPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.workPanel.Location = new System.Drawing.Point(189, 69);
-            this.workPanel.Name = "workPanel";
-            this.workPanel.Size = new System.Drawing.Size(833, 552);
-            this.workPanel.TabIndex = 3;
-            // 
             // topLabel
             // 
             this.topLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -184,11 +174,80 @@ namespace PasswordGenerator
             this.topLabel.ForeColor = System.Drawing.Color.White;
             this.topLabel.Location = new System.Drawing.Point(0, 0);
             this.topLabel.Name = "topLabel";
-            this.topLabel.Size = new System.Drawing.Size(725, 69);
+            this.topLabel.Size = new System.Drawing.Size(833, 69);
             this.topLabel.TabIndex = 6;
             this.topLabel.Text = "Генератор безопасных паролей";
             this.topLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.topLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveMouseDown);
+            // 
+            // topLabelPanel
+            // 
+            this.topLabelPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(76)))));
+            this.topLabelPanel.Controls.Add(this.reloadCurrentBtn);
+            this.topLabelPanel.Controls.Add(this.closeCurrentBtn);
+            this.topLabelPanel.Controls.Add(this.minimizeBtn);
+            this.topLabelPanel.Controls.Add(this.closeBtn);
+            this.topLabelPanel.Controls.Add(this.maximizeBtn);
+            this.topLabelPanel.Controls.Add(this.topLabel);
+            this.topLabelPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.topLabelPanel.Location = new System.Drawing.Point(189, 0);
+            this.topLabelPanel.Name = "topLabelPanel";
+            this.topLabelPanel.Size = new System.Drawing.Size(833, 69);
+            this.topLabelPanel.TabIndex = 0;
+            // 
+            // reloadCurrentBtn
+            // 
+            this.reloadCurrentBtn.FlatAppearance.BorderSize = 0;
+            this.reloadCurrentBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.reloadCurrentBtn.IconChar = FontAwesome.Sharp.IconChar.Redo;
+            this.reloadCurrentBtn.IconColor = System.Drawing.Color.White;
+            this.reloadCurrentBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.reloadCurrentBtn.IconSize = 30;
+            this.reloadCurrentBtn.Location = new System.Drawing.Point(45, 30);
+            this.reloadCurrentBtn.Name = "reloadCurrentBtn";
+            this.reloadCurrentBtn.Rotation = 45D;
+            this.reloadCurrentBtn.Size = new System.Drawing.Size(33, 33);
+            this.reloadCurrentBtn.TabIndex = 11;
+            this.reloadCurrentBtn.UseVisualStyleBackColor = true;
+            this.reloadCurrentBtn.Visible = false;
+            this.reloadCurrentBtn.Click += new System.EventHandler(this.reloadCurrentBtn_Click);
+            // 
+            // closeCurrentBtn
+            // 
+            this.closeCurrentBtn.FlatAppearance.BorderSize = 0;
+            this.closeCurrentBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.closeCurrentBtn.IconChar = FontAwesome.Sharp.IconChar.Plus;
+            this.closeCurrentBtn.IconColor = System.Drawing.Color.White;
+            this.closeCurrentBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.closeCurrentBtn.IconSize = 30;
+            this.closeCurrentBtn.Location = new System.Drawing.Point(6, 30);
+            this.closeCurrentBtn.Name = "closeCurrentBtn";
+            this.closeCurrentBtn.Rotation = 45D;
+            this.closeCurrentBtn.Size = new System.Drawing.Size(33, 33);
+            this.closeCurrentBtn.TabIndex = 10;
+            this.closeCurrentBtn.UseVisualStyleBackColor = true;
+            this.closeCurrentBtn.Visible = false;
+            this.closeCurrentBtn.Click += new System.EventHandler(this.closeCurrentBtn_Click);
+            // 
+            // minimizeBtn
+            // 
+            this.minimizeBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.minimizeBtn.BackColor = System.Drawing.Color.Transparent;
+            this.minimizeBtn.FlatAppearance.BorderSize = 0;
+            this.minimizeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.minimizeBtn.ForeColor = System.Drawing.Color.White;
+            this.minimizeBtn.IconChar = FontAwesome.Sharp.IconChar.Circle;
+            this.minimizeBtn.IconColor = System.Drawing.Color.White;
+            this.minimizeBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.minimizeBtn.IconSize = 29;
+            this.minimizeBtn.Location = new System.Drawing.Point(713, 0);
+            this.minimizeBtn.Name = "minimizeBtn";
+            this.minimizeBtn.Size = new System.Drawing.Size(40, 30);
+            this.minimizeBtn.TabIndex = 9;
+            this.minimizeBtn.UseVisualStyleBackColor = false;
+            this.minimizeBtn.Click += new System.EventHandler(this.OnMinClick);
+            this.minimizeBtn.MouseEnter += new System.EventHandler(this.OnMixMouseEnter);
+            this.minimizeBtn.MouseLeave += new System.EventHandler(this.OnMinMouseLeave);
             // 
             // closeBtn
             // 
@@ -201,9 +260,9 @@ namespace PasswordGenerator
             this.closeBtn.IconColor = System.Drawing.Color.White;
             this.closeBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.closeBtn.IconSize = 29;
-            this.closeBtn.Location = new System.Drawing.Point(803, 0);
+            this.closeBtn.Location = new System.Drawing.Point(793, 0);
             this.closeBtn.Name = "closeBtn";
-            this.closeBtn.Size = new System.Drawing.Size(30, 30);
+            this.closeBtn.Size = new System.Drawing.Size(40, 30);
             this.closeBtn.TabIndex = 7;
             this.closeBtn.UseVisualStyleBackColor = false;
             this.closeBtn.Click += new System.EventHandler(this.OnCloseClick);
@@ -221,85 +280,31 @@ namespace PasswordGenerator
             this.maximizeBtn.IconColor = System.Drawing.Color.White;
             this.maximizeBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.maximizeBtn.IconSize = 29;
-            this.maximizeBtn.Location = new System.Drawing.Point(767, 0);
+            this.maximizeBtn.Location = new System.Drawing.Point(753, 0);
             this.maximizeBtn.Name = "maximizeBtn";
-            this.maximizeBtn.Size = new System.Drawing.Size(30, 30);
+            this.maximizeBtn.Size = new System.Drawing.Size(40, 30);
             this.maximizeBtn.TabIndex = 8;
             this.maximizeBtn.UseVisualStyleBackColor = false;
             this.maximizeBtn.Click += new System.EventHandler(this.OnMaxClick);
             this.maximizeBtn.MouseEnter += new System.EventHandler(this.OnMaxMouseEnter);
             this.maximizeBtn.MouseLeave += new System.EventHandler(this.OnMaxMouseLeave);
             // 
-            // minimizeBtn
+            // workPanel
             // 
-            this.minimizeBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.minimizeBtn.BackColor = System.Drawing.Color.Transparent;
-            this.minimizeBtn.FlatAppearance.BorderSize = 0;
-            this.minimizeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.minimizeBtn.ForeColor = System.Drawing.Color.White;
-            this.minimizeBtn.IconChar = FontAwesome.Sharp.IconChar.Circle;
-            this.minimizeBtn.IconColor = System.Drawing.Color.White;
-            this.minimizeBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.minimizeBtn.IconSize = 29;
-            this.minimizeBtn.Location = new System.Drawing.Point(731, 0);
-            this.minimizeBtn.Name = "minimizeBtn";
-            this.minimizeBtn.Size = new System.Drawing.Size(30, 30);
-            this.minimizeBtn.TabIndex = 9;
-            this.minimizeBtn.UseVisualStyleBackColor = false;
-            this.minimizeBtn.Click += new System.EventHandler(this.OnMinClick);
-            this.minimizeBtn.MouseEnter += new System.EventHandler(this.OnMixMouseEnter);
-            this.minimizeBtn.MouseLeave += new System.EventHandler(this.OnMinMouseLeave);
-            // 
-            // topLabelPanel
-            // 
-            this.topLabelPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(76)))));
-            this.topLabelPanel.Controls.Add(this.reloadCurrentBtn);
-            this.topLabelPanel.Controls.Add(this.closeCurrentBtn);
-            this.topLabelPanel.Controls.Add(this.minimizeBtn);
-            this.topLabelPanel.Controls.Add(this.closeBtn);
-            this.topLabelPanel.Controls.Add(this.maximizeBtn);
-            this.topLabelPanel.Controls.Add(this.topLabel);
-            this.topLabelPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.topLabelPanel.Location = new System.Drawing.Point(189, 0);
-            this.topLabelPanel.Name = "topLabelPanel";
-            this.topLabelPanel.Size = new System.Drawing.Size(833, 69);
-            this.topLabelPanel.TabIndex = 0;
-            // 
-            // closeCurrentBtn
-            // 
-            this.closeCurrentBtn.FlatAppearance.BorderSize = 0;
-            this.closeCurrentBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.closeCurrentBtn.IconChar = FontAwesome.Sharp.IconChar.Plus;
-            this.closeCurrentBtn.IconColor = System.Drawing.Color.White;
-            this.closeCurrentBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.closeCurrentBtn.IconSize = 40;
-            this.closeCurrentBtn.Location = new System.Drawing.Point(6, 12);
-            this.closeCurrentBtn.Name = "closeCurrentBtn";
-            this.closeCurrentBtn.Rotation = 45D;
-            this.closeCurrentBtn.Size = new System.Drawing.Size(37, 37);
-            this.closeCurrentBtn.TabIndex = 10;
-            this.closeCurrentBtn.UseVisualStyleBackColor = true;
-            this.closeCurrentBtn.Click += new System.EventHandler(this.closeCurrentBtn_Click);
-            // 
-            // reloadCurrentBtn
-            // 
-            this.reloadCurrentBtn.FlatAppearance.BorderSize = 0;
-            this.reloadCurrentBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.reloadCurrentBtn.IconChar = FontAwesome.Sharp.IconChar.Redo;
-            this.reloadCurrentBtn.IconColor = System.Drawing.Color.White;
-            this.reloadCurrentBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.reloadCurrentBtn.IconSize = 40;
-            this.reloadCurrentBtn.Location = new System.Drawing.Point(49, 12);
-            this.reloadCurrentBtn.Name = "reloadCurrentBtn";
-            this.reloadCurrentBtn.Rotation = 45D;
-            this.reloadCurrentBtn.Size = new System.Drawing.Size(37, 37);
-            this.reloadCurrentBtn.TabIndex = 11;
-            this.reloadCurrentBtn.UseVisualStyleBackColor = true;
+            this.workPanel.BackColor = System.Drawing.Color.White;
+            this.workPanel.BackgroundImage = global::PasswordGenerator.Properties.Resources.keyLogo;
+            this.workPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.workPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.workPanel.Location = new System.Drawing.Point(189, 69);
+            this.workPanel.Name = "workPanel";
+            this.workPanel.Size = new System.Drawing.Size(833, 552);
+            this.workPanel.TabIndex = 3;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(76)))));
             this.ClientSize = new System.Drawing.Size(1022, 621);
             this.Controls.Add(this.workPanel);
             this.Controls.Add(this.topLabelPanel);

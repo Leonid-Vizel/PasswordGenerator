@@ -1,7 +1,9 @@
 ﻿using FontAwesome.Sharp;
 using PasswordGenerator.Forms;
 using System;
+using System.IO;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -9,17 +11,40 @@ namespace PasswordGenerator
 {
     public partial class MainForm : Form
     {
-        private ResizeTool resizeTool;
-        public PasswordGenerator Generator { get; set; }
-        private IconButton currentButton;
-        private Form currentForm;
+        public PasswordGenerator Generator { get; set; } //Объект генератора паролей
+        private IconButton currentButton; //Текущая выбранная кнопка
+        private Form currentForm; //Текущая открытая форма
+        private bool checkBtnState; //Флаг, отвечающий за проверку текущей кнопки при нажатии
+        private PrivateFontCollection fontCollection; //Коллекция шрифтов (На самом деле только 1) для лого
         public MainForm()
         {
             Generator = new PasswordGenerator(); //Пока так, потому что не загружаем с базы
             Generator.UseUpperCase = true;
             Generator.PasswordLength = 10;
+            checkBtnState = true;
             InitializeComponent();
-            resizeTool = new ResizeTool(this,workPanel);
+            ApplyFontToLogoLabel();
+        }
+
+        private void ApplyFontToLogoLabel()
+        {
+            if (File.Exists("Break.ttf"))
+            {
+                fontCollection = new PrivateFontCollection();
+                try
+                {
+                    fontCollection.AddFontFile($"{Environment.CurrentDirectory}\\Break.ttf");
+                    logoLabel.Font = new Font(fontCollection.Families[0], 18);
+                }
+                catch
+                {
+                    MessageBox.Show("Не удалось загрузить шрифт!", "Ошибка");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Не найден файл шрифта!", "Ошибка");
+            }
         }
 
         #region Moving
@@ -70,13 +95,46 @@ namespace PasswordGenerator
             => minimizeBtn.BackColor = Color.Transparent;
         #endregion
 
+        #region Resizing
+        protected override void WndProc(ref Message m)
+        {
+            const int wmNcHitTest = 0x84;
+            const int htBottomLeft = 16;
+            const int htBottomRight = 17;
+            if (m.Msg == wmNcHitTest)
+            {
+                int x = (int)(m.LParam.ToInt64() & 0xFFFF);
+                int y = (int)((m.LParam.ToInt64() & 0xFFFF0000) >> 16);
+                Point pt = PointToClient(new Point(x, y));
+                Size clientSize = ClientSize;
+                if (pt.X >= clientSize.Width - 16 && pt.Y >= clientSize.Height - 16 && clientSize.Height >= 16)
+                {
+                    m.Result = (IntPtr)(IsMirrored ? htBottomLeft : htBottomRight);
+                    return;
+                }
+            }
+            base.WndProc(ref m);
+        }
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.Style |= 0x00040000;
+                return cp;
+            }
+        }
+        #endregion
+
         #region Buttons
         public void SetCurrentForm(IconButton nextButton, Form nextForm)
         {
-            if (currentButton == nextButton)
+            if (checkBtnState && currentButton == nextButton)
             {
                 return;
             }
+            closeCurrentBtn.Visible = reloadCurrentBtn.Visible = true;
             if (currentButton != null)
             {
                 currentButton.BackColor = buttonPanel.BackColor;
@@ -86,7 +144,6 @@ namespace PasswordGenerator
             {
                 currentForm.Close();
                 workPanel.Controls.Clear();
-                resizeTool.UnlinkEvents(currentForm);
                 currentForm.Dispose();
             }
             if (hexColorString != null)
@@ -101,7 +158,6 @@ namespace PasswordGenerator
             nextForm.TopLevel = false;
             workPanel.Controls.Add(nextForm);
             topLabel.Text = nextForm.Text;
-            resizeTool.LinkEvents(nextForm);
             nextForm.BringToFront();
             nextForm.Show();
         }
@@ -130,18 +186,15 @@ namespace PasswordGenerator
         }
 
         private void OnGenerateBtnClick(object sender, EventArgs e)
-        {
-            SetCurrentForm(generateBtn, new PasswordGenerateForm(this, Generator));
-        }
+            => SetCurrentForm(generateBtn, new PasswordGenerateForm(this, Generator));
 
         public void OnPicPasswordsClick(object sender, EventArgs e)
-        {
-            SetCurrentForm(picPasswordsBtn, new SavedSettingForm(this, Generator));
-        }
+            => SetCurrentForm(picPasswordsBtn, new SavedSettingForm(this, Generator));
         #endregion
 
         private void closeCurrentBtn_Click(object sender, EventArgs e)
         {
+            closeCurrentBtn.Visible = reloadCurrentBtn.Visible = false;
             if (currentButton == null)
             {
                 return;
@@ -150,7 +203,6 @@ namespace PasswordGenerator
             {
                 currentForm.Close();
                 workPanel.Controls.Clear();
-                resizeTool.UnlinkEvents(currentForm);
                 currentForm.Dispose();
                 currentForm = null;
             }
@@ -158,6 +210,13 @@ namespace PasswordGenerator
             logoPanel.BackColor = ChangeColorBrightness(buttonPanel.BackColor, -0.3);
             currentButton.BackColor = buttonPanel.BackColor;
             currentButton = null;
+        }
+
+        private void reloadCurrentBtn_Click(object sender, EventArgs e)
+        {
+            checkBtnState = false;
+            currentButton.PerformClick();
+            checkBtnState = true;
         }
     }
 }
