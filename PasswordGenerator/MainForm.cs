@@ -22,6 +22,7 @@ namespace PasswordGenerator
             Generator.UseUpperCase = true;
             Generator.PasswordLength = 10;
             checkBtnState = true;
+            SetProcessDpiAwarenessContext(-1);
             InitializeComponent();
             ApplyFontToLogoLabel();
         }
@@ -191,6 +192,9 @@ namespace PasswordGenerator
         public void OnPicPasswordsClick(object sender, EventArgs e)
             => SetCurrentForm(picPasswordsBtn, new SavedSettingForm(this, Generator));
         #endregion
+
+        [DllImport("user32.dll")]
+        private static extern bool SetProcessDpiAwarenessContext(int value);
 
         private void closeCurrentBtn_Click(object sender, EventArgs e)
         {
