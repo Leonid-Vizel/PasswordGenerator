@@ -99,7 +99,7 @@ namespace PasswordGenerator
             this.picPasswordsBtn.Name = "picPasswordsBtn";
             this.picPasswordsBtn.Size = new System.Drawing.Size(189, 60);
             this.picPasswordsBtn.TabIndex = 2;
-            this.picPasswordsBtn.Text = "Картинки-пароли";
+            this.picPasswordsBtn.Text = "Пароли-картинки";
             this.picPasswordsBtn.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.picPasswordsBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.picPasswordsBtn.UseVisualStyleBackColor = true;

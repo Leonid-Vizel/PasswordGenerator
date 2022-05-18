@@ -10,7 +10,7 @@ namespace PasswordGenerator
         private static string DefaultAlphabet { get; } = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private static string NonAlphanumerics { get; } = "~`'!@#$%^&*()_-+={}[]|\\:\";<,>.?/";
         private static string NumberChars { get; } = "0123456789";
-        private static string SimilarChars { get; } = "il1Lo0O";
+        private static string SimilarChars { get; } = "iIl1Lo0O";
         private static string AmbiguousChars { get; } = "{}[]()/\\'\"`~,;:.<>";
 
         private Random Random { get; set; }

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace PasswordGenerator
 {
@@ -151,7 +152,7 @@ namespace PasswordGenerator
             {
                 Color fromHexColor = ColorTranslator.FromHtml(hexColorString);
                 nextButton.BackColor = topLabelPanel.BackColor = fromHexColor;
-                logoPanel.BackColor = ChangeColorBrightness(nextButton.BackColor, -0.3);
+                logoPanel.BackColor = Algorythms.ChangeColorBrightness(nextButton.BackColor, -0.3);
             }
             currentButton = nextButton;
             currentForm = nextForm;
@@ -163,34 +164,11 @@ namespace PasswordGenerator
             nextForm.Show();
         }
 
-        public Color ChangeColorBrightness(Color color, double correctionFactor)
-        {
-            double red = color.R;
-            double green = color.G;
-            double blue = color.B;
-            //If correction factor is less than 0, darken color.
-            if (correctionFactor < 0)
-            {
-                correctionFactor = 1 + correctionFactor;
-                red *= correctionFactor;
-                green *= correctionFactor;
-                blue *= correctionFactor;
-            }
-            //If correction factor is greater than zero, lighten color.
-            else
-            {
-                red = (255 - red) * correctionFactor + red;
-                green = (255 - green) * correctionFactor + green;
-                blue = (255 - blue) * correctionFactor + blue;
-            }
-            return Color.FromArgb(color.A, (byte)red, (byte)green, (byte)blue);
-        }
-
         private void OnGenerateBtnClick(object sender, EventArgs e)
             => SetCurrentForm(generateBtn, new PasswordGenerateForm(this, Generator));
 
         public void OnPicPasswordsClick(object sender, EventArgs e)
-            => SetCurrentForm(picPasswordsBtn, new SavedSettingForm(this, Generator));
+            => SetCurrentForm(picPasswordsBtn, new PictureGenForm(this, new List<string>() { "ABOBA" }));
         #endregion
 
         [DllImport("user32.dll")]
@@ -211,7 +189,7 @@ namespace PasswordGenerator
                 currentForm = null;
             }
             topLabelPanel.BackColor = buttonPanel.BackColor;
-            logoPanel.BackColor = ChangeColorBrightness(buttonPanel.BackColor, -0.3);
+            logoPanel.BackColor = Algorythms.ChangeColorBrightness(buttonPanel.BackColor, -0.3);
             currentButton.BackColor = buttonPanel.BackColor;
             currentButton = null;
         }
