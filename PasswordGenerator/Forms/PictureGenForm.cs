@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FontAwesome.Sharp;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -120,10 +121,8 @@ namespace PasswordGenerator.Forms
             btnPanel.Location = new Point(0, 223);
             btnPanel.Size = new Size(200, 33);
             #endregion
-            #region Добавление
-            passPicPanel.Controls.Add(btnPanel);
-            passPicPanel.Controls.Add(passLabel);
-            passPicPanel.Controls.Add(new PictureBox()
+            #region Картинка
+            PictureBox passImageBox = new PictureBox()
             {
                 Dock = DockStyle.Top,
                 SizeMode = PictureBoxSizeMode.StretchImage,
@@ -132,7 +131,34 @@ namespace PasswordGenerator.Forms
                 Margin = new Padding(4, 5, 4, 5),
                 Size = new Size(198, 176),
                 TabStop = false
-            });
+            };
+            #endregion
+            #region Кнопка удаления
+            IconButton deleteBtn = new IconButton();
+            deleteBtn.FlatAppearance.BorderSize = 0;
+            deleteBtn.FlatStyle = FlatStyle.Flat;
+            deleteBtn.IconChar = IconChar.Plus;
+            deleteBtn.Rotation = 45;
+            deleteBtn.IconSize = 20;
+            deleteBtn.Size = new Size(25, 25);
+            deleteBtn.BackColor = Color.Red;
+            deleteBtn.Location = new Point(passImageBox.Width - 25, 0);
+            deleteBtn.Click += (object senderObject, EventArgs arg) =>
+            {
+                ImagePassword pass = passPicPanel.Tag as ImagePassword;
+                if (pass == null)
+                {
+                    return;
+                }
+                RemovePassword(pass);
+                //!BASE! Добавить удаление из базы по Id элемента
+            };
+            #endregion
+            #region Добавление
+            passPicPanel.Controls.Add(btnPanel);
+            passPicPanel.Controls.Add(passLabel);
+            passPicPanel.Controls.Add(passImageBox);
+            passImageBox.Controls.Add(deleteBtn);
             #endregion
             passPicPanel.Location = location;
             passPicPanel.Margin = new Padding(4, 5, 4, 5);
@@ -163,6 +189,14 @@ namespace PasswordGenerator.Forms
             passwords.Add(password);
         }
 
+        public void RemovePassword(ImagePassword password)
+        {
+            passwords.Remove(password);
+            workPanel.Controls.Remove(password.Panel);
+            password.Image.Dispose();
+            RelocatePanels();
+        }
+
         public int GetNextId()
         {
             if (passwords.Count == 0)
@@ -170,6 +204,33 @@ namespace PasswordGenerator.Forms
                 return 0;
             }
             return passwords.Max(x => x.Id) + 1;
+        }
+
+        public void RelocatePanels()
+        {
+            if (passwords.Count == 0)
+            {
+                return;
+            }
+            int amountFit = (workPanel.Width - margin) / (200 + margin);
+            float lineAmount = (float)passwords.Count / amountFit;
+            if (lineAmount % 1 > 0)
+            {
+                lineAmount++;
+            }
+            int intLineAmount = (int)lineAmount;
+            for (int y = 0; y < intLineAmount; y++)
+            {
+                for (int x = 0; x < amountFit; x++)
+                {
+                    int index = amountFit * y + x;
+                    if (index >= passwords.Count)
+                    {
+                        break;
+                    }
+                    passwords[amountFit * y + x].Panel.Location = new Point(margin + (200 + margin) * x, 2 * margin + (258 + margin) * y);
+                }
+            }
         }
 
         public void OnWorkPanelResized(object sender, EventArgs e)
@@ -203,7 +264,7 @@ namespace PasswordGenerator.Forms
                     {
                         break;
                     }
-                    passwords[amountFit * y + x].Panel.Location = new Point(margin + (200 + margin) * x, 2*margin + (258 + margin) * y);
+                    passwords[amountFit * y + x].Panel.Location = new Point(margin + (200 + margin) * x, 2 * margin + (258 + margin) * y);
                 }
             }
             lastCountInLine = amountFit;

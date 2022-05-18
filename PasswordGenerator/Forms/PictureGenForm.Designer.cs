@@ -90,7 +90,7 @@ namespace PasswordGenerator.Forms
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "PictureGenForm";
             this.Tag = "#2196F3";
-            this.Text = "Пароли-картинки";
+            this.Text = "Ваши пароли-картинки";
             this.topPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
