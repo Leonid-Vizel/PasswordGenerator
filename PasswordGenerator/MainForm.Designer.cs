@@ -39,6 +39,7 @@ namespace PasswordGenerator
             this.logoBox = new System.Windows.Forms.PictureBox();
             this.topLabel = new System.Windows.Forms.Label();
             this.topLabelPanel = new System.Windows.Forms.Panel();
+            this.backBtn = new FontAwesome.Sharp.IconButton();
             this.reloadCurrentBtn = new FontAwesome.Sharp.IconButton();
             this.closeCurrentBtn = new FontAwesome.Sharp.IconButton();
             this.minimizeBtn = new FontAwesome.Sharp.IconButton();
@@ -183,6 +184,7 @@ namespace PasswordGenerator
             // topLabelPanel
             // 
             this.topLabelPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(76)))));
+            this.topLabelPanel.Controls.Add(this.backBtn);
             this.topLabelPanel.Controls.Add(this.reloadCurrentBtn);
             this.topLabelPanel.Controls.Add(this.closeCurrentBtn);
             this.topLabelPanel.Controls.Add(this.minimizeBtn);
@@ -195,6 +197,22 @@ namespace PasswordGenerator
             this.topLabelPanel.Size = new System.Drawing.Size(833, 69);
             this.topLabelPanel.TabIndex = 0;
             // 
+            // backBtn
+            // 
+            this.backBtn.FlatAppearance.BorderSize = 0;
+            this.backBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.backBtn.IconChar = FontAwesome.Sharp.IconChar.ArrowLeft;
+            this.backBtn.IconColor = System.Drawing.Color.White;
+            this.backBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.backBtn.IconSize = 30;
+            this.backBtn.Location = new System.Drawing.Point(85, 30);
+            this.backBtn.Name = "backBtn";
+            this.backBtn.Size = new System.Drawing.Size(33, 33);
+            this.backBtn.TabIndex = 12;
+            this.backBtn.UseVisualStyleBackColor = true;
+            this.backBtn.Visible = false;
+            this.backBtn.Click += new System.EventHandler(this.backBtn_Click);
+            // 
             // reloadCurrentBtn
             // 
             this.reloadCurrentBtn.FlatAppearance.BorderSize = 0;
@@ -203,10 +221,10 @@ namespace PasswordGenerator
             this.reloadCurrentBtn.IconColor = System.Drawing.Color.White;
             this.reloadCurrentBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.reloadCurrentBtn.IconSize = 30;
-            this.reloadCurrentBtn.Location = new System.Drawing.Point(45, 30);
+            this.reloadCurrentBtn.Location = new System.Drawing.Point(3, 30);
             this.reloadCurrentBtn.Name = "reloadCurrentBtn";
             this.reloadCurrentBtn.Rotation = 45D;
-            this.reloadCurrentBtn.Size = new System.Drawing.Size(33, 33);
+            this.reloadCurrentBtn.Size = new System.Drawing.Size(42, 33);
             this.reloadCurrentBtn.TabIndex = 11;
             this.reloadCurrentBtn.UseVisualStyleBackColor = true;
             this.reloadCurrentBtn.Visible = false;
@@ -220,7 +238,7 @@ namespace PasswordGenerator
             this.closeCurrentBtn.IconColor = System.Drawing.Color.White;
             this.closeCurrentBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.closeCurrentBtn.IconSize = 30;
-            this.closeCurrentBtn.Location = new System.Drawing.Point(6, 30);
+            this.closeCurrentBtn.Location = new System.Drawing.Point(46, 30);
             this.closeCurrentBtn.Name = "closeCurrentBtn";
             this.closeCurrentBtn.Rotation = 45D;
             this.closeCurrentBtn.Size = new System.Drawing.Size(33, 33);
@@ -339,6 +357,7 @@ namespace PasswordGenerator
         private FontAwesome.Sharp.IconButton picPasswordsBtn;
         private FontAwesome.Sharp.IconButton closeCurrentBtn;
         private FontAwesome.Sharp.IconButton reloadCurrentBtn;
+        public FontAwesome.Sharp.IconButton backBtn;
     }
 }
 
