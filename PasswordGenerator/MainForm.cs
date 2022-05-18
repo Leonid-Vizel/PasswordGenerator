@@ -225,7 +225,11 @@ namespace PasswordGenerator
             }
             topLabelPanel.BackColor = buttonPanel.BackColor;
             logoPanel.BackColor = Algorythms.ChangeColorBrightness(buttonPanel.BackColor, -0.3);
-            currentButton.BackColor = lastButton.BackColor = buttonPanel.BackColor;
+            currentButton.BackColor = buttonPanel.BackColor;
+            if (lastButton != null)
+            {
+                lastButton.BackColor = buttonPanel.BackColor;
+            }
             currentButton = lastButton = null;
         }
 
