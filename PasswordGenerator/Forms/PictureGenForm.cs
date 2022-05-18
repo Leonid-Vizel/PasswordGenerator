@@ -17,11 +17,19 @@ namespace PasswordGenerator.Forms
         private Color formColor;
         public PictureGenForm(MainForm parent, List<ImagePassword> passwords)
         {
-            this.passwords = new List<ImagePassword>();
             Parent = parent;
             InitializeComponent();
             formColor = ColorTranslator.FromHtml((string)Tag);
-            passwords.ForEach(x => AddPassword(x));
+            if (passwords.Count == 0)
+            {
+                this.passwords = passwords;
+            }
+            else
+            {
+                this.passwords = new List<ImagePassword>();
+                passwords.ForEach(x => AddPassword(x));
+                this.passwords = passwords;
+            }
         }
 
         private void OnBorderDraw(object sender, PaintEventArgs e)
@@ -273,6 +281,15 @@ namespace PasswordGenerator.Forms
         private void OnAddClick(object sender, EventArgs e)
         {
             Parent.SetNextForm(addBtn, new CreateImagePasswordForm(this));
+        }
+
+        private void PictureGenForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            passwords.ForEach(x =>
+            {
+                x.Panel.Dispose();
+                x.Panel = null;
+            });
         }
     }
 }

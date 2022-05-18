@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace PasswordGenerator
 {
@@ -69,6 +72,18 @@ namespace PasswordGenerator
                 passwordBuilder.Append(charSearchList[Random.Next(0, charSearchList.Count())]);
             }
             return passwordBuilder.ToString();
+        }
+
+        public void SaveJson()
+        {
+            try
+            {
+                File.WriteAllText("generatorInfo.json", JsonConvert.SerializeObject(this));
+            }
+            catch
+            {
+                MessageBox.Show("Ошибка сохранения найтроек генератора!", "Ошибка");
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace PasswordGenerator
 {
@@ -19,13 +20,49 @@ namespace PasswordGenerator
         private PrivateFontCollection fontCollection; //Коллекция шрифтов (На самом деле только 1) для лого
         private Form lastForm; //Форма для возрата назад при использовании SetNextForm
         private IconButton lastButton; //Кнопка для возрата назад при использовании SetNextForm
+        private List<ImagePassword> loadedPasswords;
 
         public MainForm()
         {
-            Generator = new PasswordGenerator(); //Пока так, потому что не загружаем с базы
-            Generator.UseUpperCase = true;
-            Generator.PasswordLength = 10;
-            checkBtnState = true;
+            if (File.Exists("generatorInfo.json"))
+            {
+                try
+                {
+                    Generator = JsonConvert.DeserializeObject<PasswordGenerator>(File.ReadAllText("generatorInfo.json"));
+                }
+                catch
+                {
+                    Generator = new PasswordGenerator();
+                    Generator.UseUpperCase = true;
+                    Generator.PasswordLength = 10;
+                    checkBtnState = true;
+                    try
+                    {
+                        File.WriteAllText("generatorInfo.json", JsonConvert.SerializeObject(Generator));
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Отсутствует файл найтроек генератора. Ошибка при создании нового.", "Ошибка");
+                    }
+                }
+            }
+            else
+            {
+                Generator = new PasswordGenerator();
+                Generator.UseUpperCase = true;
+                Generator.PasswordLength = 10;
+                checkBtnState = true;
+                try
+                {
+                    File.WriteAllText("generatorInfo.json", JsonConvert.SerializeObject(Generator));
+                }
+                catch
+                {
+                    MessageBox.Show("Отсутствует файл найтроек генератора. Ошибка при создании нового.","Ошибка");
+                }
+            }
+            loadedPasswords = new List<ImagePassword>();
+            //!BASE! Загрузка из базы всех ImagePassword в объект loadedPasswords
             SetProcessDpiAwarenessContext(-1);
             InitializeComponent();
             ApplyFontToLogoLabel();
@@ -197,7 +234,7 @@ namespace PasswordGenerator
             => SetCurrentForm(generateBtn, new PasswordGenerateForm(this, Generator));
 
         public void OnPicPasswordsClick(object sender, EventArgs e)
-            => SetCurrentForm(picPasswordsBtn, new PictureGenForm(this, new List<ImagePassword>() { new ImagePassword(0,"ABOBA", Image.FromFile("test.jpg") as Bitmap), new ImagePassword(0, "ABOBA", Image.FromFile("test.jpg") as Bitmap), new ImagePassword(0, "ABOBA", Image.FromFile("test.jpg") as Bitmap), new ImagePassword(0, "ABOBA", Image.FromFile("test.jpg") as Bitmap), new ImagePassword(0, "ABOBA", Image.FromFile("test.jpg") as Bitmap), new ImagePassword(0, "ABOBA", Image.FromFile("test.jpg") as Bitmap), new ImagePassword(1, "ABIBA", Image.FromFile("test.jpg") as Bitmap) }));
+            => SetCurrentForm(picPasswordsBtn, new PictureGenForm(this, loadedPasswords));
         #endregion
 
         [DllImport("user32.dll")]

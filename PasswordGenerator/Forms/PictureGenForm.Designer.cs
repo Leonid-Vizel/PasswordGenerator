@@ -91,6 +91,7 @@ namespace PasswordGenerator.Forms
             this.Name = "PictureGenForm";
             this.Tag = "#2196F3";
             this.Text = "Ваши пароли-картинки";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PictureGenForm_FormClosed);
             this.topPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 

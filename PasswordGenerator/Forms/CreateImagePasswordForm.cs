@@ -24,9 +24,9 @@ namespace PasswordGenerator.Forms
                     {
                         fromFile = Image.FromFile(dialog.FileName) as Bitmap;
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        MessageBox.Show($"Ошибка загрузки: {ex}");
+                        MessageBox.Show("Ошибка загрузки", "Ошибка");
                         return;
                     }
                     Image imageToDispose = imageBox.Image;
@@ -55,10 +55,12 @@ namespace PasswordGenerator.Forms
             if (passwordBox.Text.Length == 0)
             {
                 MessageBox.Show("Укажите пароль!", "Ошибка");
+                return;
             }
             if (imageBox.Image == null)
             {
                 MessageBox.Show("Загрузите картинку!", "Ошибка");
+                return;
             }
             ImagePassword imagePassword = new ImagePassword(parent.GetNextId(), passwordBox.Text, imageBox.Image as Bitmap);
             //!BASE! Здесь добавить отправку в БД объекта imagePassword
