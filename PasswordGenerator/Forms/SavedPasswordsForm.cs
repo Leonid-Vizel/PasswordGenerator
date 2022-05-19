@@ -9,9 +9,20 @@ namespace PasswordGenerator.Forms
     public partial class SavedPasswordsForm : Form
     {
         public string Result { get; set; }
+        public Color formColor;
         public SavedPasswordsForm()
         {
             InitializeComponent();
+            formColor = ColorTranslator.FromHtml((string)Tag);
+        }
+        private void OnBorderDraw(object sender, PaintEventArgs e)
+        {
+            Control senderControl = sender as Control;
+            if (senderControl == null)
+            {
+                return;
+            }
+            ControlPaint.DrawBorder(e.Graphics, senderControl.ClientRectangle, formColor, ButtonBorderStyle.Solid);
         }
 
         private void OnSearchClick(object sender, EventArgs e)
@@ -25,7 +36,7 @@ namespace PasswordGenerator.Forms
             foreach (LoginPassword password in PasswordGenerator.LoadedPasswords.Where(x=>x.Login.ToLower().Equals(searchBox.Text.ToLower())))
             {
                 Panel panel = new Panel();
-                panel.BackColor = ColorTranslator.FromHtml((string)Tag);
+                panel.BackColor = Algorythms.ChangeColorBrightness(formColor, -0.3F);
                 panel.Dock = DockStyle.Top;
                 panel.Size = new Size(0, 34);
                 #region Label
@@ -76,6 +87,29 @@ namespace PasswordGenerator.Forms
                 copyButton.FlatAppearance.BorderSize = 0;
                 copyButton.Dock = DockStyle.Right;
                 panel.Controls.Add(copyButton);
+                #endregion
+                #region Delete
+                IconButton deleteButton = new IconButton();
+                deleteButton.IconChar = IconChar.Plus;
+                deleteButton.BackColor = Color.Crimson;
+                deleteButton.Rotation = 45;
+                deleteButton.IconSize = 34;
+                deleteButton.Click += (object senderObj, EventArgs arg) =>
+                {
+                    if (MessageBox.Show("Вы действительно хотите удалить этот пароль?","Удаление", MessageBoxButtons.YesNo) == DialogResult.No)
+                    {
+                        return;
+                    }
+                    workPanel.Controls.Remove(panel);
+                    PasswordGenerator.LoadedPasswords.Remove(password);
+                    //!BASE!Удаление объекта password из базы
+                    panel.Dispose();
+                };
+                deleteButton.Size = new Size(34, 34);
+                deleteButton.FlatStyle = FlatStyle.Flat;
+                deleteButton.FlatAppearance.BorderSize = 0;
+                deleteButton.Dock = DockStyle.Right;
+                panel.Controls.Add(deleteButton);
                 #endregion
                 workPanel.Controls.Add(panel);
             }
