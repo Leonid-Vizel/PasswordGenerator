@@ -174,6 +174,7 @@ namespace PasswordGenerator
             this.passwordBox.MaxLength = 1000;
             this.passwordBox.MinimumSize = new System.Drawing.Size(365, 29);
             this.passwordBox.Name = "passwordBox";
+            this.passwordBox.ReadOnly = true;
             this.passwordBox.Size = new System.Drawing.Size(366, 29);
             this.passwordBox.TabIndex = 20;
             this.passwordBox.UseSystemPasswordChar = true;
