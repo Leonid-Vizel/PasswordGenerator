@@ -20,7 +20,7 @@ namespace PasswordGenerator
         private PrivateFontCollection fontCollection; //Коллекция шрифтов (На самом деле только 1) для лого
         private Form lastForm; //Форма для возрата назад при использовании SetNextForm
         private IconButton lastButton; //Кнопка для возрата назад при использовании SetNextForm
-        private List<ImagePassword> loadedPasswords;
+        private List<ImagePassword> imagePasswords; //Загруженные из базы картинки-пароли
 
         public MainForm()
         {
@@ -60,8 +60,10 @@ namespace PasswordGenerator
                     MessageBox.Show("Отсутствует файл найтроек генератора. Ошибка при создании нового.","Ошибка");
                 }
             }
-            loadedPasswords = new List<ImagePassword>();
-            //!BASE! Загрузка из базы всех ImagePassword в объект loadedPasswords
+            imagePasswords = new List<ImagePassword>();
+            //!BASE! Загрузка из базы всех ImagePassword в объект imagePasswords
+            //!BASE! Загрузка из базы всех LoginPassword (см след. комментарий)
+            //Юзай это -> PasswordGenerator.LoadedPasswords.Add();
             SetProcessDpiAwarenessContext(-1);
             InitializeComponent();
             ApplyFontToLogoLabel();
@@ -233,7 +235,10 @@ namespace PasswordGenerator
             => SetCurrentForm(generateBtn, new PasswordGenerateForm(this, Generator));
 
         public void OnPicPasswordsClick(object sender, EventArgs e)
-            => SetCurrentForm(picPasswordsBtn, new PictureGenForm(this, loadedPasswords));
+            => SetCurrentForm(picPasswordsBtn, new PictureGenForm(this, imagePasswords));
+
+        private void OnSavedClick(object sender, EventArgs e)
+            => SetCurrentForm(savedButton, new SavedPasswordsForm());
         #endregion
 
         [DllImport("user32.dll")]

@@ -31,6 +31,7 @@ namespace PasswordGenerator
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.buttonPanel = new System.Windows.Forms.Panel();
+            this.savedButton = new FontAwesome.Sharp.IconButton();
             this.picPasswordsBtn = new FontAwesome.Sharp.IconButton();
             this.generateBtn = new FontAwesome.Sharp.IconButton();
             this.logoPanel = new System.Windows.Forms.Panel();
@@ -54,6 +55,7 @@ namespace PasswordGenerator
             // buttonPanel
             // 
             this.buttonPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(76)))));
+            this.buttonPanel.Controls.Add(this.savedButton);
             this.buttonPanel.Controls.Add(this.picPasswordsBtn);
             this.buttonPanel.Controls.Add(this.generateBtn);
             this.buttonPanel.Controls.Add(this.logoPanel);
@@ -62,6 +64,27 @@ namespace PasswordGenerator
             this.buttonPanel.Name = "buttonPanel";
             this.buttonPanel.Size = new System.Drawing.Size(189, 621);
             this.buttonPanel.TabIndex = 1;
+            // 
+            // savedButton
+            // 
+            this.savedButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.savedButton.FlatAppearance.BorderSize = 0;
+            this.savedButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.savedButton.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.savedButton.ForeColor = System.Drawing.Color.White;
+            this.savedButton.IconChar = FontAwesome.Sharp.IconChar.Save;
+            this.savedButton.IconColor = System.Drawing.Color.White;
+            this.savedButton.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.savedButton.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.savedButton.Location = new System.Drawing.Point(0, 189);
+            this.savedButton.Name = "savedButton";
+            this.savedButton.Size = new System.Drawing.Size(189, 60);
+            this.savedButton.TabIndex = 3;
+            this.savedButton.Text = "Сохранённые";
+            this.savedButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.savedButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.savedButton.UseVisualStyleBackColor = true;
+            this.savedButton.Click += new System.EventHandler(this.OnSavedClick);
             // 
             // picPasswordsBtn
             // 
@@ -287,6 +310,7 @@ namespace PasswordGenerator
             // 
             // workPanel
             // 
+            this.workPanel.AutoScroll = true;
             this.workPanel.BackColor = System.Drawing.Color.White;
             this.workPanel.BackgroundImage = global::PasswordGenerator.Properties.Resources.keyLogo;
             this.workPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
@@ -308,7 +332,7 @@ namespace PasswordGenerator
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.MinimumSize = new System.Drawing.Size(702, 164);
+            this.MinimumSize = new System.Drawing.Size(702, 282);
             this.Name = "MainForm";
             this.Text = "Генератор паролей";
             this.buttonPanel.ResumeLayout(false);
@@ -335,6 +359,7 @@ namespace PasswordGenerator
         private FontAwesome.Sharp.IconButton closeCurrentBtn;
         private FontAwesome.Sharp.IconButton reloadCurrentBtn;
         public FontAwesome.Sharp.IconButton backBtn;
+        private FontAwesome.Sharp.IconButton savedButton;
     }
 }
 

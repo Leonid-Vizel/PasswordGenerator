@@ -1,6 +1,8 @@
 ﻿using PasswordGenerator.Forms;
 using System;
+using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace PasswordGenerator
@@ -27,7 +29,7 @@ namespace PasswordGenerator
             ambiguousCheckBox.Checked = generator.ExcludeAmbiguous;
         }
 
-        #region Copy and Eye Buttons
+        #region Copy, Eye and Save Buttons
         private void OnEyeClick(object sender, EventArgs e)
         {
             if (openPasswordBtn.IconChar == FontAwesome.Sharp.IconChar.EyeSlash)
@@ -52,6 +54,30 @@ namespace PasswordGenerator
                 copyLabel.Visible = true;
                 copyLabelShowTimer.Start();
             }
+        }
+
+        private void OnSaveClick(object sender, EventArgs e)
+        {
+            if (passwordBox.Text.Length == 0)
+            {
+                return;
+            }
+            AskLoginForm loginForm = new AskLoginForm();
+            loginForm.ShowDialog();
+            if (loginForm.Result == null)
+            {
+                return;
+            }
+            string encodedPassword = Algorythms.EncryptString(passwordBox.Text, loginForm.Result);
+            if (PasswordGenerator.LoadedPasswords.Where(x=>x.Login.Equals(loginForm.Result)).Any(x=>x.Decrypt().Equals(passwordBox.Text)))
+            {
+                MessageBox.Show("Такой пароль уже сохранён при этом логине!", "Ошибка");
+                return;
+            }
+            LoginPassword savePassword = new LoginPassword(PasswordGenerator.GetNextPasswordId(), loginForm.Result, encodedPassword);
+            loginForm.Dispose();
+            PasswordGenerator.LoadedPasswords.Add(savePassword);
+            //!BASE! Сохранить в базу объект savePassword
         }
 
         private void OnCopyTimerElapsed(object sender, EventArgs e)

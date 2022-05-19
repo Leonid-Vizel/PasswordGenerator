@@ -40,10 +40,11 @@ namespace PasswordGenerator
             this.upperCheckBox = new System.Windows.Forms.CheckBox();
             this.generateBtn = new System.Windows.Forms.Button();
             this.passwordBox = new System.Windows.Forms.TextBox();
-            this.openPasswordBtn = new FontAwesome.Sharp.IconButton();
-            this.copyBtn = new FontAwesome.Sharp.IconButton();
             this.copyLabel = new System.Windows.Forms.Label();
             this.copyLabelShowTimer = new System.Windows.Forms.Timer(this.components);
+            this.saveBtn = new FontAwesome.Sharp.IconButton();
+            this.copyBtn = new FontAwesome.Sharp.IconButton();
+            this.openPasswordBtn = new FontAwesome.Sharp.IconButton();
             ((System.ComponentModel.ISupportInitialize)(this.lengthUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -179,21 +180,37 @@ namespace PasswordGenerator
             this.passwordBox.TabIndex = 20;
             this.passwordBox.UseSystemPasswordChar = true;
             // 
-            // openPasswordBtn
+            // copyLabel
             // 
-            this.openPasswordBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.openPasswordBtn.FlatAppearance.BorderSize = 0;
-            this.openPasswordBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.openPasswordBtn.IconChar = FontAwesome.Sharp.IconChar.Eye;
-            this.openPasswordBtn.IconColor = System.Drawing.Color.Black;
-            this.openPasswordBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.openPasswordBtn.IconSize = 30;
-            this.openPasswordBtn.Location = new System.Drawing.Point(386, 308);
-            this.openPasswordBtn.Name = "openPasswordBtn";
-            this.openPasswordBtn.Size = new System.Drawing.Size(28, 24);
-            this.openPasswordBtn.TabIndex = 21;
-            this.openPasswordBtn.UseVisualStyleBackColor = true;
-            this.openPasswordBtn.Click += new System.EventHandler(this.OnEyeClick);
+            this.copyLabel.AutoSize = true;
+            this.copyLabel.ForeColor = System.Drawing.Color.Green;
+            this.copyLabel.Location = new System.Drawing.Point(21, 335);
+            this.copyLabel.Name = "copyLabel";
+            this.copyLabel.Size = new System.Drawing.Size(112, 21);
+            this.copyLabel.TabIndex = 24;
+            this.copyLabel.Text = "Скопировано!";
+            this.copyLabel.Visible = false;
+            // 
+            // copyLabelShowTimer
+            // 
+            this.copyLabelShowTimer.Interval = 3000;
+            this.copyLabelShowTimer.Tick += new System.EventHandler(this.OnCopyTimerElapsed);
+            // 
+            // saveBtn
+            // 
+            this.saveBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.saveBtn.FlatAppearance.BorderSize = 0;
+            this.saveBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.saveBtn.IconChar = FontAwesome.Sharp.IconChar.Save;
+            this.saveBtn.IconColor = System.Drawing.Color.Black;
+            this.saveBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.saveBtn.IconSize = 30;
+            this.saveBtn.Location = new System.Drawing.Point(447, 304);
+            this.saveBtn.Name = "saveBtn";
+            this.saveBtn.Size = new System.Drawing.Size(28, 29);
+            this.saveBtn.TabIndex = 25;
+            this.saveBtn.UseVisualStyleBackColor = true;
+            this.saveBtn.Click += new System.EventHandler(this.OnSaveClick);
             // 
             // copyBtn
             // 
@@ -211,27 +228,28 @@ namespace PasswordGenerator
             this.copyBtn.UseVisualStyleBackColor = true;
             this.copyBtn.Click += new System.EventHandler(this.OnCopyClick);
             // 
-            // copyLabel
+            // openPasswordBtn
             // 
-            this.copyLabel.AutoSize = true;
-            this.copyLabel.ForeColor = System.Drawing.Color.Green;
-            this.copyLabel.Location = new System.Drawing.Point(21, 335);
-            this.copyLabel.Name = "copyLabel";
-            this.copyLabel.Size = new System.Drawing.Size(112, 21);
-            this.copyLabel.TabIndex = 24;
-            this.copyLabel.Text = "Скопировано!";
-            this.copyLabel.Visible = false;
-            // 
-            // copyLabelShowTimer
-            // 
-            this.copyLabelShowTimer.Interval = 3000;
-            this.copyLabelShowTimer.Tick += new System.EventHandler(this.OnCopyTimerElapsed);
+            this.openPasswordBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.openPasswordBtn.FlatAppearance.BorderSize = 0;
+            this.openPasswordBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.openPasswordBtn.IconChar = FontAwesome.Sharp.IconChar.Eye;
+            this.openPasswordBtn.IconColor = System.Drawing.Color.Black;
+            this.openPasswordBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.openPasswordBtn.IconSize = 30;
+            this.openPasswordBtn.Location = new System.Drawing.Point(386, 308);
+            this.openPasswordBtn.Name = "openPasswordBtn";
+            this.openPasswordBtn.Size = new System.Drawing.Size(28, 24);
+            this.openPasswordBtn.TabIndex = 21;
+            this.openPasswordBtn.UseVisualStyleBackColor = true;
+            this.openPasswordBtn.Click += new System.EventHandler(this.OnEyeClick);
             // 
             // PasswordGenerateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(634, 366);
+            this.Controls.Add(this.saveBtn);
             this.Controls.Add(this.copyLabel);
             this.Controls.Add(this.copyBtn);
             this.Controls.Add(this.openPasswordBtn);
@@ -276,5 +294,6 @@ namespace PasswordGenerator
         private FontAwesome.Sharp.IconButton copyBtn;
         private System.Windows.Forms.Label copyLabel;
         private System.Windows.Forms.Timer copyLabelShowTimer;
+        private FontAwesome.Sharp.IconButton saveBtn;
     }
 }

@@ -15,6 +15,16 @@ namespace PasswordGenerator
         private static string NumberChars { get; } = "0123456789";
         private static string SimilarChars { get; } = "iIl1Lo0O";
         private static string AmbiguousChars { get; } = "{}[]()/\\'\"`~,;:.<>";
+        public static List<LoginPassword> LoadedPasswords { get; set; } = new List<LoginPassword>();
+
+        public static int GetNextPasswordId()
+        {
+            if (LoadedPasswords.Count == 0)
+            {
+                return 0;
+            }
+            return LoadedPasswords.Max(x => x.Id) + 1;
+        }
 
         private Random Random { get; set; }
         public int PasswordLength { get; set; }
