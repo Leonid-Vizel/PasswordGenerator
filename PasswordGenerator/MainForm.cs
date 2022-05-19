@@ -7,6 +7,7 @@ using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace PasswordGenerator
 {
@@ -17,12 +18,50 @@ namespace PasswordGenerator
         private Form currentForm; //Текущая открытая форма
         private bool checkBtnState; //Флаг, отвечающий за проверку текущей кнопки при нажатии
         private PrivateFontCollection fontCollection; //Коллекция шрифтов (На самом деле только 1) для лого
+        private Form lastForm; //Форма для возрата назад при использовании SetNextForm
+        private IconButton lastButton; //Кнопка для возрата назад при использовании SetNextForm
+        private List<ImagePassword> loadedPasswords;
+
         public MainForm()
         {
-            Generator = new PasswordGenerator(); //Пока так, потому что не загружаем с базы
-            Generator.UseUpperCase = true;
-            Generator.PasswordLength = 10;
             checkBtnState = true;
+            if (File.Exists("generatorInfo.json"))
+            {
+                try
+                {
+                    Generator = JsonConvert.DeserializeObject<PasswordGenerator>(File.ReadAllText("generatorInfo.json"));
+                }
+                catch
+                {
+                    Generator = new PasswordGenerator();
+                    Generator.UseUpperCase = true;
+                    Generator.PasswordLength = 10;
+                    try
+                    {
+                        File.WriteAllText("generatorInfo.json", JsonConvert.SerializeObject(Generator));
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Отсутствует файл найтроек генератора. Ошибка при создании нового.", "Ошибка");
+                    }
+                }
+            }
+            else
+            {
+                Generator = new PasswordGenerator();
+                Generator.UseUpperCase = true;
+                Generator.PasswordLength = 10;
+                try
+                {
+                    File.WriteAllText("generatorInfo.json", JsonConvert.SerializeObject(Generator));
+                }
+                catch
+                {
+                    MessageBox.Show("Отсутствует файл найтроек генератора. Ошибка при создании нового.","Ошибка");
+                }
+            }
+            loadedPasswords = new List<ImagePassword>();
+            //!BASE! Загрузка из базы всех ImagePassword в объект loadedPasswords
             SetProcessDpiAwarenessContext(-1);
             InitializeComponent();
             ApplyFontToLogoLabel();
@@ -130,6 +169,32 @@ namespace PasswordGenerator
         #endregion
 
         #region Buttons
+        public void SetNextForm(IconButton nextButton, Form nextForm)
+        {
+            if (checkBtnState && currentButton == nextButton)
+            {
+                return;
+            }
+            closeCurrentBtn.Visible = reloadCurrentBtn.Visible = backBtn.Visible = true;
+            string hexColorString = nextForm.Tag as string;
+            lastButton = currentButton;
+            lastForm = currentForm;
+            if (hexColorString != null)
+            {
+                Color fromHexColor = ColorTranslator.FromHtml(hexColorString);
+                nextButton.BackColor = topLabelPanel.BackColor = fromHexColor;
+                logoPanel.BackColor = Algorythms.ChangeColorBrightness(nextButton.BackColor, -0.3);
+            }
+            currentButton = nextButton;
+            currentForm = nextForm;
+            nextForm.Dock = DockStyle.Fill;
+            nextForm.TopLevel = false;
+            workPanel.Controls.Add(nextForm);
+            topLabel.Text = nextForm.Text;
+            nextForm.BringToFront();
+            nextForm.Show();
+        }
+
         public void SetCurrentForm(IconButton nextButton, Form nextForm)
         {
             if (checkBtnState && currentButton == nextButton)
@@ -137,7 +202,7 @@ namespace PasswordGenerator
                 return;
             }
             closeCurrentBtn.Visible = reloadCurrentBtn.Visible = true;
-            if (currentButton != null)
+            if (currentButton != null && buttonPanel.Controls.Contains(currentButton))
             {
                 currentButton.BackColor = buttonPanel.BackColor;
             }
@@ -168,7 +233,7 @@ namespace PasswordGenerator
             => SetCurrentForm(generateBtn, new PasswordGenerateForm(this, Generator));
 
         public void OnPicPasswordsClick(object sender, EventArgs e)
-            => SetCurrentForm(picPasswordsBtn, new PictureGenForm(this, new List<string>() { "ABOBA" }));
+            => SetCurrentForm(picPasswordsBtn, new PictureGenForm(this, loadedPasswords));
         #endregion
 
         [DllImport("user32.dll")]
@@ -176,7 +241,7 @@ namespace PasswordGenerator
 
         private void closeCurrentBtn_Click(object sender, EventArgs e)
         {
-            closeCurrentBtn.Visible = reloadCurrentBtn.Visible = false;
+            closeCurrentBtn.Visible = reloadCurrentBtn.Visible = backBtn.Visible = false;
             if (currentButton == null)
             {
                 return;
@@ -188,10 +253,20 @@ namespace PasswordGenerator
                 currentForm.Dispose();
                 currentForm = null;
             }
+            if (lastForm != null)
+            {
+                lastForm.Close();
+                lastForm.Dispose();
+                lastForm = null;
+            }
             topLabelPanel.BackColor = buttonPanel.BackColor;
             logoPanel.BackColor = Algorythms.ChangeColorBrightness(buttonPanel.BackColor, -0.3);
             currentButton.BackColor = buttonPanel.BackColor;
-            currentButton = null;
+            if (lastButton != null)
+            {
+                lastButton.BackColor = buttonPanel.BackColor;
+            }
+            currentButton = lastButton = null;
         }
 
         private void reloadCurrentBtn_Click(object sender, EventArgs e)
@@ -199,6 +274,12 @@ namespace PasswordGenerator
             checkBtnState = false;
             currentButton.PerformClick();
             checkBtnState = true;
+        }
+
+        private void backBtn_Click(object sender, EventArgs e)
+        {
+            backBtn.Visible = false;
+            SetCurrentForm(lastButton, lastForm);
         }
     }
 }

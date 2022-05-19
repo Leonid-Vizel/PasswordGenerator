@@ -29,31 +29,15 @@ namespace PasswordGenerator.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.addButton = new System.Windows.Forms.Button();
             this.topPanel = new System.Windows.Forms.Panel();
+            this.addBtn = new FontAwesome.Sharp.IconButton();
             this.workPanel = new System.Windows.Forms.Panel();
             this.topPanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // addButton
-            // 
-            this.addButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
-            this.addButton.Dock = System.Windows.Forms.DockStyle.Right;
-            this.addButton.FlatAppearance.BorderSize = 0;
-            this.addButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.addButton.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.addButton.Location = new System.Drawing.Point(617, 0);
-            this.addButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(218, 34);
-            this.addButton.TabIndex = 0;
-            this.addButton.Text = "Добавить";
-            this.addButton.UseVisualStyleBackColor = false;
-            this.addButton.Click += new System.EventHandler(this.addButton_Click);
-            // 
             // topPanel
             // 
-            this.topPanel.Controls.Add(this.addButton);
+            this.topPanel.Controls.Add(this.addBtn);
             this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.topPanel.Location = new System.Drawing.Point(0, 0);
             this.topPanel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -62,14 +46,37 @@ namespace PasswordGenerator.Forms
             this.topPanel.TabIndex = 1;
             this.topPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.OnBorderDraw);
             // 
+            // addBtn
+            // 
+            this.addBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
+            this.addBtn.Dock = System.Windows.Forms.DockStyle.Right;
+            this.addBtn.FlatAppearance.BorderSize = 0;
+            this.addBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addBtn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.addBtn.IconChar = FontAwesome.Sharp.IconChar.Plus;
+            this.addBtn.IconColor = System.Drawing.Color.Black;
+            this.addBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.addBtn.IconSize = 20;
+            this.addBtn.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.addBtn.Location = new System.Drawing.Point(718, 0);
+            this.addBtn.Name = "addBtn";
+            this.addBtn.Size = new System.Drawing.Size(117, 34);
+            this.addBtn.TabIndex = 1;
+            this.addBtn.Text = "Добавить";
+            this.addBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.addBtn.UseVisualStyleBackColor = false;
+            this.addBtn.Click += new System.EventHandler(this.OnAddClick);
+            // 
             // workPanel
             // 
+            this.workPanel.AutoScroll = true;
             this.workPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.workPanel.Location = new System.Drawing.Point(0, 34);
             this.workPanel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.workPanel.Name = "workPanel";
             this.workPanel.Size = new System.Drawing.Size(835, 455);
             this.workPanel.TabIndex = 2;
+            this.workPanel.Resize += new System.EventHandler(this.OnWorkPanelResized);
             // 
             // PictureGenForm
             // 
@@ -83,17 +90,16 @@ namespace PasswordGenerator.Forms
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "PictureGenForm";
             this.Tag = "#2196F3";
-            this.Text = "Пароли-картинки";
-            this.Load += new System.EventHandler(this.PictureGenForm_Load);
+            this.Text = "Ваши пароли-картинки";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PictureGenForm_FormClosed);
             this.topPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.Panel topPanel;
         private System.Windows.Forms.Panel workPanel;
+        private FontAwesome.Sharp.IconButton addBtn;
     }
 }

@@ -116,7 +116,10 @@ namespace PasswordGenerator
         #endregion
 
         private void OnGenerateClick(object sender, EventArgs e)
-            => passwordBox.Text = generator.Generate();
+        {
+            passwordBox.Text = generator.Generate();
+            generator.SaveJson();
+        }
 
         private void OnLengthUpDownChanged(object sender, EventArgs e)
             => generator.PasswordLength = (int)lengthUpDown.Value;
