@@ -24,6 +24,7 @@ namespace PasswordGenerator
 
         public MainForm()
         {
+            checkBtnState = true;
             if (File.Exists("generatorInfo.json"))
             {
                 try
@@ -35,7 +36,6 @@ namespace PasswordGenerator
                     Generator = new PasswordGenerator();
                     Generator.UseUpperCase = true;
                     Generator.PasswordLength = 10;
-                    checkBtnState = true;
                     try
                     {
                         File.WriteAllText("generatorInfo.json", JsonConvert.SerializeObject(Generator));
@@ -51,7 +51,6 @@ namespace PasswordGenerator
                 Generator = new PasswordGenerator();
                 Generator.UseUpperCase = true;
                 Generator.PasswordLength = 10;
-                checkBtnState = true;
                 try
                 {
                     File.WriteAllText("generatorInfo.json", JsonConvert.SerializeObject(Generator));
