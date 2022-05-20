@@ -8,11 +8,13 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using NLog;
 
 namespace PasswordGenerator
 {
     public partial class MainForm : Form
     {
+        private static Logger logger; //Обект логгера NLog
         public PasswordGenerator Generator { get; set; } //Объект генератора паролей
         private IconButton currentButton; //Текущая выбранная кнопка
         private Form currentForm; //Текущая открытая форма
@@ -24,46 +26,59 @@ namespace PasswordGenerator
 
         public MainForm()
         {
+            logger = LogManager.GetCurrentClassLogger();
+            logger.Info("ПРОГРАММА ЗАПУЩЕНА");
             checkBtnState = true;
             if (File.Exists("generatorInfo.json"))
             {
                 try
                 {
                     Generator = JsonConvert.DeserializeObject<PasswordGenerator>(File.ReadAllText("generatorInfo.json"));
+                    logger.Trace("Генератор загружен из JSON");
                 }
-                catch
+                catch (Exception exceptionFirst)
                 {
+                    logger.Error($"Ошибка чтения из файла конфигурации генератора: {exceptionFirst}");
                     Generator = new PasswordGenerator();
                     Generator.UseUpperCase = true;
                     Generator.PasswordLength = 10;
                     try
                     {
                         File.WriteAllText("generatorInfo.json", JsonConvert.SerializeObject(Generator));
+                        logger.Trace("Файл конфигурации успешно создан!");
                     }
-                    catch
+                    catch (Exception exceptionSecond)
                     {
+                        logger.Error($"Ошибка создания нового файла конфигурации: {exceptionSecond}");
                         MessageBox.Show("Отсутствует файл найтроек генератора. Ошибка при создании нового.", "Ошибка");
                     }
                 }
             }
             else
             {
+                logger.Warn("Файл конфигурации генератора не был найден. Создание нового...");
                 Generator = new PasswordGenerator();
                 Generator.UseUpperCase = true;
                 Generator.PasswordLength = 10;
                 try
                 {
                     File.WriteAllText("generatorInfo.json", JsonConvert.SerializeObject(Generator));
+                    logger.Trace("Файл конфигурации успешно создан");
                 }
-                catch
+                catch (Exception exception)
                 {
-                    MessageBox.Show("Отсутствует файл найтроек генератора. Ошибка при создании нового.","Ошибка");
+                    logger.Error($"Ошибка создания нового файла конфигурации: {exception}");
+                    MessageBox.Show("Отсутствует файл найтроек генератора. Ошибка при создании нового.", "Ошибка");
                 }
             }
             imagePasswords = new List<ImagePassword>();
+            logger.Trace("Начата загрузка картинок-паролей...");
             //!BASE! Загрузка из базы всех ImagePassword в объект imagePasswords
+            logger.Trace($"Загрузка картинок-паролей завершена. Всего загружено: {imagePasswords.Count}");
+            logger.Trace("Начата загрузка логин-паролей...");
             //!BASE! Загрузка из базы всех LoginPassword (см след. комментарий)
             //Юзай это -> PasswordGenerator.LoadedPasswords.Add();
+            logger.Trace($"Загрузка логин-паролей завершена. Всего загружено: {PasswordGenerator.LoadedPasswords.Count}");
             SetProcessDpiAwarenessContext(-1);
             InitializeComponent();
             ApplyFontToLogoLabel();
@@ -71,6 +86,7 @@ namespace PasswordGenerator
 
         private void ApplyFontToLogoLabel()
         {
+            logger.Trace("Начата загрузка шривта лого...");
             if (File.Exists("Break.ttf"))
             {
                 fontCollection = new PrivateFontCollection();
@@ -78,14 +94,17 @@ namespace PasswordGenerator
                 {
                     fontCollection.AddFontFile($"{Environment.CurrentDirectory}\\Break.ttf");
                     logoLabel.Font = new Font(fontCollection.Families[0], 18);
+                    logger.Trace("Шрифт успешно найден и установлен!");
                 }
-                catch
+                catch (Exception exception)
                 {
+                    logger.Error($"Ошибка чтения шрифта: {exception}");
                     MessageBox.Show("Не удалось загрузить шрифт!", "Ошибка");
                 }
             }
             else
             {
+                logger.Error("Файл шрифта не найден. Создайте Break.ttf!");
                 MessageBox.Show("Не найден файл шрифта!", "Ошибка");
             }
         }
@@ -114,7 +133,18 @@ namespace PasswordGenerator
             => Close();
 
         private void OnMaxClick(object sender, EventArgs e)
-            => WindowState = (WindowState == FormWindowState.Maximized) ? FormWindowState.Normal : FormWindowState.Maximized;
+        {
+            if (WindowState == FormWindowState.Maximized)
+            {
+                WindowState = FormWindowState.Normal;
+                mainToolTip.SetToolTip(maximizeBtn, "На весь экран");
+            }
+            else
+            {
+                WindowState = FormWindowState.Maximized;
+                mainToolTip.SetToolTip(maximizeBtn, "К нормальному виду");
+            }
+        }
 
         private void OnMinClick(object sender, EventArgs e)
             => WindowState = FormWindowState.Minimized;
@@ -195,6 +225,7 @@ namespace PasswordGenerator
             topLabel.Text = nextForm.Text;
             nextForm.BringToFront();
             nextForm.Show();
+            logger.Trace($"Переход на кнопку \"{nextButton.Text}\" и Форму \"{nextForm.Text}\" с запомянанием предыдущей ({lastForm.Text})");
         }
 
         public void SetCurrentForm(IconButton nextButton, Form nextForm)
@@ -229,6 +260,7 @@ namespace PasswordGenerator
             topLabel.Text = nextForm.Text;
             nextForm.BringToFront();
             nextForm.Show();
+            logger.Trace($"Переход на кнопку \"{nextButton.Text}\" и Форму \"{nextForm.Text}\"");
         }
 
         private void OnGenerateBtnClick(object sender, EventArgs e)
@@ -244,7 +276,7 @@ namespace PasswordGenerator
         [DllImport("user32.dll")]
         private static extern bool SetProcessDpiAwarenessContext(int value);
 
-        private void closeCurrentBtn_Click(object sender, EventArgs e)
+        private void OnCloseCurrentclick(object sender, EventArgs e)
         {
             closeCurrentBtn.Visible = reloadCurrentBtn.Visible = backBtn.Visible = false;
             if (currentButton == null)
@@ -272,19 +304,25 @@ namespace PasswordGenerator
                 lastButton.BackColor = buttonPanel.BackColor;
             }
             currentButton = lastButton = null;
+            logger.Trace("Вкладка закрыта");
         }
 
-        private void reloadCurrentBtn_Click(object sender, EventArgs e)
+        private void OnReloadCurrentClick(object sender, EventArgs e)
         {
             checkBtnState = false;
             currentButton.PerformClick();
             checkBtnState = true;
+            logger.Trace("Вкладка перезагружена");
         }
 
-        private void backBtn_Click(object sender, EventArgs e)
+        private void OnBackClick(object sender, EventArgs e)
         {
             backBtn.Visible = false;
             SetCurrentForm(lastButton, lastForm);
+            logger.Trace("Вернулся на вкладку раньше");
         }
+
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
+            => logger.Info("ПРОГРАММА ЗАКРЫТА");
     }
 }

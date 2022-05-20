@@ -29,6 +29,7 @@ namespace PasswordGenerator
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.buttonPanel = new System.Windows.Forms.Panel();
             this.savedButton = new FontAwesome.Sharp.IconButton();
@@ -46,6 +47,7 @@ namespace PasswordGenerator
             this.closeBtn = new FontAwesome.Sharp.IconButton();
             this.maximizeBtn = new FontAwesome.Sharp.IconButton();
             this.workPanel = new System.Windows.Forms.Panel();
+            this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.buttonPanel.SuspendLayout();
             this.logoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoBox)).BeginInit();
@@ -83,6 +85,7 @@ namespace PasswordGenerator
             this.savedButton.Text = "Сохранённые";
             this.savedButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.savedButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.mainToolTip.SetToolTip(this.savedButton, "Ваши сохранённые пароли");
             this.savedButton.UseVisualStyleBackColor = true;
             this.savedButton.Click += new System.EventHandler(this.OnSavedClick);
             // 
@@ -104,6 +107,7 @@ namespace PasswordGenerator
             this.picPasswordsBtn.Text = "Пароли-картинки";
             this.picPasswordsBtn.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.picPasswordsBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.mainToolTip.SetToolTip(this.picPasswordsBtn, "Список ваших картинок-паролей");
             this.picPasswordsBtn.UseVisualStyleBackColor = true;
             this.picPasswordsBtn.Click += new System.EventHandler(this.OnPicPasswordsClick);
             // 
@@ -126,6 +130,7 @@ namespace PasswordGenerator
             this.generateBtn.Text = "Генератор";
             this.generateBtn.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.generateBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.mainToolTip.SetToolTip(this.generateBtn, "Генератор паролей");
             this.generateBtn.UseVisualStyleBackColor = true;
             this.generateBtn.Click += new System.EventHandler(this.OnGenerateBtnClick);
             // 
@@ -152,6 +157,7 @@ namespace PasswordGenerator
             this.logoLabel.TabIndex = 4;
             this.logoLabel.Text = "PROGA";
             this.logoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.mainToolTip.SetToolTip(this.logoLabel, "PROGA)))");
             this.logoLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveMouseDown);
             // 
             // logoBox
@@ -165,6 +171,7 @@ namespace PasswordGenerator
             this.logoBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.logoBox.TabIndex = 3;
             this.logoBox.TabStop = false;
+            this.mainToolTip.SetToolTip(this.logoBox, "Наше лого");
             this.logoBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveMouseDown);
             // 
             // topLabel
@@ -210,9 +217,10 @@ namespace PasswordGenerator
             this.backBtn.Name = "backBtn";
             this.backBtn.Size = new System.Drawing.Size(33, 33);
             this.backBtn.TabIndex = 12;
+            this.mainToolTip.SetToolTip(this.backBtn, "Вернуться к предыдущему");
             this.backBtn.UseVisualStyleBackColor = true;
             this.backBtn.Visible = false;
-            this.backBtn.Click += new System.EventHandler(this.backBtn_Click);
+            this.backBtn.Click += new System.EventHandler(this.OnBackClick);
             // 
             // reloadCurrentBtn
             // 
@@ -227,9 +235,10 @@ namespace PasswordGenerator
             this.reloadCurrentBtn.Rotation = 45D;
             this.reloadCurrentBtn.Size = new System.Drawing.Size(42, 33);
             this.reloadCurrentBtn.TabIndex = 11;
+            this.mainToolTip.SetToolTip(this.reloadCurrentBtn, "Перезагрузить страницу");
             this.reloadCurrentBtn.UseVisualStyleBackColor = true;
             this.reloadCurrentBtn.Visible = false;
-            this.reloadCurrentBtn.Click += new System.EventHandler(this.reloadCurrentBtn_Click);
+            this.reloadCurrentBtn.Click += new System.EventHandler(this.OnReloadCurrentClick);
             // 
             // closeCurrentBtn
             // 
@@ -244,9 +253,10 @@ namespace PasswordGenerator
             this.closeCurrentBtn.Rotation = 45D;
             this.closeCurrentBtn.Size = new System.Drawing.Size(33, 33);
             this.closeCurrentBtn.TabIndex = 10;
+            this.mainToolTip.SetToolTip(this.closeCurrentBtn, "Закрыть окно");
             this.closeCurrentBtn.UseVisualStyleBackColor = true;
             this.closeCurrentBtn.Visible = false;
-            this.closeCurrentBtn.Click += new System.EventHandler(this.closeCurrentBtn_Click);
+            this.closeCurrentBtn.Click += new System.EventHandler(this.OnCloseCurrentclick);
             // 
             // minimizeBtn
             // 
@@ -263,6 +273,7 @@ namespace PasswordGenerator
             this.minimizeBtn.Name = "minimizeBtn";
             this.minimizeBtn.Size = new System.Drawing.Size(40, 30);
             this.minimizeBtn.TabIndex = 9;
+            this.mainToolTip.SetToolTip(this.minimizeBtn, "Свернуть");
             this.minimizeBtn.UseVisualStyleBackColor = false;
             this.minimizeBtn.Click += new System.EventHandler(this.OnMinClick);
             this.minimizeBtn.MouseEnter += new System.EventHandler(this.OnMixMouseEnter);
@@ -283,6 +294,7 @@ namespace PasswordGenerator
             this.closeBtn.Name = "closeBtn";
             this.closeBtn.Size = new System.Drawing.Size(40, 30);
             this.closeBtn.TabIndex = 7;
+            this.mainToolTip.SetToolTip(this.closeBtn, "Закрыть");
             this.closeBtn.UseVisualStyleBackColor = false;
             this.closeBtn.Click += new System.EventHandler(this.OnCloseClick);
             this.closeBtn.MouseEnter += new System.EventHandler(this.OnCloseMouseEnter);
@@ -303,6 +315,7 @@ namespace PasswordGenerator
             this.maximizeBtn.Name = "maximizeBtn";
             this.maximizeBtn.Size = new System.Drawing.Size(40, 30);
             this.maximizeBtn.TabIndex = 8;
+            this.mainToolTip.SetToolTip(this.maximizeBtn, "На весь экран");
             this.maximizeBtn.UseVisualStyleBackColor = false;
             this.maximizeBtn.Click += new System.EventHandler(this.OnMaxClick);
             this.maximizeBtn.MouseEnter += new System.EventHandler(this.OnMaxMouseEnter);
@@ -335,6 +348,7 @@ namespace PasswordGenerator
             this.MinimumSize = new System.Drawing.Size(702, 282);
             this.Name = "MainForm";
             this.Text = "Генератор паролей";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
             this.buttonPanel.ResumeLayout(false);
             this.logoPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.logoBox)).EndInit();
@@ -360,6 +374,7 @@ namespace PasswordGenerator
         private FontAwesome.Sharp.IconButton reloadCurrentBtn;
         public FontAwesome.Sharp.IconButton backBtn;
         private FontAwesome.Sharp.IconButton savedButton;
+        private System.Windows.Forms.ToolTip mainToolTip;
     }
 }
 

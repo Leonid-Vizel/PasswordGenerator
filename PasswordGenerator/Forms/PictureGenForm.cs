@@ -153,6 +153,10 @@ namespace PasswordGenerator.Forms
             deleteBtn.Location = new Point(passImageBox.Width - 25, 0);
             deleteBtn.Click += (object senderObject, EventArgs arg) =>
             {
+                if (MessageBox.Show("Вы действительно хотите удалить этот пароль?", "Удаление", MessageBoxButtons.YesNo) == DialogResult.No)
+                {
+                    return;
+                }
                 ImagePassword pass = passPicPanel.Tag as ImagePassword;
                 if (pass == null)
                 {
