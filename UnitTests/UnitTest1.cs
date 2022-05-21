@@ -63,6 +63,29 @@ namespace PasswordGenerator
             }
             Assert.AreEqual(excepted, actual);
         }
+        [Test]
+        public void ExceptedEmptyWithNegativePasswordLength()
+        {
+            var passwordGenerator = new PasswordGenerator();
+            passwordGenerator.UseNumbers = true;
+            passwordGenerator.PasswordLength = -10;
+
+            var excepted = string.Empty;
+            var result = passwordGenerator.Generate();
+            var actual = result;
+            Assert.AreEqual(excepted, actual);
+        }
+        [Test]
+        public void ExceptedEmptyWithoutParams()
+        {
+            var passwordGenerator = new PasswordGenerator();
+            passwordGenerator.PasswordLength = 1000;
+
+            var excepted = string.Empty;
+            var result = passwordGenerator.Generate();
+            var actual = result;
+            Assert.AreEqual(excepted, actual);
+        }
 
     }
     
