@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace PasswordGenerator
 {
@@ -10,8 +13,18 @@ namespace PasswordGenerator
         private static string DefaultAlphabet { get; } = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private static string NonAlphanumerics { get; } = "~`'!@#$%^&*()_-+={}[]|\\:\";<,>.?/";
         private static string NumberChars { get; } = "0123456789";
-        private static string SimilarChars { get; } = "il1Lo0O";
+        private static string SimilarChars { get; } = "iIl1Lo0O";
         private static string AmbiguousChars { get; } = "{}[]()/\\'\"`~,;:.<>";
+        public static List<LoginPassword> LoadedPasswords { get; set; } = new List<LoginPassword>();
+
+        public static int GetNextPasswordId()
+        {
+            if (LoadedPasswords.Count == 0)
+            {
+                return 0;
+            }
+            return LoadedPasswords.Max(x => x.Id) + 1;
+        }
 
         private Random Random { get; set; }
         public int PasswordLength { get; set; }
@@ -69,6 +82,18 @@ namespace PasswordGenerator
                 passwordBuilder.Append(charSearchList[Random.Next(0, charSearchList.Count())]);
             }
             return passwordBuilder.ToString();
+        }
+
+        public void SaveJson()
+        {
+            try
+            {
+                File.WriteAllText("generatorInfo.json", JsonConvert.SerializeObject(this));
+            }
+            catch
+            {
+                MessageBox.Show("Ошибка сохранения найтроек генератора!", "Ошибка");
+            }
         }
     }
 }
