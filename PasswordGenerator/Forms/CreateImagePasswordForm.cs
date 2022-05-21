@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -6,15 +7,18 @@ namespace PasswordGenerator.Forms
 {
     public partial class CreateImagePasswordForm : Form
     {
+        private Logger logger;
         private PictureGenForm parent;
         public CreateImagePasswordForm(PictureGenForm parent)
         {
+            logger = LogManager.GetCurrentClassLogger();
             this.parent = parent;
             InitializeComponent();
         }
 
         private void OnImageUploadClick(object sender, EventArgs e)
         {
+            logger.Trace("Начато добавление картинки");
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
@@ -24,14 +28,20 @@ namespace PasswordGenerator.Forms
                     {
                         fromFile = Image.FromFile(dialog.FileName) as Bitmap;
                     }
-                    catch
+                    catch (Exception exception)
                     {
+                        logger.Error($"Ошибка загрузки картинки: {exception}");
                         MessageBox.Show("Ошибка загрузки", "Ошибка");
                         return;
                     }
                     Image imageToDispose = imageBox.Image;
                     imageBox.Image = fromFile;
-                    imageToDispose?.Dispose(); //Это можно не делать, так как оставленное в памяти изображение скорее всего будет очищено сборщиком мусора
+                    imageToDispose?.Dispose();
+                    logger.Trace("Картинка добавлена");
+                }
+                else
+                {
+                    logger.Trace("Добавление картинки отклонено");
                 }
             }
         }
@@ -54,11 +64,13 @@ namespace PasswordGenerator.Forms
         {
             if (passwordBox.Text.Length == 0)
             {
+                logger.Warn("Сохранение картинки-пароля отклонено. Не указан пароль");
                 MessageBox.Show("Укажите пароль!", "Ошибка");
                 return;
             }
             if (imageBox.Image == null)
             {
+                logger.Warn("Сохранение картинки-пароля отклонено. Не указана картинка");
                 MessageBox.Show("Загрузите картинку!", "Ошибка");
                 return;
             }
@@ -66,6 +78,7 @@ namespace PasswordGenerator.Forms
             //!BASE! Здесь добавить отправку в БД объекта imagePassword
             parent.AddPassword(imagePassword);
             parent.Parent.backBtn.PerformClick();
+            logger.Trace("Сохранение картинки-пароля выполнено!");
         }
     }
 }

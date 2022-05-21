@@ -304,6 +304,7 @@ namespace PasswordGenerator
                 lastButton.BackColor = buttonPanel.BackColor;
             }
             currentButton = lastButton = null;
+            topLabel.Text = "Генератор безопасных паролей";
             logger.Trace("Вкладка закрыта");
         }
 

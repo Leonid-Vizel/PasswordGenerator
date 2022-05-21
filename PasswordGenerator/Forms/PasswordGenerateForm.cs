@@ -1,6 +1,6 @@
-﻿using PasswordGenerator.Forms;
+﻿using NLog;
+using PasswordGenerator.Forms;
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -9,10 +9,12 @@ namespace PasswordGenerator
 {
     public partial class PasswordGenerateForm : Form
     {
+        private static Logger logger; //Обект логгера NLog
         private PasswordGenerator generator;
         private MainForm parent;
         public PasswordGenerateForm(MainForm parent, PasswordGenerator generator)
         {
+            logger = LogManager.GetCurrentClassLogger();
             InitializeComponent();
             this.parent = parent;
             this.generator = generator;
@@ -27,6 +29,7 @@ namespace PasswordGenerator
             alphanumCheckBox.Checked = generator.UseNonAlphanumeric;
             similarCheckBox.Checked = generator.ExcludeSimilar;
             ambiguousCheckBox.Checked = generator.ExcludeAmbiguous;
+            logger.Trace("Загружены параметры генератора");
         }
 
         #region Copy, Eye and Save Buttons
@@ -51,6 +54,7 @@ namespace PasswordGenerator
                 copyBtn.IconChar = FontAwesome.Sharp.IconChar.Check;
                 copyBtn.IconColor = Color.Green;
                 Clipboard.SetText(passwordBox.Text);
+                logger.Trace("Пароль скопирован");
                 copyLabel.Visible = true;
                 copyLabelShowTimer.Start();
             }
@@ -71,6 +75,7 @@ namespace PasswordGenerator
             string encodedPassword = Algorythms.EncryptString(passwordBox.Text, loginForm.Result);
             if (PasswordGenerator.LoadedPasswords.Where(x=>x.Login.Equals(loginForm.Result)).Any(x=>x.Decrypt().Equals(passwordBox.Text)))
             {
+                logger.Warn($"Сохранение пароля отклонено. Такой пароль уже сохранён при логине {loginForm.Result}");
                 MessageBox.Show("Такой пароль уже сохранён при этом логине!", "Ошибка");
                 return;
             }
@@ -78,6 +83,7 @@ namespace PasswordGenerator
             loginForm.Dispose();
             PasswordGenerator.LoadedPasswords.Add(savePassword);
             //!BASE! Сохранить в базу объект savePassword
+            logger.Trace($"Пароль сохранён при логине {loginForm.Result}");
         }
 
         private void OnCopyTimerElapsed(object sender, EventArgs e)
@@ -89,7 +95,7 @@ namespace PasswordGenerator
         }
         #endregion
 
-        #region CehckBoxes
+        #region CheckBoxes
         private void OnUpperCheckBoxChanged(object sender, EventArgs e)
         {
             if (!(upperCheckBox.Checked || lowerCheckBox.Checked || alphanumCheckBox.Checked || numberCheckBox.Checked))
@@ -144,7 +150,9 @@ namespace PasswordGenerator
         private void OnGenerateClick(object sender, EventArgs e)
         {
             passwordBox.Text = generator.Generate();
+            logger.Trace("Пароль сгенерирован");
             generator.SaveJson();
+            logger.Trace("Параметры генератора сохранены");
         }
 
         private void OnLengthUpDownChanged(object sender, EventArgs e)

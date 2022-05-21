@@ -1,4 +1,5 @@
 ﻿using FontAwesome.Sharp;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,6 +11,7 @@ namespace PasswordGenerator.Forms
 {
     public partial class PictureGenForm : Form
     {
+        private Logger logger;
         private const int margin = 5;
         private int lastCountInLine;
         public new MainForm Parent { get; set; }
@@ -17,9 +19,11 @@ namespace PasswordGenerator.Forms
         private Color formColor;
         public PictureGenForm(MainForm parent, List<ImagePassword> passwords)
         {
+            logger = LogManager.GetCurrentClassLogger();
             Parent = parent;
             InitializeComponent();
             formColor = ColorTranslator.FromHtml((string)Tag);
+            logger.Trace("Начата загрузка картинок-паролей...");
             if (passwords.Count == 0)
             {
                 this.passwords = passwords;
@@ -30,6 +34,7 @@ namespace PasswordGenerator.Forms
                 passwords.ForEach(x => AddPassword(x));
                 this.passwords = passwords;
             }
+            logger.Trace($"Загрузка картинок-паролей завершена! Всего загружено: {this.passwords.Count}");
         }
 
         private void OnBorderDraw(object sender, PaintEventArgs e)
@@ -199,6 +204,7 @@ namespace PasswordGenerator.Forms
                 }
             }
             passwords.Add(password);
+            logger.Trace($"Пароль-картинка(ID:{password.Id}) успешно добавлен!");
         }
 
         public void RemovePassword(ImagePassword password)
@@ -207,6 +213,7 @@ namespace PasswordGenerator.Forms
             workPanel.Controls.Remove(password.Panel);
             password.Image.Dispose();
             RelocatePanels();
+            logger.Trace($"Пароль-картинка(ID:{password.Id}) успешно убран!");
         }
 
         public int GetNextId()
@@ -220,6 +227,7 @@ namespace PasswordGenerator.Forms
 
         public void RelocatePanels()
         {
+            logger.Trace("Запущено переопределение позиций плиток!");
             if (passwords.Count == 0)
             {
                 return;
@@ -243,6 +251,7 @@ namespace PasswordGenerator.Forms
                     passwords[amountFit * y + x].Panel.Location = new Point(margin + (200 + margin) * x, 2 * margin + (258 + margin) * y);
                 }
             }
+            logger.Trace("Переопределение позиций плиток завершено!");
         }
 
         public void OnWorkPanelResized(object sender, EventArgs e)
@@ -284,6 +293,7 @@ namespace PasswordGenerator.Forms
 
         private void OnAddClick(object sender, EventArgs e)
         {
+            logger.Trace("Нажата кнопка \"Добавить\"");
             Parent.SetNextForm(addBtn, new CreateImagePasswordForm(this));
         }
 

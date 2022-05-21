@@ -1,5 +1,7 @@
 ﻿using FontAwesome.Sharp;
+using NLog;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -8,10 +10,12 @@ namespace PasswordGenerator.Forms
 {
     public partial class SavedPasswordsForm : Form
     {
+        private Logger logger;
         public string Result { get; set; }
         public Color formColor;
         public SavedPasswordsForm()
         {
+            logger = LogManager.GetCurrentClassLogger();
             InitializeComponent();
             formColor = ColorTranslator.FromHtml((string)Tag);
         }
@@ -29,11 +33,15 @@ namespace PasswordGenerator.Forms
         {
             if (searchBox.Text.Length == 0)
             {
+                logger.Warn("Поиск отклонён. Не указан логин для поиска.");
                 MessageBox.Show("Укажите логин по которому искать!","Ошибка");
                 return;
             }
             workPanel.Controls.Clear();
-            foreach (LoginPassword password in PasswordGenerator.LoadedPasswords.Where(x=>x.Login.ToLower().Equals(searchBox.Text.ToLower())))
+            logger.Trace($"Происходит поиск паролей для логина {searchBox.Text}");
+            IEnumerable<LoginPassword> searchResults = PasswordGenerator.LoadedPasswords.Where(x => x.Login.ToLower().Equals(searchBox.Text.ToLower()));
+            logger.Trace($"Количество результатов: {searchResults.Count()}");
+            foreach (LoginPassword password in searchResults)
             {
                 Panel panel = new Panel();
                 panel.BackColor = Algorythms.ChangeColorBrightness(formColor, -0.3F);
@@ -98,12 +106,14 @@ namespace PasswordGenerator.Forms
                 {
                     if (MessageBox.Show("Вы действительно хотите удалить этот пароль?","Удаление", MessageBoxButtons.YesNo) == DialogResult.No)
                     {
+                        logger.Trace($"Удаление пароля (ID:{password.Id}) отклонено");
                         return;
                     }
                     workPanel.Controls.Remove(panel);
                     PasswordGenerator.LoadedPasswords.Remove(password);
                     //!BASE!Удаление объекта password из базы
                     panel.Dispose();
+                    logger.Trace($"Пароль (ID:{password.Id}) удалён!");
                 };
                 deleteButton.Size = new Size(34, 34);
                 deleteButton.FlatStyle = FlatStyle.Flat;
@@ -113,6 +123,7 @@ namespace PasswordGenerator.Forms
                 #endregion
                 workPanel.Controls.Add(panel);
             }
+            logger.Trace("Отображение результатов окончено");
         }
     }
 }
