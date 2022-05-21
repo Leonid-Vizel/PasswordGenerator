@@ -32,6 +32,7 @@ namespace PasswordGenerator.Forms
             this.topPanel = new System.Windows.Forms.Panel();
             this.addBtn = new FontAwesome.Sharp.IconButton();
             this.workPanel = new System.Windows.Forms.Panel();
+            this.designPanel = new System.Windows.Forms.Panel();
             this.topPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -42,7 +43,7 @@ namespace PasswordGenerator.Forms
             this.topPanel.Location = new System.Drawing.Point(0, 0);
             this.topPanel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.topPanel.Name = "topPanel";
-            this.topPanel.Size = new System.Drawing.Size(835, 34);
+            this.topPanel.Size = new System.Drawing.Size(835, 36);
             this.topPanel.TabIndex = 1;
             this.topPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.OnBorderDraw);
             // 
@@ -60,7 +61,7 @@ namespace PasswordGenerator.Forms
             this.addBtn.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.addBtn.Location = new System.Drawing.Point(718, 0);
             this.addBtn.Name = "addBtn";
-            this.addBtn.Size = new System.Drawing.Size(117, 34);
+            this.addBtn.Size = new System.Drawing.Size(117, 36);
             this.addBtn.TabIndex = 1;
             this.addBtn.Text = "Добавить";
             this.addBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -71,18 +72,28 @@ namespace PasswordGenerator.Forms
             // 
             this.workPanel.AutoScroll = true;
             this.workPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.workPanel.Location = new System.Drawing.Point(0, 34);
+            this.workPanel.Location = new System.Drawing.Point(0, 36);
             this.workPanel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.workPanel.Name = "workPanel";
-            this.workPanel.Size = new System.Drawing.Size(835, 455);
+            this.workPanel.Size = new System.Drawing.Size(835, 453);
             this.workPanel.TabIndex = 2;
             this.workPanel.Resize += new System.EventHandler(this.OnWorkPanelResized);
+            // 
+            // designPanel
+            // 
+            this.designPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
+            this.designPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.designPanel.Location = new System.Drawing.Point(0, 36);
+            this.designPanel.Name = "designPanel";
+            this.designPanel.Size = new System.Drawing.Size(835, 5);
+            this.designPanel.TabIndex = 3;
             // 
             // PictureGenForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(835, 489);
+            this.Controls.Add(this.designPanel);
             this.Controls.Add(this.workPanel);
             this.Controls.Add(this.topPanel);
             this.Font = new System.Drawing.Font("Segoe UI", 12F);
@@ -101,5 +112,6 @@ namespace PasswordGenerator.Forms
         private System.Windows.Forms.Panel topPanel;
         private System.Windows.Forms.Panel workPanel;
         private FontAwesome.Sharp.IconButton addBtn;
+        private System.Windows.Forms.Panel designPanel;
     }
 }
