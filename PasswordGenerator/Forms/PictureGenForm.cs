@@ -88,7 +88,7 @@ namespace PasswordGenerator.Forms
                 ImagePassword pass = passPicPanel.Tag as ImagePassword;
                 if (flag)
                 {
-                    passLabel.Text = pass.Password;
+                    passLabel.Text = pass.Decrypt();
                     openBtn.Text = "Скрыть";
                     openBtn.Tag = false;
                 }

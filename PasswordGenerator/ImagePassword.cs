@@ -13,14 +13,15 @@ namespace PasswordGenerator
         public ImagePassword(int id, string password, Bitmap image)
         {
             Id = id;
-            Password = password;
             Image = image;
+            Password = Algorythms.EncryptString(password, (Id + Image.Width + Image.Height).ToString());
         }
 
         public override string ToString()
         {
             StringBuilder passBuilder = new StringBuilder();
-            for (int i = 0; i < Password.Length; i++)
+            string decrypted = Decrypt();
+            for (int i = 0; i < decrypted.Length; i++)
             {
                 passBuilder.Append('*');
             }
@@ -28,5 +29,16 @@ namespace PasswordGenerator
         }
 
         public Panel Panel { get; set; }
+
+        private string decrypt;
+
+        public string Decrypt()
+        {
+            if (decrypt == null)
+            {
+                decrypt = Algorythms.DecryptString(Password, (Id + Image.Width + Image.Height).ToString());
+            }
+            return decrypt;
+        }
     }
 }
