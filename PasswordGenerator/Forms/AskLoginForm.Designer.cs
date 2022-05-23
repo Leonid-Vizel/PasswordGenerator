@@ -39,7 +39,7 @@
             this.loginLabel.AutoSize = true;
             this.loginLabel.Location = new System.Drawing.Point(12, 9);
             this.loginLabel.Name = "loginLabel";
-            this.loginLabel.Size = new System.Drawing.Size(116, 21);
+            this.loginLabel.Size = new System.Drawing.Size(149, 28);
             this.loginLabel.TabIndex = 0;
             this.loginLabel.Text = "Введите логин:";
             // 
@@ -86,12 +86,13 @@
             // 
             this.loginBox.Location = new System.Drawing.Point(134, 6);
             this.loginBox.Name = "loginBox";
-            this.loginBox.Size = new System.Drawing.Size(250, 29);
+            this.loginBox.Size = new System.Drawing.Size(250, 34);
             this.loginBox.TabIndex = 0;
+          
             // 
             // AskLoginForm
             // 
-            this.ClientSize = new System.Drawing.Size(395, 104);
+            this.ClientSize = new System.Drawing.Size(393, 96);
             this.Controls.Add(this.loginBox);
             this.Controls.Add(this.acceptBtn);
             this.Controls.Add(this.cancelBtn);

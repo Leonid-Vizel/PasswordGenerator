@@ -55,7 +55,7 @@
             this.searchBox.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.searchBox.Location = new System.Drawing.Point(57, 0);
             this.searchBox.Name = "searchBox";
-            this.searchBox.Size = new System.Drawing.Size(602, 36);
+            this.searchBox.Size = new System.Drawing.Size(602, 43);
             this.searchBox.TabIndex = 1;
             // 
             // searchBtn

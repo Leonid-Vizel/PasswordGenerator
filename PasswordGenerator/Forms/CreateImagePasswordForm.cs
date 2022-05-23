@@ -76,6 +76,8 @@ namespace PasswordGenerator.Forms
             }
             ImagePassword imagePassword = new ImagePassword(parent.GetNextId(), passwordBox.Text, imageBox.Image as Bitmap);
             //!BASE! Здесь добавить отправку в БД объекта imagePassword
+            SqlConnection sql = new SqlConnection();
+            sql.LoadImageToSql(imagePassword);
             parent.AddPassword(imagePassword);
             parent.Parent.backBtn.PerformClick();
             logger.Trace("Сохранение картинки-пароля выполнено!");
