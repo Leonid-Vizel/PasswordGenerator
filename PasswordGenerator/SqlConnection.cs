@@ -19,17 +19,17 @@ namespace PasswordGenerator
         public void LoadToSqlpasswd(LoginPassword logpass)
         {
              
-             using (SQLiteConnection connection = new SQLiteConnection("Data Source = password.db;Version=3;"))
-             {
-                connection.Open();
-                SQLiteCommand com = connection.CreateCommand();
-                com.CommandText = $"Insert into Passwd_generation(ID,login,password) values(@id,@login,@password)";
-                com.Parameters.Add("@id", DbType.Int32).Value = logpass.Id;
-                com.Parameters.Add("@login",DbType.String).Value = logpass.Login;
-                com.Parameters.Add("@password",DbType.String).Value = logpass.Password;
-                com.ExecuteNonQuery();
-                connection.Close();
-             }
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source = password.db;Version=3;"))
+            {
+               connection.Open();
+               SQLiteCommand com = connection.CreateCommand();
+               com.CommandText = $"Insert into Passwd_generation(ID,login,password) values(@id,@login,@password)";
+               com.Parameters.Add("@id", DbType.Int32).Value = logpass.Id;
+               com.Parameters.Add("@login",DbType.String).Value = logpass.Login;
+               com.Parameters.Add("@password",DbType.String).Value = logpass.Password;
+               com.ExecuteNonQuery();
+               connection.Close();
+            }
         }
         public void LoadImageToSql(ImagePassword imgpas)
         {    
@@ -44,6 +44,31 @@ namespace PasswordGenerator
             com.ExecuteNonQuery();
             con.Close();
         }
-        
+        public void DeleteImageFromSql(ImagePassword imgpas)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source = password.db;Version=3;"))
+            {
+                connection.Open();
+                SQLiteCommand command = new SQLiteCommand(connection);
+                command.CommandText = "Delete from Image_password where Id=@id"; 
+                command.Parameters.Add("@id", System.Data.DbType.Int32).Value = imgpas.Id;
+                command.ExecuteNonQuery();          
+                connection.Close();
+            }
+        }
+        public void DeletePassFromSql(LoginPassword logpass)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source = password.db;Version=3;"))
+            {
+                connection.Open();
+                SQLiteCommand command = new SQLiteCommand(connection);
+                command.CommandText = "Delete from Passwd_generation where Id=@id";
+                command.Parameters.Add("@id", System.Data.DbType.Int32).Value = logpass.Id;
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            
+        }
+       
     }
 }
