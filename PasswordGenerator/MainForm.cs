@@ -235,7 +235,7 @@ namespace PasswordGenerator
                 return;
             }
             closeCurrentBtn.Visible = reloadCurrentBtn.Visible = true;
-            if (lastButton != null && buttonPanel.Controls.Contains(lastButton))
+            if (lastButton != null && lastButton != nextButton && buttonPanel.Controls.Contains(lastButton))
             {
                 lastButton.BackColor = buttonPanel.BackColor;
             }
@@ -244,7 +244,7 @@ namespace PasswordGenerator
                 currentButton.BackColor = buttonPanel.BackColor;
             }
             string hexColorString = nextForm.Tag as string;
-            if (lastForm != null)
+            if (lastForm != null && lastForm != nextForm)
             {
                 lastForm.Close();
                 lastForm.Dispose();
