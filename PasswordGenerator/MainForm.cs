@@ -235,11 +235,20 @@ namespace PasswordGenerator
                 return;
             }
             closeCurrentBtn.Visible = reloadCurrentBtn.Visible = true;
+            if (lastButton != null && buttonPanel.Controls.Contains(lastButton))
+            {
+                lastButton.BackColor = buttonPanel.BackColor;
+            }
             if (currentButton != null && buttonPanel.Controls.Contains(currentButton))
             {
                 currentButton.BackColor = buttonPanel.BackColor;
             }
             string hexColorString = nextForm.Tag as string;
+            if (lastForm != null)
+            {
+                lastForm.Close();
+                lastForm.Dispose();
+            }
             if (currentForm != null)
             {
                 currentForm.Close();
