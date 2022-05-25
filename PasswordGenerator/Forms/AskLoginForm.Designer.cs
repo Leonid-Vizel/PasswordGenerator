@@ -65,7 +65,7 @@
             // 
             // acceptBtn
             // 
-            this.acceptBtn.BackColor = System.Drawing.Color.Chartreuse;
+            this.acceptBtn.BackColor = System.Drawing.Color.Green;
             this.acceptBtn.FlatAppearance.BorderSize = 0;
             this.acceptBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.acceptBtn.IconChar = FontAwesome.Sharp.IconChar.Check;

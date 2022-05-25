@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using NLog;
+using System.Linq;
 
 namespace PasswordGenerator
 {
@@ -22,7 +23,16 @@ namespace PasswordGenerator
         private PrivateFontCollection fontCollection; //Коллекция шрифтов (На самом деле только 1) для лого
         private Form lastForm; //Форма для возрата назад при использовании SetNextForm
         private IconButton lastButton; //Кнопка для возрата назад при использовании SetNextForm
-        private List<ImagePassword> imagePasswords; //Загруженные из базы картинки-пароли
+        public List<ImagePassword> imagePasswords { get; private set; }//Загруженные из базы картинки-пароли
+
+        public int GetNextImagePasswordId()
+        {
+            if (imagePasswords.Count == 0)
+            {
+                return 0;
+            }
+            return imagePasswords.Max(x => x.Id) + 1;
+        }
 
         public MainForm()
         {
@@ -74,10 +84,13 @@ namespace PasswordGenerator
             imagePasswords = new List<ImagePassword>();
             logger.Trace("Начата загрузка картинок-паролей...");
             //!BASE! Загрузка из базы всех ImagePassword в объект imagePasswords
+            SqlConnection sqlConnection = new SqlConnection();
+            sqlConnection.LoadImageFromSql(imagePasswords);
             logger.Trace($"Загрузка картинок-паролей завершена. Всего загружено: {imagePasswords.Count}");
             logger.Trace("Начата загрузка логин-паролей...");
             //!BASE! Загрузка из базы всех LoginPassword (см след. комментарий)
             //Юзай это -> PasswordGenerator.LoadedPasswords.Add();
+            sqlConnection.LoadPassFromSql();
             logger.Trace($"Загрузка логин-паролей завершена. Всего загружено: {PasswordGenerator.LoadedPasswords.Count}");
             SetProcessDpiAwarenessContext(-1);
             InitializeComponent();
@@ -234,12 +247,22 @@ namespace PasswordGenerator
             {
                 return;
             }
+            backBtn.Visible = false;
             closeCurrentBtn.Visible = reloadCurrentBtn.Visible = true;
+            if (lastButton != null && lastButton != nextButton && buttonPanel.Controls.Contains(lastButton))
+            {
+                lastButton.BackColor = buttonPanel.BackColor;
+            }
             if (currentButton != null && buttonPanel.Controls.Contains(currentButton))
             {
                 currentButton.BackColor = buttonPanel.BackColor;
             }
             string hexColorString = nextForm.Tag as string;
+            if (lastForm != null && lastForm != nextForm)
+            {
+                lastForm.Close();
+                lastForm.Dispose();
+            }
             if (currentForm != null)
             {
                 currentForm.Close();
@@ -270,7 +293,7 @@ namespace PasswordGenerator
             => SetCurrentForm(picPasswordsBtn, new PictureGenForm(this, imagePasswords));
 
         private void OnSavedClick(object sender, EventArgs e)
-            => SetCurrentForm(savedButton, new SavedPasswordsForm());
+            => SetCurrentForm(savedButton, new SavedPasswordsForm(this));
         #endregion
 
         [DllImport("user32.dll")]

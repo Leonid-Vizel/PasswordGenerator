@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace PasswordGenerator.Forms
@@ -25,8 +24,12 @@ namespace PasswordGenerator.Forms
                 MessageBox.Show("Для сохранения заполните поле логина!","Ошибка");
                 return;
             }
+            
             Result = loginBox.Text;
+           
             Close();
         }
+
+        
     }
 }

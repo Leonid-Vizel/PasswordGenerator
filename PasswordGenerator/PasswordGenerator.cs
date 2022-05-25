@@ -40,10 +40,6 @@ namespace PasswordGenerator
 
         public string Generate()
         {
-            if (!(UseLowerCase || UseUpperCase))
-            {
-                return "";
-            }
             List<char> charSearchList = new List<char>();
             if (UseUpperCase)
             {

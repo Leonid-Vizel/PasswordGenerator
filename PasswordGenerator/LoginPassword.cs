@@ -37,5 +37,20 @@ namespace PasswordGenerator
             }
             return decrypt;
         }
+
+        public static LoginPassword FromSendInfo(SendPasswordLoginInfo info, int newId)
+        {
+            return new LoginPassword(newId, info.Login, info.Password);
+        }
+
+        public SendPasswordLoginInfo ToSendInfo()
+        {
+            return new SendPasswordLoginInfo()
+            {
+                Id = Id,
+                Login = Login,
+                Password = Password
+            };
+        }
     }
 }

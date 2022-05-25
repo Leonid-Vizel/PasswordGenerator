@@ -88,7 +88,7 @@ namespace PasswordGenerator.Forms
                 ImagePassword pass = passPicPanel.Tag as ImagePassword;
                 if (flag)
                 {
-                    passLabel.Text = pass.Password;
+                    passLabel.Text = pass.Decrypt();
                     openBtn.Text = "Скрыть";
                     openBtn.Tag = false;
                 }
@@ -138,7 +138,7 @@ namespace PasswordGenerator.Forms
             PictureBox passImageBox = new PictureBox()
             {
                 Dock = DockStyle.Top,
-                SizeMode = PictureBoxSizeMode.StretchImage,
+                SizeMode = PictureBoxSizeMode.Zoom,
                 Image = password.Image,
                 Location = new Point(0, 0),
                 Margin = new Padding(4, 5, 4, 5),
@@ -154,7 +154,7 @@ namespace PasswordGenerator.Forms
             deleteBtn.Rotation = 45;
             deleteBtn.IconSize = 20;
             deleteBtn.Size = new Size(25, 25);
-            deleteBtn.BackColor = Color.Red;
+            deleteBtn.BackColor = Color.Crimson;
             deleteBtn.Location = new Point(passImageBox.Width - 25, 0);
             deleteBtn.Click += (object senderObject, EventArgs arg) =>
             {
@@ -169,6 +169,23 @@ namespace PasswordGenerator.Forms
                 }
                 RemovePassword(pass);
                 //!BASE! Добавить удаление из базы по Id элемента
+                SqlConnection sql = new SqlConnection();
+                sql.DeleteImageFromSql(pass);
+
+            };
+            #endregion
+            #region Кнопка отправки
+            IconButton sendBtn = new IconButton();
+            sendBtn.FlatAppearance.BorderSize = 0;
+            sendBtn.FlatStyle = FlatStyle.Flat;
+            sendBtn.IconChar = IconChar.Share;
+            sendBtn.IconSize = 20;
+            sendBtn.Size = new Size(25, 25);
+            sendBtn.BackColor = formColor;
+            sendBtn.Location = new Point(0, 0);
+            sendBtn.Click += (object senderObject, EventArgs arg) =>
+            {
+                Parent.SetNextForm(sendBtn, new SendTCPForm(password, Parent));
             };
             #endregion
             #region Добавление
@@ -176,6 +193,7 @@ namespace PasswordGenerator.Forms
             passPicPanel.Controls.Add(passLabel);
             passPicPanel.Controls.Add(passImageBox);
             passImageBox.Controls.Add(deleteBtn);
+            passImageBox.Controls.Add(sendBtn);
             #endregion
             passPicPanel.Location = location;
             passPicPanel.Margin = new Padding(4, 5, 4, 5);
@@ -301,9 +319,14 @@ namespace PasswordGenerator.Forms
         {
             passwords.ForEach(x =>
             {
-                x.Panel.Dispose();
+                x.Panel?.Dispose();
                 x.Panel = null;
             });
+        }
+
+        private void OnReceiveClick(object sender, EventArgs e)
+        {
+            Parent.SetNextForm(receiveBtn, new ReceiveTCPForm(this));
         }
     }
 }

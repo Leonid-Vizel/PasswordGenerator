@@ -10,14 +10,16 @@ namespace PasswordGenerator.Forms
 {
     public partial class SavedPasswordsForm : Form
     {
+        public new MainForm Parent { get; set; }
         private Logger logger;
         public string Result { get; set; }
-        public Color formColor;
-        public SavedPasswordsForm()
+        public Color FormColor { get; set; }
+        public SavedPasswordsForm(MainForm parent)
         {
+            Parent = parent;
             logger = LogManager.GetCurrentClassLogger();
             InitializeComponent();
-            formColor = ColorTranslator.FromHtml((string)Tag);
+            FormColor = ColorTranslator.FromHtml((string)Tag);
         }
         private void OnBorderDraw(object sender, PaintEventArgs e)
         {
@@ -26,10 +28,10 @@ namespace PasswordGenerator.Forms
             {
                 return;
             }
-            ControlPaint.DrawBorder(e.Graphics, senderControl.ClientRectangle, formColor, ButtonBorderStyle.Solid);
+            ControlPaint.DrawBorder(e.Graphics, senderControl.ClientRectangle, FormColor, ButtonBorderStyle.Solid);
         }
 
-        private void OnSearchClick(object sender, EventArgs e)
+        public void OnSearchClick(object sender, EventArgs e)
         {
             if (searchBox.Text.Length == 0)
             {
@@ -44,7 +46,7 @@ namespace PasswordGenerator.Forms
             foreach (LoginPassword password in searchResults)
             {
                 Panel panel = new Panel();
-                panel.BackColor = Algorythms.ChangeColorBrightness(formColor, -0.3F);
+                panel.BackColor = Algorythms.ChangeColorBrightness(FormColor, -0.3F);
                 panel.Dock = DockStyle.Top;
                 panel.Size = new Size(0, 34);
                 #region Label
@@ -54,6 +56,20 @@ namespace PasswordGenerator.Forms
                 passLabel.Text = $"Логин: {password.Login} Пароль: {password}";
                 passLabel.Size = new Size(100,0);
                 panel.Controls.Add(passLabel);
+                #endregion
+                #region Eye
+                IconButton shareBtn = new IconButton();
+                shareBtn.IconChar = IconChar.Share;
+                shareBtn.IconSize = 34;
+                shareBtn.Click += (object senderObj, EventArgs arg) =>
+                {
+                    Parent.SetNextForm(shareBtn, new SendTCPForm(password, Parent));
+                };
+                shareBtn.Size = new Size(34, 34);
+                shareBtn.FlatStyle = FlatStyle.Flat;
+                shareBtn.FlatAppearance.BorderSize = 0;
+                shareBtn.Dock = DockStyle.Right;
+                panel.Controls.Add(shareBtn);
                 #endregion
                 #region Eye
                 IconButton eyeButton = new IconButton();
@@ -112,6 +128,8 @@ namespace PasswordGenerator.Forms
                     workPanel.Controls.Remove(panel);
                     PasswordGenerator.LoadedPasswords.Remove(password);
                     //!BASE!Удаление объекта password из базы
+                    SqlConnection sql = new SqlConnection();
+                    sql.DeletePassFromSql(password);
                     panel.Dispose();
                     logger.Trace($"Пароль (ID:{password.Id}) удалён!");
                 };
@@ -124,6 +142,11 @@ namespace PasswordGenerator.Forms
                 workPanel.Controls.Add(panel);
             }
             logger.Trace("Отображение результатов окончено");
+        }
+
+        private void receiveBtn_Click(object sender, EventArgs e)
+        {
+            Parent.SetNextForm(receiveBtn, new ReceiveTCPForm(this));
         }
     }
 }
