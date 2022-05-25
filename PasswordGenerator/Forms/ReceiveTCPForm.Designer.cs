@@ -41,11 +41,16 @@
             this.saveBtn = new FontAwesome.Sharp.IconButton();
             this.foundBox = new System.Windows.Forms.PictureBox();
             this.foundLabel = new System.Windows.Forms.Label();
+            this.passwordReceivedPanel = new System.Windows.Forms.Panel();
+            this.cancelLoginPassBtn = new FontAwesome.Sharp.IconButton();
+            this.saveLoginPassBtn = new FontAwesome.Sharp.IconButton();
+            this.loginPassLabel = new System.Windows.Forms.Label();
             this.waitPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loadingBox)).BeginInit();
             this.askPortPanel.SuspendLayout();
             this.foundPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.foundBox)).BeginInit();
+            this.passwordReceivedPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // portLabel
@@ -95,7 +100,7 @@
             this.cancelWaitBtn.Text = "Отмена";
             this.cancelWaitBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.cancelWaitBtn.UseVisualStyleBackColor = false;
-            this.cancelWaitBtn.Click += new System.EventHandler(this.iconButton1_Click);
+            this.cancelWaitBtn.Click += new System.EventHandler(this.cancelWaitBtn_Click);
             // 
             // ipLabel
             // 
@@ -215,11 +220,71 @@
             this.foundLabel.TabIndex = 0;
             this.foundLabel.Text = "Пароль картинка-получена!";
             // 
+            // passwordReceivedPanel
+            // 
+            this.passwordReceivedPanel.Controls.Add(this.cancelLoginPassBtn);
+            this.passwordReceivedPanel.Controls.Add(this.saveLoginPassBtn);
+            this.passwordReceivedPanel.Controls.Add(this.loginPassLabel);
+            this.passwordReceivedPanel.Location = new System.Drawing.Point(372, 284);
+            this.passwordReceivedPanel.Name = "passwordReceivedPanel";
+            this.passwordReceivedPanel.Size = new System.Drawing.Size(343, 105);
+            this.passwordReceivedPanel.TabIndex = 10;
+            this.passwordReceivedPanel.Visible = false;
+            // 
+            // cancelLoginPassBtn
+            // 
+            this.cancelLoginPassBtn.BackColor = System.Drawing.Color.Crimson;
+            this.cancelLoginPassBtn.FlatAppearance.BorderSize = 0;
+            this.cancelLoginPassBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cancelLoginPassBtn.IconChar = FontAwesome.Sharp.IconChar.Plus;
+            this.cancelLoginPassBtn.IconColor = System.Drawing.Color.Black;
+            this.cancelLoginPassBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.cancelLoginPassBtn.IconSize = 30;
+            this.cancelLoginPassBtn.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.cancelLoginPassBtn.Location = new System.Drawing.Point(3, 24);
+            this.cancelLoginPassBtn.Name = "cancelLoginPassBtn";
+            this.cancelLoginPassBtn.Rotation = 45D;
+            this.cancelLoginPassBtn.Size = new System.Drawing.Size(337, 34);
+            this.cancelLoginPassBtn.TabIndex = 9;
+            this.cancelLoginPassBtn.Text = "Отмена";
+            this.cancelLoginPassBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.cancelLoginPassBtn.UseVisualStyleBackColor = false;
+            this.cancelLoginPassBtn.Click += new System.EventHandler(this.cancelLoginPassBtn_Click);
+            // 
+            // saveLoginPassBtn
+            // 
+            this.saveLoginPassBtn.BackColor = System.Drawing.Color.Green;
+            this.saveLoginPassBtn.FlatAppearance.BorderSize = 0;
+            this.saveLoginPassBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.saveLoginPassBtn.IconChar = FontAwesome.Sharp.IconChar.Save;
+            this.saveLoginPassBtn.IconColor = System.Drawing.Color.Black;
+            this.saveLoginPassBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.saveLoginPassBtn.IconSize = 30;
+            this.saveLoginPassBtn.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.saveLoginPassBtn.Location = new System.Drawing.Point(3, 64);
+            this.saveLoginPassBtn.Name = "saveLoginPassBtn";
+            this.saveLoginPassBtn.Size = new System.Drawing.Size(337, 34);
+            this.saveLoginPassBtn.TabIndex = 8;
+            this.saveLoginPassBtn.Text = "Сохранить";
+            this.saveLoginPassBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.saveLoginPassBtn.UseVisualStyleBackColor = false;
+            this.saveLoginPassBtn.Click += new System.EventHandler(this.saveLoginPassBtn_Click);
+            // 
+            // loginPassLabel
+            // 
+            this.loginPassLabel.AutoSize = true;
+            this.loginPassLabel.Location = new System.Drawing.Point(1, 0);
+            this.loginPassLabel.Name = "loginPassLabel";
+            this.loginPassLabel.Size = new System.Drawing.Size(220, 21);
+            this.loginPassLabel.TabIndex = 0;
+            this.loginPassLabel.Text = "Получен пароль с логином \'\'!";
+            // 
             // ReceiveTCPForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(835, 489);
+            this.Controls.Add(this.passwordReceivedPanel);
             this.Controls.Add(this.foundPanel);
             this.Controls.Add(this.askPortPanel);
             this.Controls.Add(this.waitPanel);
@@ -228,6 +293,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "ReceiveTCPForm";
             this.Text = "Получение картинки-пароля";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
             this.waitPanel.ResumeLayout(false);
             this.waitPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loadingBox)).EndInit();
@@ -235,6 +301,8 @@
             this.askPortPanel.PerformLayout();
             this.foundPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.foundBox)).EndInit();
+            this.passwordReceivedPanel.ResumeLayout(false);
+            this.passwordReceivedPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -254,5 +322,9 @@
         private System.Windows.Forms.Label foundLabel;
         private FontAwesome.Sharp.IconButton saveBtn;
         private FontAwesome.Sharp.IconButton cancelSaveBtn;
+        private System.Windows.Forms.Panel passwordReceivedPanel;
+        private FontAwesome.Sharp.IconButton cancelLoginPassBtn;
+        private FontAwesome.Sharp.IconButton saveLoginPassBtn;
+        private System.Windows.Forms.Label loginPassLabel;
     }
 }

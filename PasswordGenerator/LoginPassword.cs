@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Newtonsoft.Json;
+using System.Text;
 
 namespace PasswordGenerator
 {
@@ -36,6 +37,21 @@ namespace PasswordGenerator
                 decrypt = Algorythms.DecryptString(Password, Login);
             }
             return decrypt;
+        }
+
+        public static LoginPassword FromSendInfo(SendPasswordLoginInfo info, int newId)
+        {
+            return new LoginPassword(newId, info.Login, info.Password);
+        }
+
+        public SendPasswordLoginInfo ToSendInfo()
+        {
+            return new SendPasswordLoginInfo()
+            {
+                Id = Id,
+                Login = Login,
+                Password = Password
+            };
         }
     }
 }

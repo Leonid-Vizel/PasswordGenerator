@@ -11,15 +11,29 @@ namespace PasswordGenerator.Forms
 {
     public partial class ReceiveTCPForm : Form
     {
-        private bool endWaiting;
-        private ImagePassword received;
-        private PictureGenForm parent;
+        private int port;
+        private bool methodLinked;
+        private TcpListener server;
+        private ImagePassword receivedImage;
+        private LoginPassword receivedLogin;
+        private PictureGenForm imageParent;
+        private SavedPasswordsForm loginParent;
         private BackgroundWorker worker;
         public ReceiveTCPForm(PictureGenForm parent)
         {
-            this.parent = parent;
+            methodLinked = false;
+            imageParent = parent;
             worker = new BackgroundWorker();
             InitializeComponent();
+        }
+
+        public ReceiveTCPForm(SavedPasswordsForm parent)
+        {
+            methodLinked = false;
+            loginParent = parent;
+            worker = new BackgroundWorker();
+            InitializeComponent();
+            ReceiveBtn.BackColor = Color.FromArgb(50, 183, 108);
         }
 
         private void SwapPanels(Panel panel1, Panel panel2)
@@ -33,13 +47,19 @@ namespace PasswordGenerator.Forms
 
         private void ReceiveBtn_Click(object sender, EventArgs e)
         {
-            if (!portTextBox.MaskCompleted)
+            if (worker.IsBusy)
             {
-                MessageBox.Show("Неверно введён порт","Ошибка");
+                MessageBox.Show("Немного подождите. Завершаем предыдущую операцию.", "Ошибка");
                 return;
             }
 
-            if (!int.TryParse(portTextBox.Text, out int port))
+            if (!portTextBox.MaskCompleted)
+            {
+                MessageBox.Show("Неверно введён порт", "Ошибка");
+                return;
+            }
+
+            if (!int.TryParse(portTextBox.Text, out port))
             {
                 MessageBox.Show("Неверно введён порт", "Ошибка");
                 return;
@@ -53,32 +73,82 @@ namespace PasswordGenerator.Forms
             }
             ipLabel.Text = $"IP: {ipLocal}\nПорт: {port}";
 
-            endWaiting = false;
-
-            worker.DoWork += (object doWorkObject, DoWorkEventArgs arg) =>
+            if (!methodLinked)
             {
-                TcpListener server = new TcpListener(IPAddress.Any, port);
-                server.Start();  // запускаем сервер
-                while (!endWaiting)   // бесконечный цикл обслуживания клиентов
+                worker.DoWork += (object doWorkObject, DoWorkEventArgs arg) =>
                 {
-                    TcpClient client = server.AcceptTcpClient();  // ожидаем подключение клиента
-                    NetworkStream ns = client.GetStream(); // для получения и отправки сообщений
+                    server = new TcpListener(IPAddress.Any, port);
+                    server.Start();
+                    TcpClient client = null;
+                    try
+                    {
+                        client = server.AcceptTcpClient();
+                    }
+                    catch
+                    {
+                        Action act = () =>
+                        {
+                            SwapPanels(waitPanel, askPortPanel);
+                        };
+                        Invoke(act);
+                        return;
+                    }
+                    NetworkStream ns = client.GetStream();
                     if (client.Connected)
                     {
-                        byte[] msg = new byte[10485760];     // готовим место для принятия сообщения
-                        received = ImagePassword.FromSendInfo(JsonConvert.DeserializeObject<SendPasswordImageInfo>(Encoding.UTF8.GetString(msg, 0, ns.Read(msg, 0, msg.Length))), parent.GetNextId());
+                        byte[] msg = new byte[10485760];     // готовим место для принятия сообщения (10МБ)
+                        string message = Encoding.UTF8.GetString(msg, 0, ns.Read(msg, 0, msg.Length));
+                        try
+                        {
+                            int id = 0;
+                            if (imageParent == null)
+                            {
+                                id = loginParent.Parent.GetNextImagePasswordId();
+                            }
+                            else
+                            {
+                                id = imageParent.GetNextId();
+                            }
+                            receivedImage = ImagePassword.FromSendInfo(JsonConvert.DeserializeObject<SendPasswordImageInfo>(message), id);
+                        }
+                        catch
+                        {
+                            try
+                            {
+                                receivedLogin = LoginPassword.FromSendInfo(JsonConvert.DeserializeObject<SendPasswordLoginInfo>(message), PasswordGenerator.GetNextPasswordId());
+                            }
+                            catch
+                            {
+                                MessageBox.Show("Не удалось распознать полученный пакет!", "Ошибка");
+                            }
+                        }
+                        client.Close();
                         server.Stop();
 
                         Action act = () =>
                         {
-                            endWaiting = true;
-                            SwapPanels(waitPanel, foundPanel);
-                            foundBox.Image = received.Image;
+                            if (receivedImage == null && receivedLogin == null)
+                            {
+                                SwapPanels(waitPanel, askPortPanel);
+                            }
+                            else if (receivedLogin != null)
+                            {
+                                SwapPanels(waitPanel, passwordReceivedPanel);
+                                loginPassLabel.Text = $"Получен пароль с логином '{receivedLogin.Login}'!";
+                            }
+                            else
+                            {
+                                SwapPanels(waitPanel, foundPanel);
+                                foundBox.Image = receivedImage.Image;
+                            }
                         };
                         Invoke(act);
                     }
-                }
-            };
+                    server = null;
+                    client = null;
+                };
+                methodLinked = true;
+            }
             worker.RunWorkerAsync();
             SwapPanels(askPortPanel, waitPanel);
         }
@@ -96,23 +166,63 @@ namespace PasswordGenerator.Forms
             return "ERROR";
         }
 
-        private void iconButton1_Click(object sender, EventArgs e)
+        private void cancelWaitBtn_Click(object sender, EventArgs e)
         {
-            endWaiting = true;
-            SwapPanels(waitPanel, askPortPanel);
+            if (server != null)
+            {
+                server?.Stop();
+                server = null;
+            }
+            else
+            {
+                SwapPanels(waitPanel, askPortPanel);
+            }
         }
 
         private void cancelSaveBtn_Click(object sender, EventArgs e)
         {
-            received = null;
+            receivedImage = null;
             foundBox.Image = null;
             SwapPanels(foundPanel, askPortPanel);
         }
 
         private void saveBtn_Click(object sender, EventArgs e)
         {
-            parent.AddPassword(received);
-            parent.Parent.backBtn.PerformClick();
+            if (loginParent == null)
+            {
+                loginParent.Parent.imagePasswords.Add(receivedImage);
+                loginParent.Parent.backBtn.PerformClick();
+            }
+            else
+            {
+                imageParent.AddPassword(receivedImage);
+                imageParent.Parent.backBtn.PerformClick();
+            }
+        }
+
+        private void cancelLoginPassBtn_Click(object sender, EventArgs e)
+        {
+            receivedLogin = null;
+            SwapPanels(passwordReceivedPanel, askPortPanel);
+        }
+
+        private void saveLoginPassBtn_Click(object sender, EventArgs e)
+        {
+            PasswordGenerator.LoadedPasswords.Add(receivedLogin);
+            if (loginParent == null)
+            {
+                loginParent.OnSearchClick(null, null);
+                loginParent.Parent.backBtn.PerformClick();
+            }
+            else
+            {
+                loginParent.Parent.backBtn.PerformClick();
+            }
+        }
+
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
+        {
+            server?.Stop();
         }
     }
 }
