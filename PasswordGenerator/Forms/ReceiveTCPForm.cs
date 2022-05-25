@@ -189,7 +189,8 @@ namespace PasswordGenerator.Forms
 
         private void saveBtn_Click(object sender, EventArgs e)
         {
-            if (loginParent == null)
+            new SqlConnection().LoadImageToSql(receivedImage);
+            if (loginParent != null)
             {
                 loginParent.Parent.imagePasswords.Add(receivedImage);
                 loginParent.Parent.backBtn.PerformClick();
@@ -215,13 +216,14 @@ namespace PasswordGenerator.Forms
                 return;
             }
             PasswordGenerator.LoadedPasswords.Add(receivedLogin);
+            new SqlConnection().LoadToSqlpasswd(receivedLogin);
             if (loginParent == null)
             {
-                loginParent.OnSearchClick(null, null);
-                loginParent.Parent.backBtn.PerformClick();
+                imageParent.Parent.backBtn.PerformClick();
             }
             else
             {
+                loginParent.OnSearchClick(null, null);
                 loginParent.Parent.backBtn.PerformClick();
             }
         }

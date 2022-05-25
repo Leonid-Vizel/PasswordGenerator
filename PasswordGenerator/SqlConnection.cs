@@ -1,24 +1,15 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
 
 namespace PasswordGenerator
 {
     internal class SqlConnection
     {
-
         public void LoadToSqlpasswd(LoginPassword logpass)
         {
-
             using (SQLiteConnection connection = new SQLiteConnection("Data Source = password.db;Version=3;"))
             {
                 connection.Open();
