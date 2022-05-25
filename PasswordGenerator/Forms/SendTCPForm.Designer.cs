@@ -42,13 +42,13 @@
             this.ipLabel.Location = new System.Drawing.Point(13, 9);
             this.ipLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.ipLabel.Name = "ipLabel";
-            this.ipLabel.Size = new System.Drawing.Size(26, 21);
+            this.ipLabel.Size = new System.Drawing.Size(45, 21);
             this.ipLabel.TabIndex = 1;
-            this.ipLabel.Text = "IP:";
+            this.ipLabel.Text = "Хост:";
             // 
             // portTextBox
             // 
-            this.portTextBox.Location = new System.Drawing.Point(261, 6);
+            this.portTextBox.Location = new System.Drawing.Point(280, 6);
             this.portTextBox.Mask = "09999";
             this.portTextBox.Name = "portTextBox";
             this.portTextBox.Size = new System.Drawing.Size(56, 29);
@@ -58,7 +58,7 @@
             // portLabel
             // 
             this.portLabel.AutoSize = true;
-            this.portLabel.Location = new System.Drawing.Point(205, 9);
+            this.portLabel.Location = new System.Drawing.Point(224, 9);
             this.portLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.portLabel.Name = "portLabel";
             this.portLabel.Size = new System.Drawing.Size(49, 21);
@@ -77,7 +77,7 @@
             this.sendBtn.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.sendBtn.Location = new System.Drawing.Point(12, 41);
             this.sendBtn.Name = "sendBtn";
-            this.sendBtn.Size = new System.Drawing.Size(305, 34);
+            this.sendBtn.Size = new System.Drawing.Size(324, 34);
             this.sendBtn.TabIndex = 5;
             this.sendBtn.Text = "Отправить";
             this.sendBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -98,7 +98,7 @@
             // 
             // ipTextBox
             // 
-            this.ipTextBox.Location = new System.Drawing.Point(46, 6);
+            this.ipTextBox.Location = new System.Drawing.Point(65, 6);
             this.ipTextBox.Name = "ipTextBox";
             this.ipTextBox.Size = new System.Drawing.Size(152, 29);
             this.ipTextBox.TabIndex = 7;
