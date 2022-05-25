@@ -234,6 +234,7 @@ namespace PasswordGenerator
             {
                 return;
             }
+            backBtn.Visible = false;
             closeCurrentBtn.Visible = reloadCurrentBtn.Visible = true;
             if (lastButton != null && lastButton != nextButton && buttonPanel.Controls.Contains(lastButton))
             {

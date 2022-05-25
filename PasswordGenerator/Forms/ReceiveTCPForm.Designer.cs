@@ -1,6 +1,6 @@
 ﻿namespace PasswordGenerator.Forms
 {
-    partial class ReceiveSSLForm
+    partial class ReceiveTCPForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,34 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.portLabel = new System.Windows.Forms.Label();
             this.portTextBox = new System.Windows.Forms.MaskedTextBox();
             this.waitPanel = new System.Windows.Forms.Panel();
             this.cancelWaitBtn = new FontAwesome.Sharp.IconButton();
-            this.label2 = new System.Windows.Forms.Label();
+            this.ipLabel = new System.Windows.Forms.Label();
             this.loadingBox = new System.Windows.Forms.PictureBox();
             this.ReceiveBtn = new FontAwesome.Sharp.IconButton();
             this.askPortPanel = new System.Windows.Forms.Panel();
             this.foundPanel = new System.Windows.Forms.Panel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.saveBtn = new FontAwesome.Sharp.IconButton();
             this.cancelSaveBtn = new FontAwesome.Sharp.IconButton();
+            this.saveBtn = new FontAwesome.Sharp.IconButton();
+            this.foundBox = new System.Windows.Forms.PictureBox();
+            this.foundLabel = new System.Windows.Forms.Label();
             this.waitPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loadingBox)).BeginInit();
             this.askPortPanel.SuspendLayout();
             this.foundPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.foundBox)).BeginInit();
             this.SuspendLayout();
             // 
-            // label1
+            // portLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 6);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(130, 21);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Порт получения:";
+            this.portLabel.AutoSize = true;
+            this.portLabel.Location = new System.Drawing.Point(3, 6);
+            this.portLabel.Name = "portLabel";
+            this.portLabel.Size = new System.Drawing.Size(130, 21);
+            this.portLabel.TabIndex = 0;
+            this.portLabel.Text = "Порт получения:";
             // 
             // portTextBox
             // 
@@ -69,7 +69,7 @@
             // waitPanel
             // 
             this.waitPanel.Controls.Add(this.cancelWaitBtn);
-            this.waitPanel.Controls.Add(this.label2);
+            this.waitPanel.Controls.Add(this.ipLabel);
             this.waitPanel.Controls.Add(this.loadingBox);
             this.waitPanel.Location = new System.Drawing.Point(12, 148);
             this.waitPanel.Name = "waitPanel";
@@ -97,14 +97,14 @@
             this.cancelWaitBtn.UseVisualStyleBackColor = false;
             this.cancelWaitBtn.Click += new System.EventHandler(this.iconButton1_Click);
             // 
-            // label2
+            // ipLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(133, 3);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(147, 42);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "IP: 123.123.123.123\r\nПорт: 11111";
+            this.ipLabel.AutoSize = true;
+            this.ipLabel.Location = new System.Drawing.Point(133, 3);
+            this.ipLabel.Name = "ipLabel";
+            this.ipLabel.Size = new System.Drawing.Size(147, 42);
+            this.ipLabel.TabIndex = 1;
+            this.ipLabel.Text = "IP: 123.123.123.123\r\nПорт: 11111";
             // 
             // loadingBox
             // 
@@ -137,7 +137,7 @@
             // 
             // askPortPanel
             // 
-            this.askPortPanel.Controls.Add(this.label1);
+            this.askPortPanel.Controls.Add(this.portLabel);
             this.askPortPanel.Controls.Add(this.portTextBox);
             this.askPortPanel.Controls.Add(this.ReceiveBtn);
             this.askPortPanel.Location = new System.Drawing.Point(12, 12);
@@ -149,49 +149,13 @@
             // 
             this.foundPanel.Controls.Add(this.cancelSaveBtn);
             this.foundPanel.Controls.Add(this.saveBtn);
-            this.foundPanel.Controls.Add(this.pictureBox1);
-            this.foundPanel.Controls.Add(this.label3);
+            this.foundPanel.Controls.Add(this.foundBox);
+            this.foundPanel.Controls.Add(this.foundLabel);
             this.foundPanel.Location = new System.Drawing.Point(12, 284);
             this.foundPanel.Name = "foundPanel";
             this.foundPanel.Size = new System.Drawing.Size(354, 130);
             this.foundPanel.TabIndex = 9;
             this.foundPanel.Visible = false;
-            // 
-            // label3
-            // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.Location = new System.Drawing.Point(133, 3);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(218, 47);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Пароль картинка-получена!";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(124, 124);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 7;
-            this.pictureBox1.TabStop = false;
-            // 
-            // saveBtn
-            // 
-            this.saveBtn.BackColor = System.Drawing.Color.Green;
-            this.saveBtn.FlatAppearance.BorderSize = 0;
-            this.saveBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.saveBtn.IconChar = FontAwesome.Sharp.IconChar.Save;
-            this.saveBtn.IconColor = System.Drawing.Color.Black;
-            this.saveBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.saveBtn.IconSize = 30;
-            this.saveBtn.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
-            this.saveBtn.Location = new System.Drawing.Point(133, 93);
-            this.saveBtn.Name = "saveBtn";
-            this.saveBtn.Size = new System.Drawing.Size(218, 34);
-            this.saveBtn.TabIndex = 8;
-            this.saveBtn.Text = "Сохранить";
-            this.saveBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.saveBtn.UseVisualStyleBackColor = false;
             // 
             // cancelSaveBtn
             // 
@@ -211,8 +175,47 @@
             this.cancelSaveBtn.Text = "Отмена";
             this.cancelSaveBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.cancelSaveBtn.UseVisualStyleBackColor = false;
+            this.cancelSaveBtn.Click += new System.EventHandler(this.cancelSaveBtn_Click);
             // 
-            // ReceiveSSLForm
+            // saveBtn
+            // 
+            this.saveBtn.BackColor = System.Drawing.Color.Green;
+            this.saveBtn.FlatAppearance.BorderSize = 0;
+            this.saveBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.saveBtn.IconChar = FontAwesome.Sharp.IconChar.Save;
+            this.saveBtn.IconColor = System.Drawing.Color.Black;
+            this.saveBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.saveBtn.IconSize = 30;
+            this.saveBtn.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.saveBtn.Location = new System.Drawing.Point(133, 93);
+            this.saveBtn.Name = "saveBtn";
+            this.saveBtn.Size = new System.Drawing.Size(218, 34);
+            this.saveBtn.TabIndex = 8;
+            this.saveBtn.Text = "Сохранить";
+            this.saveBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.saveBtn.UseVisualStyleBackColor = false;
+            this.saveBtn.Click += new System.EventHandler(this.saveBtn_Click);
+            // 
+            // foundBox
+            // 
+            this.foundBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.foundBox.Location = new System.Drawing.Point(3, 3);
+            this.foundBox.Name = "foundBox";
+            this.foundBox.Size = new System.Drawing.Size(124, 124);
+            this.foundBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.foundBox.TabIndex = 7;
+            this.foundBox.TabStop = false;
+            // 
+            // foundLabel
+            // 
+            this.foundLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.foundLabel.Location = new System.Drawing.Point(133, 3);
+            this.foundLabel.Name = "foundLabel";
+            this.foundLabel.Size = new System.Drawing.Size(218, 47);
+            this.foundLabel.TabIndex = 0;
+            this.foundLabel.Text = "Пароль картинка-получена!";
+            // 
+            // ReceiveTCPForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -223,7 +226,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "ReceiveSSLForm";
+            this.Name = "ReceiveTCPForm";
             this.Text = "Получение картинки-пароля";
             this.waitPanel.ResumeLayout(false);
             this.waitPanel.PerformLayout();
@@ -231,24 +234,24 @@
             this.askPortPanel.ResumeLayout(false);
             this.askPortPanel.PerformLayout();
             this.foundPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.foundBox)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label portLabel;
         private System.Windows.Forms.MaskedTextBox portTextBox;
         private FontAwesome.Sharp.IconButton ReceiveBtn;
         private System.Windows.Forms.Panel waitPanel;
         private System.Windows.Forms.PictureBox loadingBox;
         private FontAwesome.Sharp.IconButton cancelWaitBtn;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label ipLabel;
         private System.Windows.Forms.Panel askPortPanel;
         private System.Windows.Forms.Panel foundPanel;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.PictureBox foundBox;
+        private System.Windows.Forms.Label foundLabel;
         private FontAwesome.Sharp.IconButton saveBtn;
         private FontAwesome.Sharp.IconButton cancelSaveBtn;
     }

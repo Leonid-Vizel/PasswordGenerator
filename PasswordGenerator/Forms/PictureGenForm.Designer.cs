@@ -95,10 +95,10 @@ namespace PasswordGenerator.Forms
             // 
             this.workPanel.AutoScroll = true;
             this.workPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.workPanel.Location = new System.Drawing.Point(0, 36);
+            this.workPanel.Location = new System.Drawing.Point(0, 41);
             this.workPanel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.workPanel.Name = "workPanel";
-            this.workPanel.Size = new System.Drawing.Size(835, 453);
+            this.workPanel.Size = new System.Drawing.Size(835, 448);
             this.workPanel.TabIndex = 2;
             this.workPanel.Resize += new System.EventHandler(this.OnWorkPanelResized);
             // 
@@ -116,8 +116,8 @@ namespace PasswordGenerator.Forms
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(835, 489);
-            this.Controls.Add(this.designPanel);
             this.Controls.Add(this.workPanel);
+            this.Controls.Add(this.designPanel);
             this.Controls.Add(this.topPanel);
             this.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;

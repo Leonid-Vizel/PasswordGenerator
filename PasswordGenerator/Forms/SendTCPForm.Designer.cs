@@ -1,6 +1,6 @@
 ﻿namespace PasswordGenerator.Forms
 {
-    partial class SendSSLForm
+    partial class SendTCPForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,10 +29,11 @@
         private void InitializeComponent()
         {
             this.ipLabel = new System.Windows.Forms.Label();
-            this.ipTextBox = new System.Windows.Forms.MaskedTextBox();
             this.portTextBox = new System.Windows.Forms.MaskedTextBox();
             this.portLabel = new System.Windows.Forms.Label();
             this.sendBtn = new FontAwesome.Sharp.IconButton();
+            this.waitLabel = new System.Windows.Forms.Label();
+            this.ipTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // ipLabel
@@ -44,15 +45,6 @@
             this.ipLabel.Size = new System.Drawing.Size(26, 21);
             this.ipLabel.TabIndex = 1;
             this.ipLabel.Text = "IP:";
-            // 
-            // ipTextBox
-            // 
-            this.ipTextBox.Location = new System.Drawing.Point(46, 6);
-            this.ipTextBox.Mask = "099.099.099.099";
-            this.ipTextBox.Name = "ipTextBox";
-            this.ipTextBox.Size = new System.Drawing.Size(152, 29);
-            this.ipTextBox.TabIndex = 2;
-            this.ipTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // portTextBox
             // 
@@ -90,21 +82,42 @@
             this.sendBtn.Text = "Отправить";
             this.sendBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.sendBtn.UseVisualStyleBackColor = false;
+            this.sendBtn.Click += new System.EventHandler(this.sendBtn_Click);
             // 
-            // SendSSLForm
+            // waitLabel
+            // 
+            this.waitLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.waitLabel.Font = new System.Drawing.Font("Segoe UI", 36F);
+            this.waitLabel.Location = new System.Drawing.Point(0, 0);
+            this.waitLabel.Name = "waitLabel";
+            this.waitLabel.Size = new System.Drawing.Size(835, 489);
+            this.waitLabel.TabIndex = 6;
+            this.waitLabel.Text = "Ожидайте...";
+            this.waitLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.waitLabel.Visible = false;
+            // 
+            // ipTextBox
+            // 
+            this.ipTextBox.Location = new System.Drawing.Point(46, 6);
+            this.ipTextBox.Name = "ipTextBox";
+            this.ipTextBox.Size = new System.Drawing.Size(152, 29);
+            this.ipTextBox.TabIndex = 7;
+            // 
+            // SendTCPForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(835, 489);
+            this.Controls.Add(this.ipTextBox);
             this.Controls.Add(this.sendBtn);
             this.Controls.Add(this.portTextBox);
             this.Controls.Add(this.portLabel);
-            this.Controls.Add(this.ipTextBox);
             this.Controls.Add(this.ipLabel);
+            this.Controls.Add(this.waitLabel);
             this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "SendSSLForm";
+            this.Name = "SendTCPForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Настройка отправки";
             this.ResumeLayout(false);
@@ -115,9 +128,10 @@
         #endregion
 
         private System.Windows.Forms.Label ipLabel;
-        private System.Windows.Forms.MaskedTextBox ipTextBox;
         private System.Windows.Forms.MaskedTextBox portTextBox;
         private System.Windows.Forms.Label portLabel;
         private FontAwesome.Sharp.IconButton sendBtn;
+        private System.Windows.Forms.Label waitLabel;
+        private System.Windows.Forms.TextBox ipTextBox;
     }
 }

@@ -185,7 +185,7 @@ namespace PasswordGenerator.Forms
             sendBtn.Location = new Point(0, 0);
             sendBtn.Click += (object senderObject, EventArgs arg) =>
             {
-                Parent.SetNextForm(sendBtn, new SendSSLForm(password));
+                Parent.SetNextForm(sendBtn, new SendTCPForm(password, Parent));
             };
             #endregion
             #region Добавление
@@ -319,14 +319,14 @@ namespace PasswordGenerator.Forms
         {
             passwords.ForEach(x =>
             {
-                x.Panel.Dispose();
+                x.Panel?.Dispose();
                 x.Panel = null;
             });
         }
 
         private void OnReceiveClick(object sender, EventArgs e)
         {
-            Parent.SetNextForm(receiveBtn, new ReceiveSSLForm(passwords));
+            Parent.SetNextForm(receiveBtn, new ReceiveTCPForm(this));
         }
     }
 }

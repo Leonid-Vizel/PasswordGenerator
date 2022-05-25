@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
@@ -39,6 +40,35 @@ namespace PasswordGenerator
                 decrypt = Algorythms.DecryptString(Password, (Id + Image.Width + Image.Height).ToString());
             }
             return decrypt;
+        }
+
+        public SendPasswordImageInfo ToSendInfo()
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                Image.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                return new SendPasswordImageInfo()
+                {
+                    Id = Id,
+                    Password = Password,
+                    ImageBytes = stream.ToArray()
+                };
+            }
+        }
+
+        public static ImagePassword FromSendInfo(SendPasswordImageInfo info, int newId)
+        {
+            Bitmap initial = null;
+            using (MemoryStream stream = new MemoryStream(info.ImageBytes))
+            {
+                initial = new Bitmap(stream);
+            }
+            if (initial == null)
+            {
+                return null;
+            }
+            string decrypted = Algorythms.DecryptString(info.Password, (initial.Width + initial.Height + info.Id).ToString());
+            return new ImagePassword(newId, decrypted, initial);
         }
     }
 }
