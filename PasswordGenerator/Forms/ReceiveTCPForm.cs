@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -208,6 +209,11 @@ namespace PasswordGenerator.Forms
 
         private void saveLoginPassBtn_Click(object sender, EventArgs e)
         {
+            if (PasswordGenerator.LoadedPasswords.Where(x => x.Login.Equals(receivedLogin.Login)).Any(x => x.Decrypt().Equals(receivedLogin.Decrypt())))
+            {
+                MessageBox.Show("Такой пароль уже сохранён при этом логине!", "Ошибка");
+                return;
+            }
             PasswordGenerator.LoadedPasswords.Add(receivedLogin);
             if (loginParent == null)
             {
