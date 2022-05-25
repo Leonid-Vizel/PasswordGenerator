@@ -80,6 +80,7 @@ namespace PasswordGenerator
             logger.Trace("Начата загрузка логин-паролей...");
             //!BASE! Загрузка из базы всех LoginPassword (см след. комментарий)
             //Юзай это -> PasswordGenerator.LoadedPasswords.Add();
+            sqlConnection.LoadPassFromSql();
             logger.Trace($"Загрузка логин-паролей завершена. Всего загружено: {PasswordGenerator.LoadedPasswords.Count}");
             SetProcessDpiAwarenessContext(-1);
             InitializeComponent();

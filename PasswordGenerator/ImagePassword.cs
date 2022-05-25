@@ -10,11 +10,18 @@ namespace PasswordGenerator
         public string Password { get; set; }
         public int Id { get; set; }
 
-        public ImagePassword(int id, string password, Bitmap image)
+        public ImagePassword(int id, string password, Bitmap image, bool encrypt = true)
         {
             Id = id;
             Image = image;
-            Password = Algorythms.EncryptString(password, (Id + Image.Width + Image.Height).ToString());
+            if (encrypt)
+            {
+                Password = Algorythms.EncryptString(password, (Id + Image.Width + Image.Height).ToString());
+            }
+            else
+            {
+                Password = password;
+            }
         }
 
         public override string ToString()
