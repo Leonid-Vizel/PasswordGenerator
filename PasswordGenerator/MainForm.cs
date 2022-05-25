@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using NLog;
+using System.Linq;
 
 namespace PasswordGenerator
 {
@@ -22,7 +23,16 @@ namespace PasswordGenerator
         private PrivateFontCollection fontCollection; //Коллекция шрифтов (На самом деле только 1) для лого
         private Form lastForm; //Форма для возрата назад при использовании SetNextForm
         private IconButton lastButton; //Кнопка для возрата назад при использовании SetNextForm
-        private List<ImagePassword> imagePasswords; //Загруженные из базы картинки-пароли
+        public List<ImagePassword> imagePasswords { get; private set; }//Загруженные из базы картинки-пароли
+
+        public int GetNextImagePasswordId()
+        {
+            if (imagePasswords.Count == 0)
+            {
+                return 0;
+            }
+            return imagePasswords.Max(x => x.Id) + 1;
+        }
 
         public MainForm()
         {
@@ -237,6 +247,7 @@ namespace PasswordGenerator
             {
                 return;
             }
+            backBtn.Visible = false;
             closeCurrentBtn.Visible = reloadCurrentBtn.Visible = true;
             if (lastButton != null && lastButton != nextButton && buttonPanel.Controls.Contains(lastButton))
             {
@@ -282,7 +293,7 @@ namespace PasswordGenerator
             => SetCurrentForm(picPasswordsBtn, new PictureGenForm(this, imagePasswords));
 
         private void OnSavedClick(object sender, EventArgs e)
-            => SetCurrentForm(savedButton, new SavedPasswordsForm());
+            => SetCurrentForm(savedButton, new SavedPasswordsForm(this));
         #endregion
 
         [DllImport("user32.dll")]

@@ -34,7 +34,10 @@
             this.searchLabel = new System.Windows.Forms.Label();
             this.workPanel = new System.Windows.Forms.Panel();
             this.designPanel = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.receiveBtn = new FontAwesome.Sharp.IconButton();
             this.searchPanel.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // searchPanel
@@ -55,7 +58,7 @@
             this.searchBox.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.searchBox.Location = new System.Drawing.Point(57, 0);
             this.searchBox.Name = "searchBox";
-            this.searchBox.Size = new System.Drawing.Size(602, 43);
+            this.searchBox.Size = new System.Drawing.Size(602, 36);
             this.searchBox.TabIndex = 1;
             // 
             // searchBtn
@@ -95,7 +98,7 @@
             this.workPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.workPanel.Location = new System.Drawing.Point(0, 41);
             this.workPanel.Name = "workPanel";
-            this.workPanel.Size = new System.Drawing.Size(747, 403);
+            this.workPanel.Size = new System.Drawing.Size(747, 367);
             this.workPanel.TabIndex = 1;
             // 
             // designPanel
@@ -107,10 +110,40 @@
             this.designPanel.Size = new System.Drawing.Size(747, 5);
             this.designPanel.TabIndex = 2;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.receiveBtn);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 408);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(747, 36);
+            this.panel1.TabIndex = 3;
+            // 
+            // receiveBtn
+            // 
+            this.receiveBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(183)))), ((int)(((byte)(108)))));
+            this.receiveBtn.Dock = System.Windows.Forms.DockStyle.Right;
+            this.receiveBtn.FlatAppearance.BorderSize = 0;
+            this.receiveBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.receiveBtn.IconChar = FontAwesome.Sharp.IconChar.Download;
+            this.receiveBtn.IconColor = System.Drawing.Color.Black;
+            this.receiveBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.receiveBtn.IconSize = 23;
+            this.receiveBtn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.receiveBtn.Location = new System.Drawing.Point(633, 0);
+            this.receiveBtn.Name = "receiveBtn";
+            this.receiveBtn.Size = new System.Drawing.Size(114, 36);
+            this.receiveBtn.TabIndex = 3;
+            this.receiveBtn.Text = "Получить";
+            this.receiveBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.receiveBtn.UseVisualStyleBackColor = false;
+            this.receiveBtn.Click += new System.EventHandler(this.receiveBtn_Click);
+            // 
             // SavedPasswordsForm
             // 
             this.ClientSize = new System.Drawing.Size(747, 444);
             this.Controls.Add(this.workPanel);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.designPanel);
             this.Controls.Add(this.searchPanel);
             this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -121,6 +154,7 @@
             this.Text = "Сохранённые пароли";
             this.searchPanel.ResumeLayout(false);
             this.searchPanel.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -133,5 +167,7 @@
         private System.Windows.Forms.TextBox searchBox;
         private System.Windows.Forms.Panel workPanel;
         private System.Windows.Forms.Panel designPanel;
+        private System.Windows.Forms.Panel panel1;
+        private FontAwesome.Sharp.IconButton receiveBtn;
     }
 }

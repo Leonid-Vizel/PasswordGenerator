@@ -30,6 +30,7 @@ namespace PasswordGenerator.Forms
         private void InitializeComponent()
         {
             this.topPanel = new System.Windows.Forms.Panel();
+            this.receiveBtn = new FontAwesome.Sharp.IconButton();
             this.addBtn = new FontAwesome.Sharp.IconButton();
             this.workPanel = new System.Windows.Forms.Panel();
             this.designPanel = new System.Windows.Forms.Panel();
@@ -38,6 +39,7 @@ namespace PasswordGenerator.Forms
             // 
             // topPanel
             // 
+            this.topPanel.Controls.Add(this.receiveBtn);
             this.topPanel.Controls.Add(this.addBtn);
             this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.topPanel.Location = new System.Drawing.Point(0, 0);
@@ -46,6 +48,27 @@ namespace PasswordGenerator.Forms
             this.topPanel.Size = new System.Drawing.Size(835, 36);
             this.topPanel.TabIndex = 1;
             this.topPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.OnBorderDraw);
+            // 
+            // receiveBtn
+            // 
+            this.receiveBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
+            this.receiveBtn.Dock = System.Windows.Forms.DockStyle.Right;
+            this.receiveBtn.FlatAppearance.BorderSize = 0;
+            this.receiveBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.receiveBtn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.receiveBtn.IconChar = FontAwesome.Sharp.IconChar.Download;
+            this.receiveBtn.IconColor = System.Drawing.Color.Black;
+            this.receiveBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.receiveBtn.IconSize = 20;
+            this.receiveBtn.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.receiveBtn.Location = new System.Drawing.Point(601, 0);
+            this.receiveBtn.Name = "receiveBtn";
+            this.receiveBtn.Size = new System.Drawing.Size(117, 36);
+            this.receiveBtn.TabIndex = 2;
+            this.receiveBtn.Text = "Получить";
+            this.receiveBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.receiveBtn.UseVisualStyleBackColor = false;
+            this.receiveBtn.Click += new System.EventHandler(this.OnReceiveClick);
             // 
             // addBtn
             // 
@@ -72,10 +95,10 @@ namespace PasswordGenerator.Forms
             // 
             this.workPanel.AutoScroll = true;
             this.workPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.workPanel.Location = new System.Drawing.Point(0, 36);
+            this.workPanel.Location = new System.Drawing.Point(0, 41);
             this.workPanel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.workPanel.Name = "workPanel";
-            this.workPanel.Size = new System.Drawing.Size(835, 453);
+            this.workPanel.Size = new System.Drawing.Size(835, 448);
             this.workPanel.TabIndex = 2;
             this.workPanel.Resize += new System.EventHandler(this.OnWorkPanelResized);
             // 
@@ -93,8 +116,8 @@ namespace PasswordGenerator.Forms
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(835, 489);
-            this.Controls.Add(this.designPanel);
             this.Controls.Add(this.workPanel);
+            this.Controls.Add(this.designPanel);
             this.Controls.Add(this.topPanel);
             this.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -113,5 +136,6 @@ namespace PasswordGenerator.Forms
         private System.Windows.Forms.Panel workPanel;
         private FontAwesome.Sharp.IconButton addBtn;
         private System.Windows.Forms.Panel designPanel;
+        private FontAwesome.Sharp.IconButton receiveBtn;
     }
 }
