@@ -69,6 +69,50 @@ namespace PasswordGenerator
             }
             
         }
-       
+        public void LoadImageFromSql(List<ImagePassword> imagePasswords)
+        {
+            SQLiteConnection con = new SQLiteConnection("Data Source=password.db;Version=3;");
+            SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM Image_password", con);
+            con.Open();
+            SQLiteDataReader dr;
+            dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                if (!dr.IsDBNull(0))
+                {
+                    byte[] im = (byte[])dr["image"];
+                    MemoryStream ms = new MemoryStream(im);
+                    Bitmap bitmap = new Bitmap(ms);
+                    imagePasswords.Add(new ImagePassword((int)dr.GetInt64(0),dr.GetValue(2).ToString(),bitmap));
+                    
+                }
+                else
+                {
+                  
+                }
+            }
+            con.Close();
+        }
+        public void LoadPassFromSql()
+        {
+            SQLiteConnection con = new SQLiteConnection("Data Source=password.db;Version=3;");
+            SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM Passwd_generation", con);
+            con.Open();
+            SQLiteDataReader dr;
+            dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                if (!dr.IsDBNull(0))
+                {
+                    PasswordGenerator.LoadedPasswords.Add(new LoginPassword((int)dr.GetInt64(0), dr.GetValue(1).ToString(), dr.GetValue(2).ToString()));
+
+                }
+                else
+                {
+
+                }
+            }
+            con.Close();
+        }
     }
 }

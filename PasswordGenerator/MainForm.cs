@@ -74,6 +74,8 @@ namespace PasswordGenerator
             imagePasswords = new List<ImagePassword>();
             logger.Trace("Начата загрузка картинок-паролей...");
             //!BASE! Загрузка из базы всех ImagePassword в объект imagePasswords
+            SqlConnection sqlConnection = new SqlConnection();
+            sqlConnection.LoadImageFromSql(imagePasswords);
             logger.Trace($"Загрузка картинок-паролей завершена. Всего загружено: {imagePasswords.Count}");
             logger.Trace("Начата загрузка логин-паролей...");
             //!BASE! Загрузка из базы всех LoginPassword (см след. комментарий)
