@@ -292,7 +292,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "ReceiveTCPForm";
-            this.Text = "Получение картинки-пароля";
+            this.Text = "Получение данных";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
             this.waitPanel.ResumeLayout(false);
             this.waitPanel.PerformLayout();

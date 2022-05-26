@@ -38,7 +38,7 @@ namespace PasswordGenerator
         public PasswordGenerator(Random random = null)
             => Random = random ?? new Random(Guid.NewGuid().GetHashCode());
 
-        public string Generate()
+        private List<char> GetListOfPermittedSymbols()
         {
             List<char> charSearchList = new List<char>();
             if (UseUpperCase)
@@ -52,13 +52,6 @@ namespace PasswordGenerator
             if (UseNonAlphanumeric)
             {
                 charSearchList.AddRange(NonAlphanumerics);
-                if (ExcludeAmbiguous)
-                {
-                    foreach (char excludeChar in AmbiguousChars)
-                    {
-                        charSearchList.Remove(excludeChar);
-                    }
-                }
             }
             if (UseNumbers)
             {
@@ -66,18 +59,130 @@ namespace PasswordGenerator
             }
             if (ExcludeSimilar)
             {
-                foreach(char excludeChar in SimilarChars)
+                foreach (char excludeChar in SimilarChars)
                 {
                     charSearchList.Remove(excludeChar);
                 }
             }
+            if (ExcludeAmbiguous)
+            {
+                foreach (char excludeChar in AmbiguousChars)
+                {
+                    charSearchList.Remove(excludeChar);
+                }
+            }
+            return charSearchList;
+        }
 
-            StringBuilder passwordBuilder = new StringBuilder();
+        public string Generate()
+        {
+            if (!(UseLowerCase || UseNonAlphanumeric || UseNumbers || UseUpperCase))
+            {
+                return string.Empty;
+            }
+            List<char> searchList = GetListOfPermittedSymbols();
+            StringBuilder builder = new StringBuilder();
             for (int i = 0; i < PasswordLength; i++)
             {
-                passwordBuilder.Append(charSearchList[Random.Next(0, charSearchList.Count())]);
+                builder.Append(searchList[Random.Next(0, searchList.Count())]);
             }
-            return passwordBuilder.ToString();
+
+            string analyzeString = builder.ToString();
+            //Определяем разрешённые для вставки символы
+            string permittedUpperCase = DefaultAlphabet;
+            string permittedLowerCase = DefaultAlphabet.ToLower();
+            string permittedNumbers = NumberChars;
+            string permittedSymbols = NonAlphanumerics;
+            if (ExcludeSimilar)
+            {
+                foreach (char excludeChar in SimilarChars)
+                {
+                    permittedUpperCase = permittedUpperCase.Replace(excludeChar.ToString(), "");
+                    permittedLowerCase = permittedLowerCase.Replace(excludeChar.ToString(), "");
+                    permittedNumbers = permittedNumbers.Replace(excludeChar.ToString(), "");
+                }
+            }
+            if (ExcludeAmbiguous)
+            {
+                foreach (char excludeChar in AmbiguousChars)
+                {
+                    permittedSymbols = permittedSymbols.Replace(excludeChar.ToString(), "");
+                }
+            }
+            //Определяем, надо ли производить дополнительные изменения
+            bool upperCaseNotUsed = UseUpperCase && !builder.ToString().Any(x => permittedUpperCase.Contains(x));
+            bool lowerCaseNotUsed = UseLowerCase && !builder.ToString().Any(x => permittedLowerCase.Contains(x));
+            bool numbersNotUsed = UseNumbers && !builder.ToString().Any(x => permittedNumbers.Contains(x));
+            bool symbolsNotUsed = UseNonAlphanumeric && !builder.ToString().Any(x => permittedSymbols.Contains(x));
+            if (upperCaseNotUsed || lowerCaseNotUsed || numbersNotUsed || symbolsNotUsed)
+            {
+                //Определяем список позиций в строке, заместо которых будем вставлять
+                bool upperFound = false;
+                bool lowerFound = false;
+                bool numberFound = false;
+                bool symbolFound = false;
+                List<int> possiblePositions = new List<int>();
+                for (int i = 0; i < builder.Length; i++)
+                {
+                    if (!upperFound && UseUpperCase && permittedUpperCase.Contains(analyzeString[i]))
+                    {
+                        upperFound = true;
+                        continue;
+                    }
+                    if (!lowerFound && UseLowerCase && permittedLowerCase.Contains(analyzeString[i]))
+                    {
+                        lowerFound = true;
+                        continue;
+                    }
+                    if (!numberFound && UseNumbers && permittedNumbers.Contains(analyzeString[i]))
+                    {
+                        numberFound = true;
+                        continue;
+                    }
+                    if (!symbolFound && UseNonAlphanumeric && permittedSymbols.Contains(analyzeString[i]))
+                    {
+                        symbolFound = true;
+                        continue;
+                    }
+                    possiblePositions.Add(i);
+                }
+
+                int replacePosition = 0; //Переменная для замены позиций, которую далее будем использовать
+                //Если надо вставить Верхний регистр
+                if (upperCaseNotUsed)
+                {
+                    replacePosition = possiblePositions[Random.Next(0, possiblePositions.Count)];
+                    possiblePositions.Remove(replacePosition);
+                    builder.Remove(replacePosition, 1);
+                    builder.Insert(replacePosition, permittedUpperCase[Random.Next(0, permittedLowerCase.Length)]);
+                }
+                //Если надо вставить нижний регистр
+                if (lowerCaseNotUsed)
+                {
+                    replacePosition = possiblePositions[Random.Next(0, possiblePositions.Count)];
+                    possiblePositions.Remove(replacePosition);
+                    builder.Remove(replacePosition, 1);
+                    builder.Insert(replacePosition, permittedLowerCase[Random.Next(0, permittedLowerCase.Length)]);
+                }
+                //Если надо вставить цифру
+                if (numbersNotUsed)
+                {
+                    replacePosition = possiblePositions[Random.Next(0, possiblePositions.Count)];
+                    possiblePositions.Remove(replacePosition);
+                    builder.Remove(replacePosition, 1);
+                    builder.Insert(replacePosition, permittedNumbers[Random.Next(0, permittedNumbers.Length)]);
+                }
+                //Если надо вставить символ
+                if (symbolsNotUsed)
+                {
+                    replacePosition = possiblePositions[Random.Next(0, possiblePositions.Count)];
+                    possiblePositions.Remove(replacePosition);
+                    builder.Remove(replacePosition, 1);
+                    builder.Insert(replacePosition, permittedSymbols[Random.Next(0, permittedSymbols.Length)]);
+                }
+            }
+
+            return builder.ToString();
         }
 
         public void SaveJson()

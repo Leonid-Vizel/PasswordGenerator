@@ -1,15 +1,15 @@
 ﻿using FontAwesome.Sharp;
-using PasswordGenerator.Forms;
-using System;
-using System.IO;
-using System.Drawing;
-using System.Drawing.Text;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 using NLog;
+using PasswordGenerator.Forms;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Text;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace PasswordGenerator
 {
@@ -92,7 +92,6 @@ namespace PasswordGenerator
             //Юзай это -> PasswordGenerator.LoadedPasswords.Add();
             sqlConnection.LoadPassFromSql();
             logger.Trace($"Загрузка логин-паролей завершена. Всего загружено: {PasswordGenerator.LoadedPasswords.Count}");
-            SetProcessDpiAwarenessContext(-1);
             InitializeComponent();
             ApplyFontToLogoLabel();
         }
@@ -295,9 +294,6 @@ namespace PasswordGenerator
         private void OnSavedClick(object sender, EventArgs e)
             => SetCurrentForm(savedButton, new SavedPasswordsForm(this));
         #endregion
-
-        [DllImport("user32.dll")]
-        private static extern bool SetProcessDpiAwarenessContext(int value);
 
         private void OnCloseCurrentclick(object sender, EventArgs e)
         {

@@ -58,7 +58,7 @@ namespace PasswordGenerator
             0,
             0});
             this.lengthUpDown.Minimum = new decimal(new int[] {
-            1,
+            6,
             0,
             0,
             0});
@@ -66,7 +66,7 @@ namespace PasswordGenerator
             this.lengthUpDown.Size = new System.Drawing.Size(180, 29);
             this.lengthUpDown.TabIndex = 0;
             this.lengthUpDown.Value = new decimal(new int[] {
-            1,
+            6,
             0,
             0,
             0});
