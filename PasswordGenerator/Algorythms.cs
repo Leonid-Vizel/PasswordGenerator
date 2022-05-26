@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PasswordGenerator
 {
-    internal static class Algorythms
+    public static class Algorythms
     {
         public static Color ChangeColorBrightness(Color color, double correctionFactor)
         {
