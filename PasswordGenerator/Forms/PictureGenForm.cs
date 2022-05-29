@@ -17,24 +17,17 @@ namespace PasswordGenerator.Forms
         public new MainForm Parent { get; set; }
         private List<ImagePassword> passwords;
         private Color formColor;
-        public PictureGenForm(MainForm parent, List<ImagePassword> passwords)
+        public PictureGenForm(MainForm parent)
         {
             logger = LogManager.GetCurrentClassLogger();
             Parent = parent;
             InitializeComponent();
             formColor = ColorTranslator.FromHtml((string)Tag);
             logger.Trace("Начата загрузка картинок-паролей...");
-            if (passwords.Count == 0)
-            {
-                this.passwords = passwords;
-            }
-            else
-            {
-                this.passwords = new List<ImagePassword>();
-                passwords.ForEach(x => AddPassword(x));
-                this.passwords = passwords;
-            }
-            logger.Trace($"Загрузка картинок-паролей завершена! Всего загружено: {this.passwords.Count}");
+            passwords = new List<ImagePassword>();
+            List<ImagePassword> loadedPasswords = SqlConnector.LoadImagesFromBase();
+            loadedPasswords.ForEach(x => AddPassword(x));
+            logger.Trace($"Загрузка картинок-паролей завершена! Всего загружено: {passwords.Count}");
         }
 
         private void OnBorderDraw(object sender, PaintEventArgs e)
@@ -54,7 +47,6 @@ namespace PasswordGenerator.Forms
             password.Panel = passPicPanel;
             passPicPanel.BackColor = SystemColors.Control;
             passPicPanel.BorderStyle = BorderStyle.FixedSingle;
-            passPicPanel.Tag = password;
             #region Надпись
             Label passLabel = new Label()
             {
@@ -85,17 +77,16 @@ namespace PasswordGenerator.Forms
             openBtn.Click += (object senderObject, EventArgs arg) =>
             {
                 bool flag = (bool)openBtn.Tag;
-                ImagePassword pass = passPicPanel.Tag as ImagePassword;
                 if (flag)
                 {
-                    passLabel.Text = pass.Decrypt();
+                    passLabel.Text = password.Decrypt();
                     openBtn.Text = "Скрыть";
                     openBtn.Tag = false;
                 }
                 else
                 {
                     StringBuilder passBuilder = new StringBuilder();
-                    for (int i = 0; i < pass.Password.Length; i++)
+                    for (int i = 0; i < password.Password.Length; i++)
                     {
                         passBuilder.Append('*');
                     }
@@ -122,10 +113,9 @@ namespace PasswordGenerator.Forms
             copyBtn.FlatAppearance.BorderSize = 0;
             copyBtn.Click += (object senderObject, EventArgs arg) =>
             {
-                ImagePassword pass = passPicPanel.Tag as ImagePassword;
-                if (pass != null && pass.Password.Length > 0)
+                if (password != null && password.Password.Length > 0)
                 {
-                    Clipboard.SetText(pass.Password);
+                    Clipboard.SetText(password.Password);
                 }
             };
             #endregion
@@ -162,13 +152,12 @@ namespace PasswordGenerator.Forms
                 {
                     return;
                 }
-                ImagePassword pass = passPicPanel.Tag as ImagePassword;
-                if (pass == null)
+                if (password == null)
                 {
                     return;
                 }
-                RemovePassword(pass);
-                SqlConnector.DeleteImageFromSql(pass);
+                RemovePassword(password);
+                SqlConnector.DeleteFromBase(password);
 
             };
             #endregion
@@ -202,13 +191,13 @@ namespace PasswordGenerator.Forms
 
         public void AddPassword(ImagePassword password)
         {
-            if (passwords.Count == 0)
+            if (passwords.Count(x=>x.Panel != null) == 0)
             {
                 CreatePasswordPanel(new Point(margin, margin), password);
             }
             else
             {
-                ImagePassword lastPassword = passwords.Last();
+                ImagePassword lastPassword = passwords.Where(x => x.Panel != null).Last();
                 int freeSpace = workPanel.Width - margin * 3 - lastPassword.Panel.Location.X - lastPassword.Panel.Width;
                 if (freeSpace >= lastPassword.Panel.Width)
                 {
@@ -230,15 +219,6 @@ namespace PasswordGenerator.Forms
             password.Image.Dispose();
             RelocatePanels();
             logger.Trace($"Пароль-картинка(ID:{password.Id}) успешно убран!");
-        }
-
-        public int GetNextId()
-        {
-            if (passwords.Count == 0)
-            {
-                return 0;
-            }
-            return passwords.Max(x => x.Id) + 1;
         }
 
         public void RelocatePanels()

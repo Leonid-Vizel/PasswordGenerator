@@ -41,7 +41,7 @@ namespace PasswordGenerator.Forms
             }
             workPanel.Controls.Clear();
             logger.Trace($"Происходит поиск паролей для логина {searchBox.Text}");
-            IEnumerable<LoginPassword> searchResults = PasswordGenerator.LoadedPasswords.Where(x => x.Login.ToLower().Equals(searchBox.Text.ToLower()));
+            List<LoginPassword> searchResults = SqlConnector.FindPasswordWithLogin(searchBox.Text);
             logger.Trace($"Количество результатов: {searchResults.Count()}");
             foreach (LoginPassword password in searchResults)
             {
@@ -126,8 +126,7 @@ namespace PasswordGenerator.Forms
                         return;
                     }
                     workPanel.Controls.Remove(panel);
-                    PasswordGenerator.LoadedPasswords.Remove(password);
-                    SqlConnector.DeletePassFromSql(password);
+                    SqlConnector.DeleteFromBase(password);
                     panel.Dispose();
                     logger.Trace($"Пароль (ID:{password.Id}) удалён!");
                 };

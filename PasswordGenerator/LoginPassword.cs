@@ -4,11 +4,11 @@ namespace PasswordGenerator
 {
     public class LoginPassword
     {
-        public int Id { get; private set; }
+        public long Id { get; set; }
         public string Login { get; private set; }
         public string Password { get; private set; }
 
-        public LoginPassword(int id, string login, string password)
+        public LoginPassword(long id, string login, string password)
         {
             Id = id;
             Login = login;
@@ -38,9 +38,9 @@ namespace PasswordGenerator
             return decrypt;
         }
 
-        public static LoginPassword FromSendInfo(SendPasswordLoginInfo info, int newId)
+        public static LoginPassword FromSendInfo(SendPasswordLoginInfo info)
         {
-            return new LoginPassword(newId, info.Login, info.Password);
+            return new LoginPassword(info.Id, info.Login, info.Password);
         }
 
         public SendPasswordLoginInfo ToSendInfo()

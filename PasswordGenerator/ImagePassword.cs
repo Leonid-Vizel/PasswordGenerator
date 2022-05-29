@@ -7,11 +7,11 @@ namespace PasswordGenerator
 {
     public class ImagePassword
     {
-        public Bitmap Image { get; set; }
-        public string Password { get; set; }
-        public int Id { get; set; }
+        public long Id { get; set; }
+        public Image Image { get; private set; }
+        public string Password { get; private set; }
 
-        public ImagePassword(int id, string password, Bitmap image, bool encrypt = true)
+        public ImagePassword(long id, string password, Image image, bool encrypt = true)
         {
             Id = id;
             Image = image;
@@ -44,7 +44,7 @@ namespace PasswordGenerator
         {
             if (decrypt == null)
             {
-                decrypt = Algorythms.DecryptString(Password, (Id + Image.Width + Image.Height).ToString());
+                decrypt = Algorythms.DecryptString(Password, (Image.Width + Image.Height).ToString());
             }
             return decrypt;
         }
@@ -63,19 +63,14 @@ namespace PasswordGenerator
             }
         }
 
-        public static ImagePassword FromSendInfo(SendPasswordImageInfo info, int newId)
+        public static ImagePassword FromSendInfo(SendPasswordImageInfo info)
         {
             Bitmap initial = null;
             using (MemoryStream stream = new MemoryStream(info.ImageBytes))
             {
                 initial = new Bitmap(stream);
             }
-            if (initial == null)
-            {
-                return null;
-            }
-            string decrypted = Algorythms.DecryptString(info.Password, (initial.Width + initial.Height + info.Id).ToString());
-            return new ImagePassword(newId, decrypted, initial);
+            return new ImagePassword(info.Id, info.Password, initial, false);
         }
     }
 }

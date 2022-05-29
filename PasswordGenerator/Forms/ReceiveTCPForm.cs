@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using NLog;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
@@ -116,17 +117,8 @@ namespace PasswordGenerator.Forms
                         string message = Encoding.UTF8.GetString(msg, 0, ns.Read(msg, 0, msg.Length));
                         try
                         {
-                            int id = 0;
-                            if (imageParent == null)
-                            {
-                                id = loginParent.Parent.GetNextImagePasswordId();
-                            }
-                            else
-                            {
-                                id = imageParent.GetNextId();
-                            }
                             logger.Trace("Проиводится попытка получения картинки-пароля");
-                            receivedImage = ImagePassword.FromSendInfo(JsonConvert.DeserializeObject<SendPasswordImageInfo>(message), id);
+                            receivedImage = ImagePassword.FromSendInfo(JsonConvert.DeserializeObject<SendPasswordImageInfo>(message));
                             logger.Info("Получен пароль-картинка");
                         }
                         catch
@@ -134,7 +126,7 @@ namespace PasswordGenerator.Forms
                             try
                             {
                                 logger.Trace("Проиводится попытка получения логин-пароля");
-                                receivedLogin = LoginPassword.FromSendInfo(JsonConvert.DeserializeObject<SendPasswordLoginInfo>(message), PasswordGenerator.GetNextPasswordId());
+                                receivedLogin = LoginPassword.FromSendInfo(JsonConvert.DeserializeObject<SendPasswordLoginInfo>(message));
                                 logger.Info("Получен логин-пароль");
                             }
                             catch
@@ -209,10 +201,9 @@ namespace PasswordGenerator.Forms
 
         private void saveBtn_Click(object sender, EventArgs e)
         {
-            SqlConnector.LoadImageToSql(receivedImage);
+            receivedImage.Id = SqlConnector.AddToBase(receivedImage);
             if (loginParent != null)
             {
-                loginParent.Parent.imagePasswords.Add(receivedImage);
                 loginParent.Parent.backBtn.PerformClick();
             }
             else
@@ -230,13 +221,14 @@ namespace PasswordGenerator.Forms
 
         private void saveLoginPassBtn_Click(object sender, EventArgs e)
         {
-            if (PasswordGenerator.LoadedPasswords.Where(x => x.Login.Equals(receivedLogin.Login)).Any(x => x.Decrypt().Equals(receivedLogin.Decrypt())))
+            List<LoginPassword> foundPassword = SqlConnector.FindPasswordWithLogin(receivedLogin.Login);
+            if (foundPassword.Any(x => x.Decrypt().Equals(receivedLogin.Decrypt())))
             {
+                logger.Warn($"Сохранение пароля отклонено. Такой пароль уже сохранён при логине {receivedLogin.Login}");
                 MessageBox.Show("Такой пароль уже сохранён при этом логине!", "Ошибка");
                 return;
             }
-            PasswordGenerator.LoadedPasswords.Add(receivedLogin);
-            SqlConnector.LoadToSqlpasswd(receivedLogin);
+            receivedLogin.Id = SqlConnector.AddToBase(receivedLogin);
             if (loginParent == null)
             {
                 imageParent.Parent.backBtn.PerformClick();
