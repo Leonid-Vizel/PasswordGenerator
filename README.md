@@ -22,10 +22,7 @@
 
 #Команда разработки
 
-+[Аналитик](https://github.com/jimmipet)
-
-+[Разработчик](https://github.com/Leonid-Vizel)
-
-+[Разработчик](https://github.com/AdelChernyatov)
-
-+[Тестировщик](https://github.com/MoZoLbKA)
++ [Аналитик](https://github.com/jimmipet)
++ [Разработчик](https://github.com/Leonid-Vizel)
++ [Разработчик](https://github.com/AdelChernyatov)
++ [Тестировщик](https://github.com/MoZoLbKA)
