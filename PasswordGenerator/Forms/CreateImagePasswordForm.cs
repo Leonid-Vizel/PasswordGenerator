@@ -1,6 +1,7 @@
 ﻿using NLog;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace PasswordGenerator.Forms
@@ -9,6 +10,7 @@ namespace PasswordGenerator.Forms
     {
         private Logger logger;
         private PictureGenForm parent;
+        private Image loadedImage;
         public CreateImagePasswordForm(PictureGenForm parent)
         {
             logger = LogManager.GetCurrentClassLogger();
@@ -36,7 +38,9 @@ namespace PasswordGenerator.Forms
                     }
                     Image imageToDispose = imageBox.Image;
                     imageBox.Image = fromFile;
+                    loadedImage = fromFile;
                     imageToDispose?.Dispose();
+
                     logger.Trace("Картинка добавлена");
                 }
                 else
@@ -74,9 +78,8 @@ namespace PasswordGenerator.Forms
                 MessageBox.Show("Загрузите картинку!", "Ошибка");
                 return;
             }
-            ImagePassword imagePassword = new ImagePassword(parent.GetNextId(), passwordBox.Text, imageBox.Image as Bitmap);
-            SqlConnection sql = new SqlConnection();
-            sql.LoadImageToSql(imagePassword);
+            ImagePassword imagePassword = new ImagePassword(0, passwordBox.Text, loadedImage);
+            imagePassword.Id = SqlConnector.AddToBase(imagePassword);
             parent.AddPassword(imagePassword);
             parent.Parent.backBtn.PerformClick();
             logger.Trace("Сохранение картинки-пароля выполнено!");

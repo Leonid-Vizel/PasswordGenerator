@@ -23,16 +23,6 @@ namespace PasswordGenerator
         private PrivateFontCollection fontCollection; //Коллекция шрифтов (На самом деле только 1) для лого
         private Form lastForm; //Форма для возрата назад при использовании SetNextForm
         private IconButton lastButton; //Кнопка для возрата назад при использовании SetNextForm
-        public List<ImagePassword> imagePasswords { get; private set; }//Загруженные из базы картинки-пароли
-
-        public int GetNextImagePasswordId()
-        {
-            if (imagePasswords.Count == 0)
-            {
-                return 0;
-            }
-            return imagePasswords.Max(x => x.Id) + 1;
-        }
 
         public MainForm()
         {
@@ -81,17 +71,6 @@ namespace PasswordGenerator
                     MessageBox.Show("Отсутствует файл найтроек генератора. Ошибка при создании нового.", "Ошибка");
                 }
             }
-            imagePasswords = new List<ImagePassword>();
-            logger.Trace("Начата загрузка картинок-паролей...");
-            //!BASE! Загрузка из базы всех ImagePassword в объект imagePasswords
-            SqlConnection sqlConnection = new SqlConnection();
-            sqlConnection.LoadImageFromSql(imagePasswords);
-            logger.Trace($"Загрузка картинок-паролей завершена. Всего загружено: {imagePasswords.Count}");
-            logger.Trace("Начата загрузка логин-паролей...");
-            //!BASE! Загрузка из базы всех LoginPassword (см след. комментарий)
-            //Юзай это -> PasswordGenerator.LoadedPasswords.Add();
-            sqlConnection.LoadPassFromSql();
-            logger.Trace($"Загрузка логин-паролей завершена. Всего загружено: {PasswordGenerator.LoadedPasswords.Count}");
             InitializeComponent();
             ApplyFontToLogoLabel();
         }
@@ -289,7 +268,7 @@ namespace PasswordGenerator
             => SetCurrentForm(generateBtn, new PasswordGenerateForm(this, Generator));
 
         public void OnPicPasswordsClick(object sender, EventArgs e)
-            => SetCurrentForm(picPasswordsBtn, new PictureGenForm(this, imagePasswords));
+            => SetCurrentForm(picPasswordsBtn, new PictureGenForm(this));
 
         private void OnSavedClick(object sender, EventArgs e)
             => SetCurrentForm(savedButton, new SavedPasswordsForm(this));

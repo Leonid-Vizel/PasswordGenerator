@@ -1,6 +1,8 @@
 ﻿using NLog;
 using PasswordGenerator.Forms;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -66,26 +68,25 @@ namespace PasswordGenerator
             {
                 return;
             }
-            AskLoginForm loginForm = new AskLoginForm();
-            loginForm.ShowDialog();
-            if (loginForm.Result == null)
+            using (AskLoginForm loginForm = new AskLoginForm())
             {
-                return;
+                loginForm.ShowDialog();
+                if (loginForm.Result == null)
+                {
+                    return;
+                }
+                List<LoginPassword> foundPassword = SqlConnector.FindPasswordWithLogin(loginForm.Result);
+                if (foundPassword.Any(x => x.Decrypt().Equals(passwordBox.Text)))
+                {
+                    logger.Warn($"Сохранение пароля отклонено. Такой пароль уже сохранён при логине {loginForm.Result}");
+                    MessageBox.Show("Такой пароль уже сохранён при этом логине!", "Ошибка");
+                    return;
+                }
+                string encodedPassword = Algorythms.EncryptString(passwordBox.Text, loginForm.Result);
+                LoginPassword savePassword = new LoginPassword(0, loginForm.Result, encodedPassword);
+                savePassword.Id = SqlConnector.AddToBase(savePassword);
+                logger.Trace($"Пароль сохранён при логине {loginForm.Result}");
             }
-            string encodedPassword = Algorythms.EncryptString(passwordBox.Text, loginForm.Result);
-            if (PasswordGenerator.LoadedPasswords.Where(x=>x.Login.Equals(loginForm.Result)).Any(x=>x.Decrypt().Equals(passwordBox.Text)))
-            {
-                logger.Warn($"Сохранение пароля отклонено. Такой пароль уже сохранён при логине {loginForm.Result}");
-                MessageBox.Show("Такой пароль уже сохранён при этом логине!", "Ошибка");
-                return;
-            }
-            LoginPassword savePassword = new LoginPassword(PasswordGenerator.GetNextPasswordId(), loginForm.Result, encodedPassword);
-            loginForm.Dispose();
-            PasswordGenerator.LoadedPasswords.Add(savePassword);
-            SqlConnection sql = new SqlConnection();
-            sql.LoadToSqlpasswd(savePassword);
-
-            logger.Trace($"Пароль сохранён при логине {loginForm.Result}");
         }
 
         private void OnCopyTimerElapsed(object sender, EventArgs e)
@@ -161,6 +162,6 @@ namespace PasswordGenerator
             => generator.PasswordLength = (int)lengthUpDown.Value;
 
         private void OnOpenSavedClick(object sender, EventArgs e)
-            => parent.OnPicPasswordsClick(null,null);
+            => parent.OnPicPasswordsClick(null, null);
     }
 }

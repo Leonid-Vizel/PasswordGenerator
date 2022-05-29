@@ -4,6 +4,6 @@
     {
         public string Login { get; set; }
         public string Password { get; set; }
-        public int Id { get; set; }
+        public long Id { get; set; }
     }
 }

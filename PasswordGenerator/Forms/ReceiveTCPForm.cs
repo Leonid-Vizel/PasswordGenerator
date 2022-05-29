@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
+using NLog;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
@@ -12,16 +14,18 @@ namespace PasswordGenerator.Forms
 {
     public partial class ReceiveTCPForm : Form
     {
-        private int port;
-        private bool methodLinked;
-        private TcpListener server;
-        private ImagePassword receivedImage;
-        private LoginPassword receivedLogin;
-        private PictureGenForm imageParent;
-        private SavedPasswordsForm loginParent;
-        private BackgroundWorker worker;
+        private int port; //Порт текущего подключения
+        private bool methodLinked; //Флаг, обозначающий, что метод DoWOrk подключен
+        private TcpListener server; //Активный слушатель TCP
+        private ImagePassword receivedImage; //Полчуенное Пароль-Изображение
+        private LoginPassword receivedLogin; //Полученный Логин-Пароль
+        private PictureGenForm imageParent; //Пошлая форма в случае, если 
+        private SavedPasswordsForm loginParent; //Пошлая форма в случае, если 
+        private BackgroundWorker worker; // Фоновый процесс для ожидания получения новых пакетов
+        private Logger logger; //Логгер текущего класса
         public ReceiveTCPForm(PictureGenForm parent)
         {
+            logger = LogManager.GetCurrentClassLogger();
             methodLinked = false;
             imageParent = parent;
             worker = new BackgroundWorker();
@@ -30,6 +34,7 @@ namespace PasswordGenerator.Forms
 
         public ReceiveTCPForm(SavedPasswordsForm parent)
         {
+            logger = LogManager.GetCurrentClassLogger();
             methodLinked = false;
             loginParent = parent;
             worker = new BackgroundWorker();
@@ -48,30 +53,37 @@ namespace PasswordGenerator.Forms
 
         private void ReceiveBtn_Click(object sender, EventArgs e)
         {
+            logger.Trace("Запрошено начало ожидания получения");
             if (worker.IsBusy)
             {
+                logger.Warn("Worker ещё не завершил исполняющий метод!");
                 MessageBox.Show("Немного подождите. Завершаем предыдущую операцию.", "Ошибка");
                 return;
             }
 
             if (!portTextBox.MaskCompleted)
             {
+                logger.Warn("Неверно введён порт");
                 MessageBox.Show("Неверно введён порт", "Ошибка");
                 return;
             }
 
             if (!int.TryParse(portTextBox.Text, out port))
             {
+                logger.Warn("Неверно введён порт");
                 MessageBox.Show("Неверно введён порт", "Ошибка");
                 return;
             }
 
+            logger.Trace("Получение текущего IP");
             string ipLocal = GetLocalIPAddress();
             if (ipLocal.Equals("ERROR"))
             {
+                logger.Warn("Нет сетевых адаптеров с адресом IPv4 в системе");
                 MessageBox.Show("Нет сетевых адаптеров с адресом IPv4 в системе", "Ошибка");
                 return;
             }
+            logger.Trace($"Успешно: {ipLocal}");
             ipLabel.Text = $"IP: {ipLocal}\nПорт: {port}";
 
             if (!methodLinked)
@@ -80,46 +92,46 @@ namespace PasswordGenerator.Forms
                 {
                     server = new TcpListener(IPAddress.Any, port);
                     server.Start();
+                    logger.Trace("Сервер TCP стартовал");
                     TcpClient client = null;
                     try
                     {
                         client = server.AcceptTcpClient();
+                        logger.Trace("Клиент подтверждён");
                     }
                     catch
                     {
+                        logger.Error("Ошибка подключения клиента, меняю панели обратно");
                         Action act = () =>
                         {
                             SwapPanels(waitPanel, askPortPanel);
                         };
-                        Invoke(act);
+                        this?.Invoke(act);
                         return;
                     }
                     NetworkStream ns = client.GetStream();
                     if (client.Connected)
                     {
+                        logger.Trace("Клиент подключился");
                         byte[] msg = new byte[10485760];     // готовим место для принятия сообщения (10МБ)
                         string message = Encoding.UTF8.GetString(msg, 0, ns.Read(msg, 0, msg.Length));
                         try
                         {
-                            int id = 0;
-                            if (imageParent == null)
-                            {
-                                id = loginParent.Parent.GetNextImagePasswordId();
-                            }
-                            else
-                            {
-                                id = imageParent.GetNextId();
-                            }
-                            receivedImage = ImagePassword.FromSendInfo(JsonConvert.DeserializeObject<SendPasswordImageInfo>(message), id);
+                            logger.Trace("Проиводится попытка получения картинки-пароля");
+                            receivedImage = ImagePassword.FromSendInfo(JsonConvert.DeserializeObject<SendPasswordImageInfo>(message));
+                            logger.Info("Получен пароль-картинка");
                         }
                         catch
                         {
                             try
                             {
-                                receivedLogin = LoginPassword.FromSendInfo(JsonConvert.DeserializeObject<SendPasswordLoginInfo>(message), PasswordGenerator.GetNextPasswordId());
+                                logger.Trace("Проиводится попытка получения логин-пароля");
+                                receivedLogin = LoginPassword.FromSendInfo(JsonConvert.DeserializeObject<SendPasswordLoginInfo>(message));
+                                logger.Info("Получен логин-пароль");
                             }
                             catch
                             {
+                                logger.Error("Не удалось распознать полученный пакет");
                                 MessageBox.Show("Не удалось распознать полученный пакет!", "Ошибка");
                             }
                         }
@@ -143,7 +155,7 @@ namespace PasswordGenerator.Forms
                                 foundBox.Image = receivedImage.Image;
                             }
                         };
-                        Invoke(act);
+                        this?.Invoke(act);
                     }
                     server = null;
                     client = null;
@@ -189,10 +201,9 @@ namespace PasswordGenerator.Forms
 
         private void saveBtn_Click(object sender, EventArgs e)
         {
-            new SqlConnection().LoadImageToSql(receivedImage);
+            receivedImage.Id = SqlConnector.AddToBase(receivedImage);
             if (loginParent != null)
             {
-                loginParent.Parent.imagePasswords.Add(receivedImage);
                 loginParent.Parent.backBtn.PerformClick();
             }
             else
@@ -210,13 +221,14 @@ namespace PasswordGenerator.Forms
 
         private void saveLoginPassBtn_Click(object sender, EventArgs e)
         {
-            if (PasswordGenerator.LoadedPasswords.Where(x => x.Login.Equals(receivedLogin.Login)).Any(x => x.Decrypt().Equals(receivedLogin.Decrypt())))
+            List<LoginPassword> foundPassword = SqlConnector.FindPasswordWithLogin(receivedLogin.Login);
+            if (foundPassword.Any(x => x.Decrypt().Equals(receivedLogin.Decrypt())))
             {
+                logger.Warn($"Сохранение пароля отклонено. Такой пароль уже сохранён при логине {receivedLogin.Login}");
                 MessageBox.Show("Такой пароль уже сохранён при этом логине!", "Ошибка");
                 return;
             }
-            PasswordGenerator.LoadedPasswords.Add(receivedLogin);
-            new SqlConnection().LoadToSqlpasswd(receivedLogin);
+            receivedLogin.Id = SqlConnector.AddToBase(receivedLogin);
             if (loginParent == null)
             {
                 imageParent.Parent.backBtn.PerformClick();
