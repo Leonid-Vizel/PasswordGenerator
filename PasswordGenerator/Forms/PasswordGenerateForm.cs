@@ -82,8 +82,7 @@ namespace PasswordGenerator
             LoginPassword savePassword = new LoginPassword(PasswordGenerator.GetNextPasswordId(), loginForm.Result, encodedPassword);
             loginForm.Dispose();
             PasswordGenerator.LoadedPasswords.Add(savePassword);
-            SqlConnection sql = new SqlConnection();
-            sql.LoadToSqlpasswd(savePassword);
+            SqlConnector.LoadToSqlpasswd(savePassword);
 
             logger.Trace($"Пароль сохранён при логине {loginForm.Result}");
         }

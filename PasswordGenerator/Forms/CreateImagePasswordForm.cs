@@ -75,8 +75,7 @@ namespace PasswordGenerator.Forms
                 return;
             }
             ImagePassword imagePassword = new ImagePassword(parent.GetNextId(), passwordBox.Text, imageBox.Image as Bitmap);
-            SqlConnection sql = new SqlConnection();
-            sql.LoadImageToSql(imagePassword);
+            SqlConnector.LoadImageToSql(imagePassword);
             parent.AddPassword(imagePassword);
             parent.Parent.backBtn.PerformClick();
             logger.Trace("Сохранение картинки-пароля выполнено!");

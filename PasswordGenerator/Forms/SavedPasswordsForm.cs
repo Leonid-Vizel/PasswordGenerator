@@ -127,9 +127,7 @@ namespace PasswordGenerator.Forms
                     }
                     workPanel.Controls.Remove(panel);
                     PasswordGenerator.LoadedPasswords.Remove(password);
-                    //!BASE!Удаление объекта password из базы
-                    SqlConnection sql = new SqlConnection();
-                    sql.DeletePassFromSql(password);
+                    SqlConnector.DeletePassFromSql(password);
                     panel.Dispose();
                     logger.Trace($"Пароль (ID:{password.Id}) удалён!");
                 };

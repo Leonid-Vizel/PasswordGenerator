@@ -168,9 +168,7 @@ namespace PasswordGenerator.Forms
                     return;
                 }
                 RemovePassword(pass);
-                //!BASE! Добавить удаление из базы по Id элемента
-                SqlConnection sql = new SqlConnection();
-                sql.DeleteImageFromSql(pass);
+                SqlConnector.DeleteImageFromSql(pass);
 
             };
             #endregion

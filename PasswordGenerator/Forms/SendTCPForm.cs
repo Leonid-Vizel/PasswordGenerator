@@ -95,7 +95,7 @@ namespace PasswordGenerator.Forms
                     {
                         grandParent.backBtn.PerformClick();
                     };
-                    Invoke(act);
+                    this?.Invoke(act);
                 };
                 methodLinked = true;
             }
